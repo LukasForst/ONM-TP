@@ -1,9 +1,11 @@
+package onm
+
 fun main(args: Array<String>) {
     print("hello")
 }
 
 class Hello {
-    fun run() {
-        println("hello world")
+    fun sayHello(): String {
+        return "Hello world!"
     }
 }
