@@ -6,6 +6,7 @@ import onm.house.devices.AbstractDevice
 import onm.house.furniture.Furniture
 import onm.interfaces.Place
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Room class is representing one room in the house.
@@ -19,18 +20,37 @@ class Room internal constructor(
          * */
         val roomType: RoomType,
 
-        /**
-         * Collection of all devices in the room.
-         * */
-        val devicesInRoom: MutableCollection<AbstractDevice>,
+        private val _devicesInRoom: MutableCollection<AbstractDevice>,
+        private val _furnitureInRoom: MutableCollection<Furniture>) : Place {
 
-        /**
-         * Collection of all furniture in the room.
-         * */
-        val furnitureInRoom: MutableCollection<Furniture>) : Place {
+    override val placeType get() = PlaceType.ROOM
 
-    override val placeType: PlaceType
-        get() = PlaceType.ROOM
+    /**
+     * Immutable collection of all devices in the room.
+     * */
+    val devicesInRoom get() = _devicesInRoom as Collection<AbstractDevice>
+
+    /**
+     * Immutable collection of all furniture in the room.
+     * */
+    val furnitureInRoom get() = _furnitureInRoom as Collection<Furniture>
+
+
+    /**
+     * Adds device to the room
+     * */
+    fun addDevice(device: AbstractDevice) {
+        device.room = this
+        _devicesInRoom.add(device)
+    }
+
+    /**
+     * Adds furniture to the room
+     * */
+    fun addFurniture(furniture: Furniture) {
+        furniture.room = this
+        _furnitureInRoom.add(furniture)
+    }
 
     override fun generateReport(): String {
         TODO()
@@ -38,8 +58,8 @@ class Room internal constructor(
 }
 
 class RoomBuilder(private val type: RoomType) {
-    private val devicesInRoom: MutableCollection<AbstractDevice> = LinkedList()
-    private val furnitureInRoom: MutableCollection<Furniture> = LinkedList()
+    private val devicesInRoom: MutableCollection<AbstractDevice> = ArrayList()
+    private val furnitureInRoom: MutableCollection<Furniture> = ArrayList()
     private var description: String? = null
 
     fun addDevice(device: AbstractDevice): RoomBuilder {
@@ -58,6 +78,11 @@ class RoomBuilder(private val type: RoomType) {
     }
 
     fun buildRoom(): Room {
-        return Room(UUID.randomUUID(), description, type, devicesInRoom, furnitureInRoom)
+        val room = Room(UUID.randomUUID(), description, type, devicesInRoom, furnitureInRoom)
+
+        furnitureInRoom.forEach { x -> x.room = room }
+        devicesInRoom.forEach { x -> x.room = room }
+
+        return room
     }
 }

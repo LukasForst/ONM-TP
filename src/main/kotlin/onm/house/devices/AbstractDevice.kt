@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.house.places.Room
 import onm.interfaces.StationaryEntity
 
 /**
@@ -7,4 +8,9 @@ import onm.interfaces.StationaryEntity
  * */
 abstract class AbstractDevice : StationaryEntity {
     //todo get specs and implement this
+
+    /**
+     * Room reference. This should be set after adding device to the room.
+     * */
+    var room: Room? = null
 }
