@@ -22,7 +22,7 @@ class Fridge(override val id: UUID,
         get() {
             if (_food.isEmpty()) {
                 fridgeEmptyEvent.raiseEvent()
-                TODO("This event is executed in main thread, execute it in the separate thread for better performance")
+//                TODO("This event is executed in main thread, execute it in the separate thread for better performance")
             }
 
             return _food

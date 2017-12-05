@@ -15,4 +15,24 @@ class FridgeEmptyEvent(
     override fun raiseEvent() {
         eventHandler.handle(this)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as FridgeEmptyEvent
+
+        if (message != other.message) return false
+        if (severity != other.severity) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = message.hashCode()
+        result = 31 * result + severity.hashCode()
+        return result
+    }
+
+
 }
