@@ -10,7 +10,12 @@ import java.util.*
  * */
 class Furniture internal constructor(
         override val id: UUID,
+
+        /**
+         * Type of furniture represented by this class.
+         * */
         val furnitureType: FurnitureType) : StationaryEntity {
+
     //todo implement and get specs
 
     /**
@@ -23,7 +28,14 @@ class Furniture internal constructor(
     }
 }
 
+/**
+ * Factory creating various types of furniture.
+ * */
 object FurnitureFactory {
+
+    /**
+     * Creates chair furniture.
+     * */
     fun createChair(): Furniture {
         return Furniture(UUID.randomUUID(), FurnitureType.CHAIR)
     }

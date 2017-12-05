@@ -55,6 +55,16 @@ class Room internal constructor(
     override fun generateReport(): String {
         TODO()
     }
+
+    override fun toString(): String {
+        val sb = StringBuilder().append(roomType.name)
+
+        if (placeDescription != null) {
+            sb.append(" - [").append(placeDescription).append("] - ")
+        }
+
+        return sb.toString()
+    }
 }
 
 class RoomBuilder(private val type: RoomType) {
