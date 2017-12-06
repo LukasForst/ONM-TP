@@ -1,7 +1,7 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
-import onm.events.EventFactory
+import onm.events.WasherDoneEvent
 import onm.interfaces.EventHandler
 import java.util.*
 
@@ -10,7 +10,7 @@ import java.util.*
  * */
 class Washer(override val id: UUID, eventHandler: EventHandler) : AbstractDevice(DeviceType.WASHER) {
 
-    private val event = EventFactory.createWasherDoneEvent(eventHandler)
+    private val event = WasherDoneEvent(eventHandler)
 
     /**
      * Starts washing clothes. This produces event which is raised after given time period. Note that new thread is created.
@@ -19,9 +19,9 @@ class Washer(override val id: UUID, eventHandler: EventHandler) : AbstractDevice
         isBusy = true
         Thread(Runnable {
             Thread.sleep((periodInMinutes * 60000).toLong())
-            event.raiseEvent()
             isBusy = false
-        })
+            event.raiseEvent()
+        }).start()
     }
 
     override fun generateReport(): String {

@@ -3,7 +3,7 @@ package onm.events
 import onm.configuration.EventSeverity
 
 /**
- * Event interface has to be implemented by every single event. Equals and Hascode method should be generated because of the tests.
+ * Event interface has to be implemented by every single event.
  * */
 interface Event {
 
