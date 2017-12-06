@@ -6,33 +6,15 @@ import onm.interfaces.EventHandler
 /**
  * Event raised when fridge is empty.
  * */
-class FridgeEmptyEvent(
-        override val message: String,
-        override val severity: EventSeverity,
+class FridgeEmptyEvent(private val eventHandler: EventHandler) : Event {
 
-        private val eventHandler: EventHandler) : Event {
+    override val severity: EventSeverity
+        get() = EventSeverity.INFO
+
+    override val message: String
+        get() = "Fridge is empty!"
 
     override fun raiseEvent() {
         eventHandler.handle(this)
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as FridgeEmptyEvent
-
-        if (message != other.message) return false
-        if (severity != other.severity) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = message.hashCode()
-        result = 31 * result + severity.hashCode()
-        return result
-    }
-
-
 }

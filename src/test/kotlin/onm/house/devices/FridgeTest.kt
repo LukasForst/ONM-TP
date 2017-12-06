@@ -1,6 +1,6 @@
 package onm.house.devices
 
-import onm.events.EventFactory
+import onm.TestUtils
 import onm.events.FridgeEmptyEvent
 import onm.interfaces.EventHandler
 import onm.things.Food
@@ -21,18 +21,19 @@ class FridgeTest {
     lateinit var eventHandlerMock: EventHandler
     lateinit var event: FridgeEmptyEvent
 
+
     @Before
     fun setUp() {
         eventHandlerMock = mock(EventHandler::class.java)
         fridge = Fridge(UUID.randomUUID(), eventHandlerMock)
-        event = EventFactory.createFridgeEmptyEvent(eventHandlerMock)
+        event = FridgeEmptyEvent(eventHandlerMock)
     }
 
     @Test
     fun createEventTest() {
         val food = fridge.food
         assertEquals(0, food.size)
-        verify(eventHandlerMock, times(1)).handle(event)
+        verify(eventHandlerMock, times(1)).handle(TestUtils.any<FridgeEmptyEvent>())
     }
 
     @Test
@@ -42,5 +43,6 @@ class FridgeTest {
 
         val food = fridge.food
         assertEquals(2, food.size)
+        verify(eventHandlerMock, never()).handle(TestUtils.any<FridgeEmptyEvent>())
     }
 }

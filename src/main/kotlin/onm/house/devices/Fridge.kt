@@ -1,7 +1,7 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
-import onm.events.EventFactory
+import onm.events.FridgeEmptyEvent
 import onm.interfaces.EventHandler
 import onm.things.Food
 import java.util.*
@@ -12,7 +12,7 @@ import java.util.*
 class Fridge(override val id: UUID,
              eventHandler: EventHandler) : AbstractDevice(DeviceType.FRIDGE) {
 
-    private val fridgeEmptyEvent = EventFactory.createFridgeEmptyEvent(eventHandler)
+    private val fridgeEmptyEvent = FridgeEmptyEvent(eventHandler)
     private val _food = LinkedList<Food>()
 
     /**
@@ -22,7 +22,7 @@ class Fridge(override val id: UUID,
         get() {
             if (_food.isEmpty()) {
                 fridgeEmptyEvent.raiseEvent()
-//                TODO("This event is executed in main thread, execute it in the separate thread for better performance")
+                //todo This event is executed in main thread, execute it in the separate thread for better performance
             }
 
             return _food
