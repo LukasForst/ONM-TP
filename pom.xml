@@ -9,6 +9,8 @@
     <version>1.0-SNAPSHOT</version>
     <properties>
         <kotlin.version>1.2.0</kotlin.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <mockit.version>2.12.0</mockit.version>
     </properties>
 
     <dependencies>
@@ -22,6 +24,16 @@
             <artifactId>kotlin-test-junit</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 
