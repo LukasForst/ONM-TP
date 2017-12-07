@@ -2,7 +2,7 @@ package onm.house.devices
 
 import onm.configuration.DeviceType
 import onm.events.FridgeEmptyEvent
-import onm.interfaces.EventHandler
+import onm.events.IEventHandler
 import onm.things.Food
 import java.util.*
 
@@ -10,7 +10,7 @@ import java.util.*
  * Fridge representation.
  * */
 class Fridge(override val id: UUID,
-             eventHandler: EventHandler) : AbstractDevice(DeviceType.FRIDGE) {
+             eventHandler: IEventHandler) : AbstractDevice(DeviceType.FRIDGE) {
 
     private val fridgeEmptyEvent = FridgeEmptyEvent(eventHandler)
     private val _food = LinkedList<Food>()

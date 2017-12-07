@@ -3,9 +3,9 @@ package onm.events
 import onm.configuration.EventSeverity
 
 /**
- * Event interface has to be implemented by every single event.
+ * IEvent interface has to be implemented by every single event.
  * */
-interface Event {
+interface IEvent {
 
     /**
      * Message of the event.
@@ -18,7 +18,7 @@ interface Event {
     val severity: EventSeverity
 
     /**
-     * Handle event by EventHandler
+     * Handle event by eventHandler
      * */
     fun raiseEvent()
 }

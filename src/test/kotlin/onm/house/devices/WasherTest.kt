@@ -2,7 +2,7 @@ package onm.house.devices
 
 import onm.TestUtils
 import onm.events.WasherDoneEvent
-import onm.interfaces.EventHandler
+import onm.events.IEventHandler
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -13,13 +13,13 @@ import kotlin.test.assertTrue
 
 class WasherTest {
     lateinit var washer: Washer
-    lateinit var eventHandlerMock: EventHandler
+    lateinit var eventHandlerMock: IEventHandler
     lateinit var event: WasherDoneEvent
 
 
     @Before
     fun setUp() {
-        eventHandlerMock = Mockito.mock(EventHandler::class.java)
+        eventHandlerMock = Mockito.mock(IEventHandler::class.java)
         washer = Washer(UUID.randomUUID(), eventHandlerMock)
         event = WasherDoneEvent(eventHandlerMock)
     }
