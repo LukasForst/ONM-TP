@@ -19,14 +19,12 @@ import kotlin.test.assertEquals
 class FridgeTest {
     lateinit var fridge: Fridge
     lateinit var eventHandlerMock: EventHandler
-    lateinit var event: FridgeEmptyEvent
 
 
     @Before
     fun setUp() {
         eventHandlerMock = mock(EventHandler::class.java)
         fridge = Fridge(UUID.randomUUID(), eventHandlerMock)
-        event = FridgeEmptyEvent(eventHandlerMock)
     }
 
     @Test
