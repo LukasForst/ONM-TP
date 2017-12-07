@@ -3,7 +3,7 @@ package onm.events
 import onm.configuration.EventSeverity
 
 /**
- * IEvent raised when fridge is empty.
+ * Event raised when fridge is empty.
  * */
 class FridgeEmptyEvent(private val eventHandler: IEventHandler) : IEvent {
 

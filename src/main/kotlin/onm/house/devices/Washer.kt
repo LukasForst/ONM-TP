@@ -1,8 +1,8 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
-import onm.events.WasherDoneEvent
 import onm.events.IEventHandler
+import onm.events.WasherDoneEvent
 import java.util.*
 
 /**

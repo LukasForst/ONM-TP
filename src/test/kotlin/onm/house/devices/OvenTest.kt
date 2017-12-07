@@ -2,7 +2,7 @@ package onm.house.devices
 
 import onm.TestUtils
 import onm.events.BakeFinishedEvent
-import onm.interfaces.EventHandler
+import onm.events.IEventHandler
 import onm.things.Food
 import onm.things.FoodType
 import org.junit.Before
@@ -14,11 +14,11 @@ import java.util.*
 class OvenTest(){
 
     lateinit var oven : Oven
-    lateinit var eventHandlerMock : EventHandler
+    lateinit var eventHandlerMock: IEventHandler
 
     @Before
     fun setUp(){
-        eventHandlerMock = mock(EventHandler::class.java)
+        eventHandlerMock = mock(IEventHandler::class.java)
         oven = Oven(UUID.randomUUID(), eventHandlerMock)
     }
 

@@ -11,7 +11,6 @@ import org.mockito.Mockito.*
 import java.util.*
 import kotlin.test.assertEquals
 
-
 /**
  * @date 12/5/17
  * @author Lukas Forst

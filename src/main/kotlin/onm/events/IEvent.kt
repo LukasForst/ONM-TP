@@ -3,7 +3,7 @@ package onm.events
 import onm.configuration.EventSeverity
 
 /**
- * IEvent interface has to be implemented by every single event.
+ * Event interface has to be implemented by every single event.
  * */
 interface IEvent {
 

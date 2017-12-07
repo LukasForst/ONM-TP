@@ -2,7 +2,6 @@ package onm.builder
 
 import onm.configuration.RoomType
 import onm.events.EventHandler
-import onm.events.IEventHandler
 import onm.house.devices.Fridge
 import onm.house.devices.Washer
 import onm.house.places.RoomBuilder
@@ -17,11 +16,12 @@ class HouseBuilder(){
     /**
      * IEvent handler dealing with all raised events from i.e., devices
      */
-    val eventHandler : IEventHandler = EventHandler()
+    val eventHandler = EventHandler() //TODO later add via constructor and implement wrapper
+
     /**
      * House variable containing references to all rooms
      */
-    val house : House = House()
+    val house = House() //TODO later add via constructor and implement wrapper
 
     /**
      * If there is not a room with given type, the room is created and added to the house

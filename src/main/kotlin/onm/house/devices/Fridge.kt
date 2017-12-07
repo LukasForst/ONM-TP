@@ -2,6 +2,7 @@ package onm.house.devices
 
 import onm.configuration.DeviceType
 import onm.events.FridgeEmptyEvent
+
 import onm.events.IEventHandler
 import onm.things.Food
 import java.util.*
