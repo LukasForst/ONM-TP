@@ -1,5 +1,6 @@
 package onm.interfaces
 
+import onm.events.BakeFinishedEvent
 import onm.events.FridgeEmptyEvent
 import onm.events.WasherDoneEvent
 
@@ -11,4 +12,6 @@ interface EventHandler {
     fun handle(event: FridgeEmptyEvent)
 
     fun handle(event: WasherDoneEvent)
+
+    fun handle(event: BakeFinishedEvent)
 }
