@@ -24,7 +24,7 @@ class OvenTest(){
 
     @Test
     fun createEventTest(){
-        oven.switchOn(listOf(Food(FoodType.BREAD)), 1)
+        oven.switchOn(listOf(Food(FoodType.BREAD)), 1) //TODO REDO when oven bakes in another thread
         verify(eventHandlerMock, times(1)).handle(TestUtils.any<BakeFinishedEvent>())
     }
 }

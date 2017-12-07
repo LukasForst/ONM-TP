@@ -9,7 +9,7 @@ import onm.interfaces.EventHandler
 class BakeFinishedEvent(private val eventHandler: EventHandler) : Event {
 
     override val severity: EventSeverity
-        get() = EventSeverity.INFO
+        get() = EventSeverity.EXECUTION_DONE
 
     override val message: String
         get() = "Oven finished baking!"
