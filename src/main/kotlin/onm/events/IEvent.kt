@@ -18,7 +18,7 @@ interface IEvent {
     val severity: EventSeverity
 
     /**
-     * Handle event by IEventHandler
+     * Handle event by eventHandler
      * */
     fun raiseEvent()
 }

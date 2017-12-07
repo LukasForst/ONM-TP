@@ -1,7 +1,7 @@
 package onm.house.devices
 
 import onm.TestUtils
-import onm.events.WasherDoneIEvent
+import onm.events.WasherDoneEvent
 import onm.events.IEventHandler
 import org.junit.Before
 import org.junit.Test
@@ -13,22 +13,22 @@ import kotlin.test.assertTrue
 
 class WasherTest {
     lateinit var washer: Washer
-    lateinit var IEventHandlerMock: IEventHandler
-    lateinit var event: WasherDoneIEvent
+    lateinit var eventHandlerMock: IEventHandler
+    lateinit var event: WasherDoneEvent
 
 
     @Before
     fun setUp() {
-        IEventHandlerMock = Mockito.mock(IEventHandler::class.java)
-        washer = Washer(UUID.randomUUID(), IEventHandlerMock)
-        event = WasherDoneIEvent(IEventHandlerMock)
+        eventHandlerMock = Mockito.mock(IEventHandler::class.java)
+        washer = Washer(UUID.randomUUID(), eventHandlerMock)
+        event = WasherDoneEvent(eventHandlerMock)
     }
 
     @Test
     fun startWashingTest() {
         var washerCalled = false
         var timesChecked = 0
-        `when`(IEventHandlerMock.handle(TestUtils.any<WasherDoneIEvent>())).then({
+        `when`(eventHandlerMock.handle(TestUtils.any<WasherDoneEvent>())).then({
             washerCalled = true
 
             null
@@ -44,7 +44,7 @@ class WasherTest {
         }
 
         assertFalse(washer.isBusy)
-        verify(IEventHandlerMock, times(1)).handle(TestUtils.any<WasherDoneIEvent>())
+        verify(eventHandlerMock, times(1)).handle(TestUtils.any<WasherDoneEvent>())
     }
 
 }

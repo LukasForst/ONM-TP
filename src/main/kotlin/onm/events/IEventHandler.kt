@@ -5,7 +5,7 @@ package onm.events
  * */
 interface IEventHandler {
     //todo implement global handler for all events
-    fun handle(event: FridgeEmptyIEvent)
+    fun handle(event: FridgeEmptyEvent)
 
-    fun handle(event: WasherDoneIEvent)
+    fun handle(event: WasherDoneEvent)
 }

@@ -5,7 +5,7 @@ import onm.configuration.EventSeverity
 /**
  * IEvent raised when fridge is empty.
  * */
-class FridgeEmptyIEvent(private val IEventHandler: IEventHandler) : IEvent {
+class FridgeEmptyEvent(private val eventHandler: IEventHandler) : IEvent {
 
     override val severity: EventSeverity
         get() = EventSeverity.INFO
@@ -14,6 +14,6 @@ class FridgeEmptyIEvent(private val IEventHandler: IEventHandler) : IEvent {
         get() = "Fridge is empty!"
 
     override fun raiseEvent() {
-        IEventHandler.handle(this)
+        eventHandler.handle(this)
     }
 }

@@ -18,6 +18,6 @@ fun main(args: Array<String>){
         val washer = houseBuilder.addWasher(RoomType.TOILET)
 
         fridge.addFood(Food(FoodType.APPLE))
-        washer.startWashing(1.0)
+        washer.startWashing(00000.1)
 
     }

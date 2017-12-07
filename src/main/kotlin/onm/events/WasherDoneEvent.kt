@@ -5,7 +5,7 @@ import onm.configuration.EventSeverity
 /**
  * Washing machine has done its job event.
  * */
-class WasherDoneIEvent(private val IEventHandler: IEventHandler) : IEvent {
+class WasherDoneEvent(private val eventHandler: IEventHandler) : IEvent {
 
     override val message: String
         get() = "Your clothes are washed!"
@@ -14,6 +14,6 @@ class WasherDoneIEvent(private val IEventHandler: IEventHandler) : IEvent {
         get() = EventSeverity.EXECUTION_DONE
 
     override fun raiseEvent() {
-        IEventHandler.handle(this)
+        eventHandler.handle(this)
     }
 }
