@@ -1,16 +1,16 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
-import onm.events.WasherDoneEvent
-import onm.interfaces.EventHandler
+import onm.events.WasherDoneIEvent
+import onm.events.IEventHandler
 import java.util.*
 
 /**
  * Wash machine representation
  * */
-class Washer(override val id: UUID, eventHandler: EventHandler) : AbstractDevice(DeviceType.WASHER) {
+class Washer(override val id: UUID, IEventHandler: IEventHandler) : AbstractDevice(DeviceType.WASHER) {
 
-    private val event = WasherDoneEvent(eventHandler)
+    private val event = WasherDoneIEvent(IEventHandler)
 
     /**
      * Starts washing clothes. This produces event which is raised after given time period. Note that new thread is created.
