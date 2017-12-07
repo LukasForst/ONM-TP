@@ -31,4 +31,5 @@ abstract class AbstractDevice(
             field = value
         }
 
+
 }
