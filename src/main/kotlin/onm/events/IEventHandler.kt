@@ -1,13 +1,10 @@
-package onm.interfaces
+package onm.events
 
-import onm.events.BakeFinishedEvent
-import onm.events.FridgeEmptyEvent
-import onm.events.WasherDoneEvent
 
 /**
  * Handler which will react on all types of events. Works on dispatch pattern.
  * */
-interface EventHandler {
+interface IEventHandler {
     //todo implement global handler for all events
     fun handle(event: FridgeEmptyEvent)
 

@@ -2,7 +2,7 @@ package onm.house.devices
 
 import onm.TestUtils
 import onm.events.FridgeEmptyEvent
-import onm.interfaces.EventHandler
+import onm.events.IEventHandler
 import onm.things.Food
 import onm.things.FoodType
 import org.junit.Before
@@ -11,19 +11,18 @@ import org.mockito.Mockito.*
 import java.util.*
 import kotlin.test.assertEquals
 
-
 /**
  * @date 12/5/17
  * @author Lukas Forst
  */
 class FridgeTest {
     lateinit var fridge: Fridge
-    lateinit var eventHandlerMock: EventHandler
+    lateinit var eventHandlerMock: IEventHandler
 
 
     @Before
     fun setUp() {
-        eventHandlerMock = mock(EventHandler::class.java)
+        eventHandlerMock = mock(IEventHandler::class.java)
         fridge = Fridge(UUID.randomUUID(), eventHandlerMock)
     }
 

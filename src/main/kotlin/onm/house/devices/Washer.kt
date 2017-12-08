@@ -1,14 +1,14 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
+import onm.events.IEventHandler
 import onm.events.WasherDoneEvent
-import onm.interfaces.EventHandler
 import java.util.*
 
 /**
  * Wash machine representation
  * */
-class Washer(override val id: UUID, eventHandler: EventHandler) : AbstractDevice(DeviceType.WASHER) {
+class Washer(override val id: UUID, eventHandler: IEventHandler) : AbstractDevice(DeviceType.WASHER) {
 
     private val event = WasherDoneEvent(eventHandler)
 

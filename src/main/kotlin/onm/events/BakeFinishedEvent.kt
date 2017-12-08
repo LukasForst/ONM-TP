@@ -1,12 +1,11 @@
 package onm.events
 
 import onm.configuration.EventSeverity
-import onm.interfaces.EventHandler
 
 /**
  * Event raised when oven finishes baking.
  * */
-class BakeFinishedEvent(private val eventHandler: EventHandler) : Event {
+class BakeFinishedEvent(private val eventHandler: IEventHandler) : IEvent {
 
     override val severity: EventSeverity
         get() = EventSeverity.EXECUTION_DONE
