@@ -4,6 +4,6 @@ package onm.configuration
  * DeviceType represents type of devices like fridge, oven etc. etc.
  * */
 enum class DeviceType {
-    WASHER, FRIDGE, OVEN
+    WASHER, FRIDGE, OVEN, KETTLE
     //todo add device type values
 }
