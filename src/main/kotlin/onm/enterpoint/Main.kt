@@ -19,7 +19,9 @@ fun main(args: Array<String>){
         val washer = houseBuilder.addWasher(RoomType.TOILET)
     val oven = houseBuilder.addOven(RoomType.KITCHEN)
 
+
     houseBuilder.addFurniture(RoomType.TOILET, FurnitureType.CHAIR)
+
 
         fridge.addFood(Food(FoodType.APPLE))
     washer.startWashing(0.00001)
