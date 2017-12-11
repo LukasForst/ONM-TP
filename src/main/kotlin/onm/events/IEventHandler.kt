@@ -11,4 +11,6 @@ interface IEventHandler {
     fun handle(event: WasherDoneEvent)
 
     fun handle(event: BakeFinishedEvent)
+
+    fun handle(event: KettleDoneEvent)
 }
