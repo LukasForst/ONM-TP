@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
  * */
 class Room internal constructor(
         override val id: UUID,
-        override val placeDescription: String? = null,
+        override val placeDescription: String,
 
         /**
          * Type of room.
@@ -24,6 +24,7 @@ class Room internal constructor(
         private val _furnitureInRoom: MutableCollection<Furniture>) : Place {
 
     override val placeType get() = PlaceType.ROOM
+
 
     /**
      * Immutable collection of all devices in the room.
@@ -67,10 +68,9 @@ class Room internal constructor(
     }
 }
 
-class RoomBuilder(private val type: RoomType) {
+class RoomBuilder(private val type: RoomType, private var description: String) {
     private val devicesInRoom: MutableCollection<AbstractDevice> = ArrayList()
     private val furnitureInRoom: MutableCollection<Furniture> = ArrayList()
-    private var description: String? = null
 
     fun addDevice(device: AbstractDevice): RoomBuilder {
         devicesInRoom.add(device)
@@ -79,11 +79,6 @@ class RoomBuilder(private val type: RoomType) {
 
     fun addFurniture(furniture: Furniture): RoomBuilder {
         furnitureInRoom.add(furniture)
-        return this
-    }
-
-    fun addDescription(description: String?): RoomBuilder {
-        this.description = description
         return this
     }
 

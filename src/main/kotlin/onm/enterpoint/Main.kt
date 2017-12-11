@@ -9,19 +9,20 @@ import onm.things.FoodType
 
 fun main(args: Array<String>){
 
-        val houseBuilder = HouseBuilder()
+    val houseBuilder = HouseBuilder()
 
-        houseBuilder.addRoom(RoomType.TOILET)
-        houseBuilder.addRoom(RoomType.LIVING_ROOM)
-        houseBuilder.addRoom(RoomType.KITCHEN)
+    houseBuilder.addRoom(RoomType.TOILET, "toilet")
+    houseBuilder.addRoom(RoomType.KITCHEN, "kitchen")
+    houseBuilder.addRoom(RoomType.LIVING_ROOM, "chill room")
 
-        val fridge = houseBuilder.addFridge(RoomType.KITCHEN)
-        val washer = houseBuilder.addWasher(RoomType.TOILET)
-    val oven = houseBuilder.addOven(RoomType.KITCHEN)
+    val oven = houseBuilder.addOven(RoomType.KITCHEN, "kitchen")
+    val fridge = houseBuilder.addFridge(RoomType.KITCHEN, "kitchen")
+    val washer = houseBuilder.addWasher(RoomType.TOILET, "toilet")
 
-    houseBuilder.addFurniture(RoomType.TOILET, FurnitureType.CHAIR)
 
-        fridge.addFood(Food(FoodType.APPLE))
+    houseBuilder.addFurniture(RoomType.LIVING_ROOM, FurnitureType.CHAIR, "chill room")
+
+    fridge.addFood(Food(FoodType.APPLE))
     washer.startWashing(0.00001)
     oven.switchOn(listOf(Food(FoodType.APPLE)), 0.00001)
 
