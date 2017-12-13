@@ -11,7 +11,7 @@ import org.mockito.Mockito.*
 import java.util.*
 
 
-class OvenTest(){
+class OvenTest {
 
     lateinit var oven : Oven
     lateinit var eventHandlerMock: IEventHandler
@@ -24,7 +24,9 @@ class OvenTest(){
 
     @Test
     fun createEventTest(){
-        oven.switchOn(listOf(Food(FoodType.BREAD)), 1.0) //TODO REDO when oven bakes in another thread
+        val bakingTime = 0.0001
+        oven.switchOn(listOf(Food(FoodType.BREAD)), bakingTime)
+        Thread.sleep((bakingTime * 60000 + 50).toLong()) //todo redo for more thread safety
         verify(eventHandlerMock, times(1)).handle(TestUtils.any<BakeFinishedEvent>())
     }
 }

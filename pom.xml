@@ -11,6 +11,7 @@
         <kotlin.version>1.2.0</kotlin.version>
         <slf4j.version>1.7.25</slf4j.version>
         <mockit.version>2.12.0</mockit.version>
+        <kotson.version>2.5.0</kotson.version>
     </properties>
 
     <dependencies>
@@ -18,6 +19,16 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jre8</artifactId>
             <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.salomonbrys.kotson</groupId>
+            <artifactId>kotson</artifactId>
+            <version>${kotson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

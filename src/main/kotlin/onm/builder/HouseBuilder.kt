@@ -1,43 +1,86 @@
 package onm.builder
 
-import onm.configuration.FurnitureType
-import onm.configuration.RoomType
+import onm.configuration.*
 import onm.events.EventHandler
+import onm.events.IEventHandler
+import onm.house.devices.AbstractDevice
 import onm.house.devices.Fridge
 import onm.house.devices.Oven
 import onm.house.devices.Washer
 import onm.house.furniture.Furniture
+import onm.house.places.Room
 import onm.house.places.RoomBuilder
 import java.util.*
+
 
 /**
  * Class representing framework builder for devices and rooms in a smart house.
  */
-class HouseBuilder {
+class HouseBuilder private constructor(
+        /**
+         * Primary house reference.
+         * */
+        val house: House,
 
+        /**
+         * Event handler which will be used for devices created with config.
+         * */
+        private val eventHandler: IEventHandler) {
+
+    companion object {
+        /**
+         * Builds empty house.
+         * */
+        fun createEmptyHouseBuilder(): HouseBuilder {
+            val house = House()
+            val eventHandler = EventHandler() //todo make it singleton
+            return HouseBuilder(house, eventHandler)
+        }
+
+        /**
+         * Builds house from given config class. This class should be parsed from JSON.
+         * */
+        fun createHouseBuilder(config: ConfigurationDataClass): HouseBuilder {
+            val house = House()
+            val eventHandler = EventHandler() //todo make event handler as singleton
+
+            val houseBuilder = HouseBuilder(house, eventHandler)
+
+            for (key in config.roomsAndDevices.keys) {
+                val room = houseBuilder.addOrGetRoom(key)
+
+                for (deviceConfig in config.roomsAndDevices[key]!!) {
+                    room.addDevice(createDevice(deviceConfig, eventHandler))
+                }
+            }
+
+            return houseBuilder
+        }
+
+
+        private fun createDevice(deviceConfig: DeviceConfig, eventHandler: IEventHandler): AbstractDevice {
+            when (deviceConfig.deviceType) {
+                DeviceType.WASHER -> Washer(UUID.randomUUID(), eventHandler, deviceConfig.powerConsumption)
+                DeviceType.FRIDGE -> Fridge(UUID.randomUUID(), eventHandler)
+                DeviceType.OVEN -> Oven(UUID.randomUUID(), eventHandler)
+            }
+
+            throw IllegalStateException("Attempt to create non existing device.")
+        }
+    }
 
     /**
-     * Event handler dealing with all raised events from i.e., devices
-     */
-    val eventHandler = EventHandler() //TODO later add via constructor and implement wrapper
-
-    /**
-     * House variable containing references to all rooms
-     */
-    val house = House() //TODO later add via constructor and implement wrapper
-
-    /**
-     * If there is not a room with given type and description, the room is created and added to the house
+     * Adds or gets room in the house.
      * @param type Type of desired room
      * @param description description/name of desired room
      */
-    fun addRoom(type: RoomType, description: String) {
+    fun addOrGetRoom(roomConfig: RoomConfig): Room {
+        var room = house.rooms.find { x -> x.roomType == roomConfig.roomType && x.floorNumber == roomConfig.floor && x.placeDescription == roomConfig.description }
+        if (room != null) return room
 
-        if (!house.rooms.any { room -> room.roomType == type && room.placeDescription == description })
-            house.rooms.add(RoomBuilder(type, description).buildRoom())
-        else {
-            //TODO log bad usage of API (or throw exception??)
-        }
+        room = RoomBuilder(roomConfig).buildRoom()
+        house.rooms.add(room)
+        return room
     }
 
     /**
@@ -51,7 +94,6 @@ class HouseBuilder {
         val room = house.rooms.find { room -> room.roomType == roomType && room.placeDescription == roomDescription }
         if (room == null) throw NoSuchFieldException() //TODO maybe throw better exception
         else {
-
             val fridge = Fridge(UUID.randomUUID(), eventHandler)
             room.addDevice(fridge)
             return fridge

@@ -1,6 +1,7 @@
 package onm.house.places
 
 import onm.configuration.PlaceType
+import onm.configuration.RoomConfig
 import onm.configuration.RoomType
 import onm.house.devices.AbstractDevice
 import onm.house.furniture.Furniture
@@ -19,6 +20,11 @@ class Room internal constructor(
          * Type of room.
          * */
         val roomType: RoomType,
+
+        /**
+         * Floor in which is this room situated.
+         * */
+        val floorNumber: Int,
 
         private val _devicesInRoom: MutableCollection<AbstractDevice>,
         private val _furnitureInRoom: MutableCollection<Furniture>) : Place {
@@ -59,16 +65,13 @@ class Room internal constructor(
 
     override fun toString(): String {
         val sb = StringBuilder().append(roomType.name)
-
-        if (placeDescription != null) {
-            sb.append(" - [").append(placeDescription).append("] - ")
-        }
-
+        sb.append(" - [").append(placeDescription).append("] - ")
         return sb.toString()
     }
 }
 
-class RoomBuilder(private val type: RoomType, private var description: String) {
+class RoomBuilder(private val roomConfig: RoomConfig) {
+
     private val devicesInRoom: MutableCollection<AbstractDevice> = ArrayList()
     private val furnitureInRoom: MutableCollection<Furniture> = ArrayList()
 
@@ -83,7 +86,7 @@ class RoomBuilder(private val type: RoomType, private var description: String) {
     }
 
     fun buildRoom(): Room {
-        val room = Room(UUID.randomUUID(), description, type, devicesInRoom, furnitureInRoom)
+        val room = Room(UUID.randomUUID(), roomConfig.description, roomConfig.roomType, roomConfig.floor, devicesInRoom, furnitureInRoom)
 
         furnitureInRoom.forEach { x -> x.room = room }
         devicesInRoom.forEach { x -> x.room = room }

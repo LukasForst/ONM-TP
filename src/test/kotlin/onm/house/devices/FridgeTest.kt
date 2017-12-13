@@ -30,6 +30,7 @@ class FridgeTest {
     fun createEventTest() {
         val food = fridge.food
         assertEquals(0, food.size)
+        Thread.sleep(50)
         verify(eventHandlerMock, times(1)).handle(TestUtils.any<FridgeEmptyEvent>())
     }
 

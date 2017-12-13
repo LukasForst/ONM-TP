@@ -1,20 +1,35 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
+import onm.configuration.PowerConsumption
 import onm.events.FridgeEmptyEvent
 
 import onm.events.IEventHandler
 import onm.things.Food
 import java.util.*
+import kotlin.concurrent.thread
 
 /**
  * Fridge representation.
  * */
 class Fridge(override val id: UUID,
-             eventHandler: IEventHandler) : AbstractDevice(DeviceType.FRIDGE) {
+             eventHandler: IEventHandler,
+             powerConsumption: PowerConsumption = PowerConsumption.defaultPowerConsumption(),
+             private val workingIntervalInMinutes: Double = 1.0) : AbstractDevice(DeviceType.FRIDGE, powerConsumption) {
 
     private val fridgeEmptyEvent = FridgeEmptyEvent(eventHandler)
     private val _food = LinkedList<Food>()
+
+    init { //todo what if electricity is turned off?
+        //simulates fridge working
+
+        thread(start = true) {
+            deviceStateMachine.idleState()
+            Thread.sleep((workingIntervalInMinutes * 60000).toLong())
+            deviceStateMachine.workingState()
+            Thread.sleep((workingIntervalInMinutes * 60000).toLong())
+        }
+    }
 
     /**
      * Get collection representing food in the fridge. When collection is empty FridgeEmptyEvent is raised.
@@ -22,8 +37,7 @@ class Fridge(override val id: UUID,
     val food: Collection<Food>
         get() {
             if (_food.isEmpty()) {
-                fridgeEmptyEvent.raiseEvent()
-                //todo This event is executed in main thread, execute it in the separate thread for better performance
+                doWork(0, fridgeEmptyEvent::raiseEvent)
             }
 
             return _food
