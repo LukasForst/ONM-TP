@@ -1,7 +1,7 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
-import onm.configuration.PowerConsumption
+import onm.configuration.json.PowerConsumption
 import onm.events.BakeFinishedEvent
 import onm.events.IEventHandler
 import onm.things.Food
@@ -12,7 +12,7 @@ import java.util.*
  * */
 class Oven(override val id: UUID,
            eventHandler: IEventHandler,
-           powerConsumption: PowerConsumption = PowerConsumption.defaultPowerConsumption())
+           powerConsumption: PowerConsumption = PowerConsumption())
     : AbstractDevice(DeviceType.OVEN, powerConsumption) {
 
     private val ovenBakeFinishedEvent = BakeFinishedEvent(eventHandler)

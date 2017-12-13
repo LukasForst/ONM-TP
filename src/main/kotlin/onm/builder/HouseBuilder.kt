@@ -1,6 +1,11 @@
 package onm.builder
 
-import onm.configuration.*
+import onm.configuration.DeviceType
+import onm.configuration.FurnitureType
+import onm.configuration.RoomType
+import onm.configuration.json.ConfigurationDataClass
+import onm.configuration.json.DeviceConfig
+import onm.configuration.json.RoomConfig
 import onm.events.EventHandler
 import onm.events.IEventHandler
 import onm.house.devices.AbstractDevice
@@ -59,20 +64,16 @@ class HouseBuilder private constructor(
 
 
         private fun createDevice(deviceConfig: DeviceConfig, eventHandler: IEventHandler): AbstractDevice {
-            when (deviceConfig.deviceType) {
+            return when (deviceConfig.deviceType) {
                 DeviceType.WASHER -> Washer(UUID.randomUUID(), eventHandler, deviceConfig.powerConsumption)
                 DeviceType.FRIDGE -> Fridge(UUID.randomUUID(), eventHandler)
                 DeviceType.OVEN -> Oven(UUID.randomUUID(), eventHandler)
             }
-
-            throw IllegalStateException("Attempt to create non existing device.")
         }
     }
 
     /**
      * Adds or gets room in the house.
-     * @param type Type of desired room
-     * @param description description/name of desired room
      */
     fun addOrGetRoom(roomConfig: RoomConfig): Room {
         var room = house.rooms.find { x -> x.roomType == roomConfig.roomType && x.floorNumber == roomConfig.floor && x.placeDescription == roomConfig.description }

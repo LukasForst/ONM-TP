@@ -1,15 +1,24 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
-import onm.configuration.PowerConsumption
+import onm.configuration.json.PowerConsumption
 
 
+/**
+ * This data class represents current device state. In state, device has power consumption and available state
+ * */
 data class DeviceState(val currentPowerConsumption: Int, val isDeviceAvailable: Boolean)
 
+/**
+ * This class changes current state according called methods. Default is idleState
+ * */
 class DeviceStateMachine(
         private val powerConsumption: PowerConsumption,
         private val deviceType: DeviceType) {
 
+    /**
+     * Gets current state of the machine.
+     * */
     var currentState = idleState()
         private set(value) {
             field = value

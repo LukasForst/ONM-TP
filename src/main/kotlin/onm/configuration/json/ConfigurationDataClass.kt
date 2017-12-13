@@ -1,4 +1,11 @@
-package onm.configuration
+package onm.configuration.json
+
+import onm.configuration.DeviceType
+import onm.configuration.RoomType
+
+/**
+ * Classes in this file will be serialized to the JSON.
+ * */
 
 /**
  * Data class used as configuration part for out framework.
@@ -13,7 +20,7 @@ data class ConfigurationDataClass(
          *
          * ```Kitchen : Fridge : 1```
          * */
-        val roomsAndDevices: Map<RoomConfig, Collection<DeviceConfig>> //todo add more config options
+        val roomsAndDevices: Map<RoomConfig, Collection<DeviceConfig>> //todo add more config options + how to save generic collection to the json
 )
 
 /**
@@ -21,7 +28,7 @@ data class ConfigurationDataClass(
  * */
 data class RoomConfig(
         val roomType: RoomType,
-        val description: String,
+        val description: String?,
         val floor: Int
 )
 
@@ -40,13 +47,4 @@ data class PowerConsumption(
         val idleState: Int? = null,
         val workingState: Int? = null,
         val turnedOffState: Int? = null
-) {
-    companion object {
-        /**
-         * Creates power consumption with default parameters
-         * */
-        fun defaultPowerConsumption(): PowerConsumption {
-            return PowerConsumption()
-        }
-    }
-}
+)

@@ -1,7 +1,7 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
-import onm.configuration.PowerConsumption
+import onm.configuration.json.PowerConsumption
 import onm.events.IEventHandler
 import onm.events.WasherDoneEvent
 import java.util.*
@@ -11,7 +11,7 @@ import java.util.*
  * */
 class Washer(override val id: UUID,
              eventHandler: IEventHandler,
-             powerConsumption: PowerConsumption = PowerConsumption.defaultPowerConsumption()) : AbstractDevice(DeviceType.WASHER, powerConsumption) {
+             powerConsumption: PowerConsumption = PowerConsumption()) : AbstractDevice(DeviceType.WASHER, powerConsumption) {
 
     private val event = WasherDoneEvent(eventHandler)
 

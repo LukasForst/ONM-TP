@@ -2,8 +2,8 @@ package onm.enterpoint
 
 import onm.builder.HouseBuilder
 import onm.configuration.FurnitureType
-import onm.configuration.RoomConfig
 import onm.configuration.RoomType
+import onm.configuration.json.RoomConfig
 import onm.things.Food
 import onm.things.FoodType
 

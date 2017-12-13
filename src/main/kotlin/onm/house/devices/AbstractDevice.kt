@@ -1,7 +1,7 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
-import onm.configuration.PowerConsumption
+import onm.configuration.json.PowerConsumption
 import onm.house.places.Room
 import onm.interfaces.StationaryEntity
 import kotlin.concurrent.thread
