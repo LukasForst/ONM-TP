@@ -26,8 +26,8 @@ class Room internal constructor(
          * */
         val floorNumber: Int,
 
-        private val _devicesInRoom: MutableCollection<AbstractDevice>,
-        private val _furnitureInRoom: MutableCollection<Furniture>) : Place {
+        private val _devicesInRoom: MutableCollection<AbstractDevice> = ArrayList(),
+        private val _furnitureInRoom: MutableCollection<Furniture> = ArrayList()) : Place {
 
     override val placeType get() = PlaceType.ROOM
 
