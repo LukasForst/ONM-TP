@@ -1,9 +1,13 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
-import onm.configuration.json.PowerConsumption
+import onm.configuration.json.DeviceConfig
+import onm.events.DeviceBrokenEvent
+import onm.events.IEvent
+import onm.events.IEventHandler
 import onm.house.places.Room
 import onm.interfaces.StationaryEntity
+import java.util.*
 import kotlin.concurrent.thread
 
 /**
@@ -13,12 +17,17 @@ abstract class AbstractDevice(
         /**
          * Type of device.
          * */
-        deviceType: DeviceType,
+        val deviceType: DeviceType,
 
         /**
-         * power consumption settings for this device
+         * Device configuration
          * */
-        powerConsumption: PowerConsumption) : StationaryEntity {
+        private val deviceConfig: DeviceConfig,
+
+        /**
+         * Event handler used for handling raised events.
+         * */
+        protected val eventHandler: IEventHandler) : StationaryEntity {
 
 
     /**
@@ -39,6 +48,11 @@ abstract class AbstractDevice(
      * */
     var room: Room? = null
 
+    /**
+     * Description of the device.
+     * */
+    val deviceDescription: String
+        get() = deviceConfig.deviceDescription
 
     /**
      * Determines whether is device available to be used or not.
@@ -55,17 +69,36 @@ abstract class AbstractDevice(
     /**
      * State machine is used for manipulating with device power consumption.
      * */
-    protected val deviceStateMachine = DeviceStateMachine(powerConsumption, deviceType, this)
+    protected val deviceStateMachine = DeviceStateMachine(deviceConfig.powerConsumption, deviceType, this)
 
     /**
      * Simulates work. After ending work it invokes callback.
      * */
     protected fun doWork(milliseconds: Long, callback: () -> Unit) {
         thread(start = true) {
-            deviceStateMachine.workingState()
-            Thread.sleep(milliseconds)
-            deviceStateMachine.idleState()
-            callback.invoke()
+            val brokenEvent = verifyNotBroken(currentErrorProbability)
+            if (brokenEvent != null) {
+                brokenEvent.raiseEvent()
+            } else {
+                currentErrorProbability += currentErrorProbability / 10
+                deviceStateMachine.workingState()
+                Thread.sleep(milliseconds)
+                deviceStateMachine.idleState()
+                callback.invoke()
+            }
+        }
+    }
+
+    private var currentErrorProbability: Double = deviceConfig.breakageProbability ?: deviceType.breakageProbability
+
+    private fun verifyNotBroken(brokenChance: Double): IEvent? {
+        val intervalNumber = (brokenChance * 10).toInt()
+        val randomNumber = Random().nextInt(1000)
+
+        return if (randomNumber >= intervalNumber) {
+            null
+        } else {
+            DeviceBrokenEvent(eventHandler, this)
         }
     }
 }

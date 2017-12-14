@@ -5,5 +5,5 @@ package onm.configuration
  * @author Lukas Forst
  */
 enum class EventSeverity {
-    WARNING, INFO, EXECUTION_DONE, ERROR
+    WARNING, INFO, EXECUTION_DONE, ERROR, DEVICE_BROKEN
 }

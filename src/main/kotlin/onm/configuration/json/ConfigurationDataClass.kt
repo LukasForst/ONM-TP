@@ -37,7 +37,9 @@ data class RoomConfig(
  * */
 data class DeviceConfig(
         val deviceType: DeviceType,
-        val powerConsumption: PowerConsumption
+        val powerConsumption: PowerConsumption,
+        val breakageProbability: Double?,
+        val deviceDescription: String = deviceType.name + " - description provided"
 )
 
 /**
