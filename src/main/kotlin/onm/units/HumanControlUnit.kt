@@ -1,23 +1,29 @@
 package onm.units
 
-import onm.events.BakeFinishedEvent
-import onm.events.FridgeEmptyEvent
-import onm.events.IEvent
 import onm.house.devices.AbstractDevice
+import onm.house.devices.Fridge
 import onm.human.Human
 import onm.human.HumanAbility
+import onm.human.HumanTask
+import onm.human.TaskTypes
 import onm.things.Equipment
-import java.util.concurrent.*
+import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.concurrent.thread
 
 class NoSuchHumans : Exception();
 
 class HumanControlUnit(private val humans: Collection<Human>) {
+    init {
+        for (h in humans) {
+            h.controlUnit = this
+        }
+    }
+
     private val availableHumans = ArrayList<Human>()
     private val availableEquipment = ArrayList<Equipment>()
-    private val availableThings = ArrayList<AbstractDevice>()
-    private val queueTodo = ConcurrentLinkedQueue<IEvent>()
-    private val queueWaitForHuman = ConcurrentLinkedQueue<IEvent>()
+    private val availableThings = mutableListOf<AbstractDevice>()
+    private val queueTodo = ConcurrentLinkedQueue<HumanTask>()
+    private val queueWaitForHuman = ConcurrentLinkedQueue<HumanTask>()
 
 
     private fun getHumanByAbility(ability: HumanAbility): Human {
@@ -29,30 +35,32 @@ class HumanControlUnit(private val humans: Collection<Human>) {
         }
     }
 
+
     private fun start() {
         thread(start = true) {
             while (!queueTodo.isEmpty()) {
-                val event = queueTodo.poll()
-                when {
-                    event is FridgeEmptyEvent -> {
+                val task = queueTodo.poll()
+                when (task.type) {
+                    TaskTypes.SHOP -> {
                         try {
-                            val h = getHumanByAbility(HumanAbility.CAN_COOK)
+                            if (task.device != null) {
+                                val h = getHumanByAbility(HumanAbility.ANY)
+                                h.goShop(task.device as Fridge)
+                            } else {
+                                //TODO: No device, log it
+                            }
 
                         } catch (err: NoSuchHumans) {
-                            queueWaitForHuman.add(event)
+                            queueWaitForHuman.add(task)
                         }
                     }
-                    event is BakeFinishedEvent -> {
-
-                    }
                 }
-
             }
         }
     }
 
-    fun handleEvent(event: IEvent) {
-        queueTodo.add(event)
+    fun handleTask(task: HumanTask) {
+        queueTodo.add(task)
         if (queueTodo.size == 1) {
             start()
         }
