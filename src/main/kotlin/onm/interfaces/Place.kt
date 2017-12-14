@@ -16,5 +16,5 @@ interface Place : HouseEntity {
     /**
      * Short description of the place.
      * */
-    val placeDescription: String?
+    val placeDescription: String
 }

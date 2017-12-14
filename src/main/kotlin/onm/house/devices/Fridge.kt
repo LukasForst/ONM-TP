@@ -1,9 +1,8 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
-import onm.configuration.json.PowerConsumption
+import onm.configuration.json.DeviceConfig
 import onm.events.FridgeEmptyEvent
-
 import onm.events.IEventHandler
 import onm.things.Food
 import java.util.*
@@ -14,8 +13,8 @@ import kotlin.concurrent.thread
  * */
 class Fridge(override val id: UUID,
              eventHandler: IEventHandler,
-             powerConsumption: PowerConsumption = PowerConsumption(),
-             private val workingIntervalInMinutes: Double = 1.0) : AbstractDevice(DeviceType.FRIDGE, powerConsumption) {
+             deviceConfig: DeviceConfig,
+             private val workingIntervalInMinutes: Double = 1.0) : AbstractDevice(DeviceType.FRIDGE, deviceConfig, eventHandler) {
 
     private val fridgeEmptyEvent = FridgeEmptyEvent(eventHandler)
     private val _food = LinkedList<Food>()
