@@ -22,6 +22,19 @@ abstract class AbstractDevice(
 
 
     /**
+     * Time of device in idle state
+     */
+    var idleTime = 0.0;
+    /**
+     * Time of device in working state
+     */
+    var workingTime = 0.0;
+    /**
+     * Time of device in turnedOffTime
+     */
+    var turnedOffTime = 0.0;
+
+    /**
      * Room reference. This should be set after adding device to the room.
      * */
     var room: Room? = null
@@ -42,7 +55,7 @@ abstract class AbstractDevice(
     /**
      * State machine is used for manipulating with device power consumption.
      * */
-    protected val deviceStateMachine = DeviceStateMachine(powerConsumption, deviceType)
+    protected val deviceStateMachine = DeviceStateMachine(powerConsumption, deviceType, this)
 
     /**
      * Simulates work. After ending work it invokes callback.
