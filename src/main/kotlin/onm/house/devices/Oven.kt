@@ -1,6 +1,7 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
+import onm.configuration.json.PowerConsumption
 import onm.events.BakeFinishedEvent
 import onm.events.IEventHandler
 import onm.things.Food
@@ -10,15 +11,15 @@ import java.util.*
  * Oven representation.
  * */
 class Oven(override val id: UUID,
-           eventHandler: IEventHandler) : AbstractDevice(DeviceType.OVEN) {
+           eventHandler: IEventHandler,
+           powerConsumption: PowerConsumption = PowerConsumption())
+    : AbstractDevice(DeviceType.OVEN, powerConsumption) {
 
     private val ovenBakeFinishedEvent = BakeFinishedEvent(eventHandler)
 
     fun switchOn(food: Collection<Food>, minutes: Double) {
-
-        //TODO add execution in separate thread for $minutes minutes. Food size determines number of portions.
-
-        ovenBakeFinishedEvent.raiseEvent()
+        doWork((minutes * 60000).toLong(), ovenBakeFinishedEvent::raiseEvent)
+        //TODO Food size determines number of portions.
     }
 
     override fun generateReport(): String {

@@ -1,8 +1,10 @@
 package onm.house.devices
 
 import onm.configuration.DeviceType
+import onm.configuration.json.PowerConsumption
 import onm.house.places.Room
 import onm.interfaces.StationaryEntity
+import kotlin.concurrent.thread
 
 /**
  * Abstract device class represents device in the house. All future devices should implements this class.
@@ -11,10 +13,12 @@ abstract class AbstractDevice(
         /**
          * Type of device.
          * */
-        val deviceType: DeviceType) : StationaryEntity {
+        deviceType: DeviceType,
 
-
-    //todo get specs and implement this
+        /**
+         * power consumption settings for this device
+         * */
+        powerConsumption: PowerConsumption) : StationaryEntity {
 
 
     /**
@@ -22,14 +26,33 @@ abstract class AbstractDevice(
      * */
     var room: Room? = null
 
+
     /**
-     * Determines state of device - whether is working or not.
+     * Determines whether is device available to be used or not.
      * */
-    var isBusy: Boolean = false
-        @Synchronized get() = field
-        @Synchronized set(value) {
-            field = value
+    val isDeviceAvailable: Boolean
+        get() = deviceStateMachine.currentState.isDeviceAvailable
+
+    /**
+     * Returns current power consumption of the device. This is based on the state of the device.
+     * */
+    val currentPowerConsumption: Int
+        get() = deviceStateMachine.currentState.currentPowerConsumption
+
+    /**
+     * State machine is used for manipulating with device power consumption.
+     * */
+    protected val deviceStateMachine = DeviceStateMachine(powerConsumption, deviceType)
+
+    /**
+     * Simulates work. After ending work it invokes callback.
+     * */
+    protected fun doWork(milliseconds: Long, callback: () -> Unit) {
+        thread(start = true) {
+            deviceStateMachine.workingState()
+            Thread.sleep(milliseconds)
+            deviceStateMachine.idleState()
+            callback.invoke()
         }
-
-
+    }
 }

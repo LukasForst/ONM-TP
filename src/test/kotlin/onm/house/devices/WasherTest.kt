@@ -1,14 +1,13 @@
 package onm.house.devices
 
 import onm.TestUtils
-import onm.events.WasherDoneEvent
 import onm.events.IEventHandler
+import onm.events.WasherDoneEvent
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 import java.util.*
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class WasherTest {
@@ -30,20 +29,17 @@ class WasherTest {
         var timesChecked = 0
         `when`(eventHandlerMock.handle(TestUtils.any<WasherDoneEvent>())).then({
             washerCalled = true
-
             null
         })
 
         val washingTime = 0.001
         washer.startWashing(washingTime)
-
-        assertTrue(washer.isBusy)
         while (timesChecked != 3 && !washerCalled) {
             Thread.sleep((washingTime * 60000).toLong())
             timesChecked++
         }
 
-        assertFalse(washer.isBusy)
+        assertTrue(washer.isDeviceAvailable)
         verify(eventHandlerMock, times(1)).handle(TestUtils.any<WasherDoneEvent>())
     }
 
