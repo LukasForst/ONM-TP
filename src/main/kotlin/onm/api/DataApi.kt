@@ -3,6 +3,9 @@ package onm.api
 import onm.house.devices.AbstractDevice
 
 //TODO add javadoc beacuse this is API
+/**
+ * Data api to every device monitoring consumption in all states
+ */
 class DataApi(private val device: AbstractDevice) {
 
     /**
