@@ -56,27 +56,23 @@ class DeviceStateMachine(
         timeOfLastChange = System.currentTimeMillis()
     }
 
-    fun idleState(): DeviceState {
+    fun idleState() {
         addConsumption()
         currentState = DeviceState(powerConsumption.idleState ?: deviceType.idlePowerConsumption, true, StateType.IDLE)
-        return currentState
     }
 
-    fun workingState(): DeviceState {
+    fun workingState() {
         addConsumption()
         currentState = DeviceState(powerConsumption.workingState ?: deviceType.workingPowerConsumption, false, StateType.WORKING)
-        return currentState
     }
 
-    fun turnedOffState(): DeviceState {
+    fun turnedOffState() {
         addConsumption()
         currentState = DeviceState(powerConsumption.turnedOffState ?: deviceType.turnedOffPowerConsumption, false, StateType.TURNED_OFF)
-        return currentState
     }
 
-    fun brokenSate(): DeviceState {
+    fun brokenSate() {
         addConsumption()
         currentState = DeviceState(powerConsumption.turnedOffState ?: deviceType.turnedOffPowerConsumption, false, StateType.BROKEN, true)
-        return currentState
     }
 }
