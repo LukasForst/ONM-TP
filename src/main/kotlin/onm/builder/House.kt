@@ -20,8 +20,7 @@ class House internal constructor(){
     val allIControlApi = LinkedList<IControlApi>()
 
     fun getUidOfDevice(deviceDescription: String): UUID {
-        val id = allIDevices.firstOrNull { device -> device.deviceDescription.contentEquals(deviceDescription) }?.id ?: throw NoSuchElementException()
-        return id
+        return allIDevices.firstOrNull { device -> device.deviceDescription.contentEquals(deviceDescription) }?.id ?: throw NoSuchElementException()
     }
 
     fun getDataApiByUUID(id: UUID): DataApi? {
@@ -29,7 +28,6 @@ class House internal constructor(){
     }
 
     inline fun <reified T> getControlApiByUUID(id: UUID): T? {
-        val controlApi = allIControlApi.singleOrNull { iDevice -> iDevice.id == id } ?: return null
-        return controlApi as? T
+        return allIControlApi.singleOrNull { iDevice -> iDevice.id == id }  as? T
     }
 }
