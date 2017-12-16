@@ -7,7 +7,7 @@ import onm.configuration.json.PowerConsumption
 /**
  * This data class represents current device state. In state, device has power consumption and available state
  * */
-data class DeviceState(val currentPowerConsumption: Int, val isDeviceAvailable: Boolean)
+data class DeviceState(val currentPowerConsumption: Int, val isDeviceAvailable: Boolean, val isBroken: Boolean = false)
 
 /**
  * This class changes current state according called methods. Default is idleState
@@ -36,6 +36,11 @@ class DeviceStateMachine(
 
     fun turnedOffState(): DeviceState {
         currentState = DeviceState(powerConsumption.turnedOffState ?: deviceType.turnedOffPowerConsumption, false)
+        return currentState
+    }
+
+    fun brokenSate(): DeviceState {
+        currentState = DeviceState(powerConsumption.turnedOffState ?: deviceType.turnedOffPowerConsumption, false, true)
         return currentState
     }
 }
