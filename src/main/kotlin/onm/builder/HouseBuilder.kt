@@ -5,10 +5,7 @@ import onm.configuration.json.ConfigurationDataClass
 import onm.configuration.json.DeviceConfig
 import onm.events.EventHandler
 import onm.events.IEventHandler
-import onm.house.devices.AbstractDevice
-import onm.house.devices.Fridge
-import onm.house.devices.Oven
-import onm.house.devices.Washer
+import onm.house.devices.*
 import onm.house.places.Room
 import java.util.*
 
@@ -53,6 +50,11 @@ object HouseBuilder {
                 val oven = Oven(UUID.randomUUID(), eventHandler, deviceConfig)
                 house.ovenList.add(oven)
                 return oven
+            }
+            DeviceType.DRYER -> {
+                val dryer = Dryer(UUID.randomUUID(), eventHandler, deviceConfig)
+                house.dryerList.add(dryer)
+                return dryer
             }
         }
     }

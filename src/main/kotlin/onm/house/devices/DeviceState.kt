@@ -24,6 +24,16 @@ class DeviceStateMachine(
         private val device: AbstractDevice,
         private var timeOfLastChange: Long = System.currentTimeMillis()) {
 
+
+    /**
+     * Gets current state of the machine.
+     * */
+    var currentState = DeviceState(powerConsumption.idleState ?: deviceType.idlePowerConsumption, true, StateType.IDLE)
+        private set(value) {
+            addConsumption()
+            field = value
+        }
+
     /**
      * Consumed energy is calculated this way: _elapsedMinutes_ * cur_power_consumption
      */
@@ -40,19 +50,11 @@ class DeviceStateMachine(
             StateType.TURNED_OFF -> device.turnedOffConsumption += getConsumedEnergy()
             StateType.WORKING -> device.workingConsumption += getConsumedEnergy()
             StateType.IDLE -> device.idleConsumption += getConsumedEnergy()
-            //TODO
+            else -> {
+            }  //No consumption when the device is broken
         }
         timeOfLastChange = System.currentTimeMillis()
     }
-
-    /**
-     * Gets current state of the machine.
-     * */
-    var currentState = idleState()
-        private set(value) {
-            addConsumption()
-            field = value
-        }
 
     fun idleState(): DeviceState {
         addConsumption()

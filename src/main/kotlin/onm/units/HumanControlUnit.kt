@@ -1,5 +1,6 @@
 package onm.units
 
+import onm.api.FridgeControlApi
 import onm.events.EventHandler
 import onm.events.HumanStopSport
 import onm.house.devices.AbstractDevice
@@ -13,7 +14,7 @@ import onm.things.Equipment
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.concurrent.thread
 
-class NoSuchHumans : Exception();
+class NoSuchHumans : Exception()
 
 class HumanControlUnit(private val availableHumans: Collection<Human>,
                        protected val eventHandler: EventHandler) {
@@ -27,9 +28,9 @@ class HumanControlUnit(private val availableHumans: Collection<Human>,
     private fun getHumanByAbility(ability: HumanAbility): Human {
         val rest = availableHumans.filter { it.ability.compareTo(ability) > 0; it.available == true }.toList()
         if (rest.isNotEmpty()) {
-            return rest[0];
+            return rest[0]
         } else {
-            throw NoSuchHumans();
+            throw NoSuchHumans()
         }
     }
 
@@ -41,7 +42,7 @@ class HumanControlUnit(private val availableHumans: Collection<Human>,
                 when (task.type) {
                     TaskTypes.SHOP -> {
                         try {
-                            goShop(task.device as Fridge)
+                            goShop((task.device as Fridge).fridgeControlApi)
                         } catch (err: NoSuchHumans) {
                             queueWaitForHuman.add(task)
                         }
@@ -95,7 +96,7 @@ class HumanControlUnit(private val availableHumans: Collection<Human>,
         }
     }
 
-    private fun goShop(device: Fridge) {
+    private fun goShop(device: FridgeControlApi) {
         val h = getHumanByAbility(HumanAbility.ANY)
         h.goShop(device)
 
@@ -104,7 +105,7 @@ class HumanControlUnit(private val availableHumans: Collection<Human>,
 
     private fun repairDevice(device: AbstractDevice) {
         val h = getHumanByAbility(HumanAbility.CAN_REPAIR_DEVICES)
-        h.repairDevice(device);
+        h.repairDevice(device)
     }
 
     private fun interactWithDevice(device: AbstractDevice) {

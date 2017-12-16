@@ -1,9 +1,7 @@
 package onm.builder
 
-import onm.api.DataApi
-import onm.api.FridgeControlApi
-import onm.api.OvenControlApi
-import onm.api.WasherControlApi
+import onm.api.*
+import onm.house.devices.Dryer
 import onm.house.devices.Fridge
 import onm.house.devices.Oven
 import onm.house.devices.Washer
@@ -19,9 +17,12 @@ import kotlin.NoSuchElementException
 class House internal constructor(){
 
     val rooms = LinkedList<Room>()
+
     val fridgeList = LinkedList<Fridge>()
     val washerList = LinkedList<Washer>()
     val ovenList = LinkedList<Oven>()
+    val dryerList = LinkedList<Dryer>()
+
 
     fun getDataApi(deviceDescription: String): DataApi {
         for (room in rooms) {
@@ -46,6 +47,12 @@ class House internal constructor(){
     fun getOvenControlApi(ovenDescription: String): OvenControlApi {
         val oven = ovenList.firstOrNull { oven -> oven.deviceDescription.contentEquals(ovenDescription) }
         if (oven != null) return oven.ovenControlApi
+        throw NoSuchElementException()
+    }
+
+    fun getDryerControlApi(dryerDescription: String): DryerControlApi {
+        val dryer = dryerList.firstOrNull { dryer -> dryer.deviceDescription.contentEquals(dryerDescription) }
+        if (dryer != null) return dryer.dryerControlApi
         throw NoSuchElementException()
     }
 

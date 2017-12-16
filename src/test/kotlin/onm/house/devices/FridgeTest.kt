@@ -1,6 +1,7 @@
 package onm.house.devices
 
 import onm.TestUtils
+import onm.api.FridgeControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.configuration.json.PowerConsumption
@@ -19,19 +20,19 @@ import kotlin.test.assertEquals
  * @author Lukas Forst
  */
 class FridgeTest {
-    lateinit var fridge: Fridge
+    lateinit var fridge: FridgeControlApi
     lateinit var eventHandlerMock: IEventHandler
 
 
     @Before
     fun setUp() {
         eventHandlerMock = mock(IEventHandler::class.java)
-        fridge = Fridge(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.FRIDGE, PowerConsumption()))
+        fridge = Fridge(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.FRIDGE, PowerConsumption(), "fridge")).fridgeControlApi
     }
 
     @Test
     fun createEventTest() {
-        val food = fridge.food
+        val food = fridge.getFood()
         assertEquals(0, food.size)
         Thread.sleep(50)
         verify(eventHandlerMock, times(1)).handle(TestUtils.any<FridgeEmptyEvent>())
@@ -42,7 +43,7 @@ class FridgeTest {
         fridge.addFood(Food(FoodType.APPLE))
         fridge.addFood(Food(FoodType.BREAD))
 
-        val food = fridge.food
+        val food = fridge.getFood()
         assertEquals(2, food.size)
         verify(eventHandlerMock, never()).handle(TestUtils.any<FridgeEmptyEvent>())
     }
