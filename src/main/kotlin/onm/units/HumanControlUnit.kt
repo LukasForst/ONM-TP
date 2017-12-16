@@ -1,5 +1,7 @@
 package onm.units
 
+import onm.events.EventHandler
+import onm.events.HumanStopSport
 import onm.house.devices.AbstractDevice
 import onm.house.devices.Dryer
 import onm.house.devices.Fridge
@@ -13,15 +15,16 @@ import kotlin.concurrent.thread
 
 class NoSuchHumans : Exception();
 
-class HumanControlUnit(private val humans: Collection<Human>) {
+class HumanControlUnit(private val availableHumans: Collection<Human>,
+                       protected val eventHandler: EventHandler) {
     init {
-        for (h in humans) {
+        for (h in availableHumans) {
             h.controlUnit = this
         }
     }
 
-    private val availableHumans = mutableListOf<Human>()
-    private val availableEquipment = mutableListOf<Equipment>()
+
+    private val availableEquipment = ConcurrentLinkedQueue<Equipment>()
     private val availableThings = mutableListOf<AbstractDevice>()
     private val queueTodo = ConcurrentLinkedQueue<HumanTask>()
     private val queueWaitForHuman = ConcurrentLinkedQueue<HumanTask>()
@@ -69,9 +72,10 @@ class HumanControlUnit(private val humans: Collection<Human>) {
                 // Add all stuff to queue when it possible
                 if (queueTodo.isEmpty()) {
                     //If there are no stuff to do, go sport
+                    //TODO: call this function before "if" if human is lenoch
+                    choseRandomSport()
 
-
-                    if(queueWaitForHuman.isNotEmpty()){
+                    if (queueWaitForHuman.isNotEmpty()) {
                         queueTodo.addAll(queueWaitForHuman)
                         queueWaitForHuman.clear()
                     }
@@ -79,6 +83,21 @@ class HumanControlUnit(private val humans: Collection<Human>) {
                 }
             }
 
+        }
+    }
+
+    private fun choseRandomSport() {
+        if (availableEquipment.isEmpty()) return
+
+        try {
+            val eq = availableEquipment.poll()
+            val h = getHumanByAbility(HumanAbility.ANY)
+            h.doSport(eq, {
+                HumanStopSport(eventHandler, h).raiseEvent()
+                availableEquipment.add(eq)
+            })
+        } catch (err: NoSuchHumans) {
+            //TODO: no humans for sporting... Do nothing
         }
     }
 

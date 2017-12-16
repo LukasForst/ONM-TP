@@ -3,12 +3,13 @@ package onm.human
 import onm.house.devices.AbstractDevice
 import onm.house.devices.Dryer
 import onm.house.devices.Fridge
+import onm.things.Equipment
 import onm.things.Food
 import onm.things.FoodType
 import onm.units.HumanControlUnit
 import kotlin.concurrent.thread
 
-class Human(val ability: HumanAbility) {
+class Human(val ability: HumanAbility, val name:String) {
     var available: Boolean = true
 
     var controlUnit: HumanControlUnit? = null
@@ -44,6 +45,16 @@ class Human(val ability: HumanAbility) {
             Thread.sleep(2000)
             device.repair()
             available = true;
+        }
+    }
+
+    fun doSport(equipment: Equipment, callback: () -> Unit) {
+        available = false
+        thread(start = true) {
+            Thread.sleep(4000)
+
+            available = true
+            callback.invoke()
         }
     }
 }

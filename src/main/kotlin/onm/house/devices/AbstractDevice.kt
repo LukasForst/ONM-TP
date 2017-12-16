@@ -5,6 +5,7 @@ import onm.configuration.json.DeviceConfig
 import onm.events.DeviceBrokenEvent
 import onm.events.IEvent
 import onm.events.IEventHandler
+import onm.events.RepairEvent
 import onm.house.places.Room
 import onm.interfaces.StationaryEntity
 import java.util.*
@@ -78,7 +79,8 @@ abstract class AbstractDevice(
     }
 
     fun repair(){
-        deviceStateMachine.idleState();
+        deviceStateMachine.idleState()
+        RepairEvent(eventHandler, this).raiseEvent()
     }
 
     private var currentErrorProbability: Double = deviceConfig.breakageProbability ?: deviceType.breakageProbability
