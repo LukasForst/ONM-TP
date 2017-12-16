@@ -4,6 +4,7 @@ import onm.house.devices.Fridge
 import onm.things.Food
 import java.util.*
 
+//TODO add javadoc beacuse this is API
 class FridgeControlApi(
         private val fridge : Fridge){
 
@@ -28,9 +29,6 @@ class FridgeControlApi(
     fun addFood(food: Food) {
         fridge.food.add(food)
     }
-
-
-
 
 
 }

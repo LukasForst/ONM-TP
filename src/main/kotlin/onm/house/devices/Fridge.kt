@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.api.FridgeControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.FridgeEmptyEvent
@@ -18,6 +19,8 @@ class Fridge(override val id: UUID,
 
     private val fridgeEmptyEvent = FridgeEmptyEvent(eventHandler)
     private val _food = LinkedList<Food>()
+
+    val fridgeControlApi = FridgeControlApi(this)
 
     init { //todo what if electricity is turned off?
         //simulates fridge working

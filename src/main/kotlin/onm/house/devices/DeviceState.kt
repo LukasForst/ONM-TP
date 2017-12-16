@@ -9,10 +9,11 @@ import onm.configuration.json.PowerConsumption
  * */
 data class DeviceState(val currentPowerConsumption: Int, val isDeviceAvailable: Boolean, var stateType : StateType)
 
-enum class StateType(){
+
+//TODO this data clas and enum can be merged to just enum (if isDeviceAvailable is still unused)
+enum class StateType {
     IDLE, WORKING, TURNED_OFF
 }
-
 
 /**
  * This class changes current state according called methods. Default is idleState
@@ -23,18 +24,22 @@ class DeviceStateMachine(
         private val device: AbstractDevice,
         private var timeOfLastChange: Long = System.currentTimeMillis()) {
 
-
-
-    private fun getElapsedMinutes() : Float {
+    /**
+     * Consumed energy is calculated this way: _elapsedMinutes_ * cur_power_consumption
+     */
+    private fun getConsumedEnergy(): Float {
         val elapsedTimeMilis = System.currentTimeMillis() - timeOfLastChange
-        return elapsedTimeMilis/(60*1000F)
+        return elapsedTimeMilis / (60 * 1000F) * currentState.currentPowerConsumption
     }
 
-    private fun addElapsedTime(){
+    /**
+     * Add consumption to device according to current state
+     */
+    private fun addConsumption() {
         when (currentState.stateType){
-            StateType.TURNED_OFF -> device.turnedOffTime += getElapsedMinutes()
-            StateType.WORKING -> device.workingTime += getElapsedMinutes()
-            StateType.IDLE -> device.idleTime += getElapsedMinutes()
+            StateType.TURNED_OFF -> device.turnedOffConsumption += getConsumedEnergy()
+            StateType.WORKING -> device.workingConsumption += getConsumedEnergy()
+            StateType.IDLE -> device.idleConsumption += getConsumedEnergy()
         }
         timeOfLastChange = System.currentTimeMillis()
     }
@@ -44,23 +49,24 @@ class DeviceStateMachine(
      * */
     var currentState = idleState()
         private set(value) {
+            addConsumption()
             field = value
         }
 
     fun idleState(): DeviceState {
-        addElapsedTime()
+        addConsumption()
         currentState = DeviceState(powerConsumption.idleState ?: deviceType.idlePowerConsumption, true, StateType.IDLE)
         return currentState
     }
 
     fun workingState(): DeviceState {
-        addElapsedTime()
+        addConsumption()
         currentState = DeviceState(powerConsumption.workingState ?: deviceType.workingPowerConsumption, false, StateType.WORKING)
         return currentState
     }
 
     fun turnedOffState(): DeviceState {
-        addElapsedTime()
+        addConsumption()
         currentState = DeviceState(powerConsumption.turnedOffState ?: deviceType.turnedOffPowerConsumption, false, StateType.TURNED_OFF)
         return currentState
     }

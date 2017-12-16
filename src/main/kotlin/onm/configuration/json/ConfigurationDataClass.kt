@@ -39,7 +39,7 @@ data class DeviceConfig(
         val deviceType: DeviceType,
         val powerConsumption: PowerConsumption,
         val breakageProbability: Double?,
-        val deviceDescription: String = deviceType.name + " - description provided"
+        val deviceDescription: String //TODO deviceDescription must be unique, therefore it has to be checked while parsing json
 )
 
 /**

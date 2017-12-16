@@ -18,12 +18,12 @@ import java.util.*
  */
 object HouseBuilder {
 
+    val house = House()
     /**
      * Builds house from given config class. This class should be parsed from JSON.
      * */
     fun buildHouseFromConfig(config: ConfigurationDataClass): House {
         val eventHandler = EventHandler() //todo make event handler as singleton
-        val house = House()
 
         for (roomConfig in config.roomsAndDevices.keys) {
             val room = Room(UUID.randomUUID(), roomConfig.description ?: "No description provided.",
@@ -38,10 +38,22 @@ object HouseBuilder {
     }
 
     private fun createDevice(deviceConfig: DeviceConfig, eventHandler: IEventHandler): AbstractDevice {
-        return when (deviceConfig.deviceType) {
-            DeviceType.WASHER -> Washer(UUID.randomUUID(), eventHandler, deviceConfig)
-            DeviceType.FRIDGE -> Fridge(UUID.randomUUID(), eventHandler, deviceConfig)
-            DeviceType.OVEN -> Oven(UUID.randomUUID(), eventHandler, deviceConfig)
+        when (deviceConfig.deviceType) {
+            DeviceType.WASHER -> {
+                val washer = Washer(UUID.randomUUID(), eventHandler, deviceConfig)
+                house.washerList.add(washer)
+                return washer
+            }
+            DeviceType.FRIDGE -> {
+                val fridge = Fridge(UUID.randomUUID(), eventHandler, deviceConfig)
+                house.fridgeList.add(fridge)
+                return fridge
+            }
+            DeviceType.OVEN -> {
+                val oven = Oven(UUID.randomUUID(), eventHandler, deviceConfig)
+                house.ovenList.add(oven)
+                return oven
+            }
         }
     }
 }
