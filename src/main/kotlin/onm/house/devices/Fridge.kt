@@ -20,7 +20,7 @@ class Fridge(override val id: UUID,
     private val fridgeEmptyEvent = FridgeEmptyEvent(eventHandler)
     private val _food = LinkedList<Food>()
 
-    val fridgeControlApi = FridgeControlApi(this)
+    val fridgeControlApi = FridgeControlApi(this, this.id)
 
     init { //todo what if electricity is turned off?
         //simulates fridge working

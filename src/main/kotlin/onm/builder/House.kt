@@ -1,10 +1,8 @@
 package onm.builder
 
-import onm.api.*
-import onm.house.devices.Dryer
-import onm.house.devices.Fridge
-import onm.house.devices.Oven
-import onm.house.devices.Washer
+import onm.api.DataApi
+import onm.api.IControlApi
+import onm.house.devices.IDevice
 import onm.house.places.Room
 import java.util.*
 import kotlin.NoSuchElementException
@@ -16,47 +14,22 @@ import kotlin.NoSuchElementException
 //TODO add javadoc beacuse this works as API for now
 class House internal constructor(){
 
-    val rooms = LinkedList<Room>()
+    internal val rooms = LinkedList<Room>()
 
-    val fridgeList = LinkedList<Fridge>()
-    val washerList = LinkedList<Washer>()
-    val ovenList = LinkedList<Oven>()
-    val dryerList = LinkedList<Dryer>()
+    internal val allIDevices = LinkedList<IDevice>()
+    val allIControlApi = LinkedList<IControlApi>()
 
-
-    fun getDataApi(deviceDescription: String): DataApi {
-        for (room in rooms) {
-            val device = room.devicesInRoom.firstOrNull { device -> device.deviceDescription.contentEquals(deviceDescription) }
-            if (device != null) return device.dataApi
-        }
-        throw NoSuchElementException()
+    fun getUidOfDevice(deviceDescription: String): UUID {
+        val id = allIDevices.firstOrNull { device -> device.deviceDescription.contentEquals(deviceDescription) }?.id ?: throw NoSuchElementException()
+        return id
     }
 
-    fun getFridgeControlApi(fridgeDescription: String): FridgeControlApi {
-        val fridge = fridgeList.firstOrNull { fridge -> fridge.deviceDescription.contentEquals(fridgeDescription) }
-        if (fridge != null) return fridge.fridgeControlApi
-        throw NoSuchElementException()
+    fun getDataApiByUUID(id: UUID): DataApi? {
+        return allIDevices.singleOrNull { iDevice -> iDevice.id == id }?.dataApi
     }
 
-    fun getWasherControlApi(washerDescription: String): WasherControlApi {
-        val washer = washerList.firstOrNull { washer -> washer.deviceDescription.contentEquals(washerDescription) }
-        if (washer != null) return washer.washerControlApi
-        throw NoSuchElementException()
+    inline fun <reified T> getControlApiByUUID(id: UUID): T? {
+        val controlApi = allIControlApi.singleOrNull { iDevice -> iDevice.id == id } ?: return null
+        return controlApi as? T
     }
-
-    fun getOvenControlApi(ovenDescription: String): OvenControlApi {
-        val oven = ovenList.firstOrNull { oven -> oven.deviceDescription.contentEquals(ovenDescription) }
-        if (oven != null) return oven.ovenControlApi
-        throw NoSuchElementException()
-    }
-
-    fun getDryerControlApi(dryerDescription: String): DryerControlApi {
-        val dryer = dryerList.firstOrNull { dryer -> dryer.deviceDescription.contentEquals(dryerDescription) }
-        if (dryer != null) return dryer.dryerControlApi
-        throw NoSuchElementException()
-    }
-
-
-
-
 }

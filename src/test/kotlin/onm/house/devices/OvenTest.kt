@@ -23,7 +23,7 @@ class OvenTest {
     @Before
     fun setUp(){
         eventHandlerMock = mock(IEventHandler::class.java)
-        oven = Oven(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.OVEN, PowerConsumption(), "oven")).ovenControlApi
+        oven = Oven(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.OVEN, "oven", PowerConsumption())).ovenControlApi
     }
 
     @Test

@@ -8,7 +8,6 @@ import onm.events.IEvent
 import onm.events.IEventHandler
 import onm.events.RepairEvent
 import onm.house.places.Room
-import onm.interfaces.StationaryEntity
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -29,7 +28,7 @@ abstract class AbstractDevice(
         /**
          * Event handler used for handling raised events.
          * */
-        protected val eventHandler: IEventHandler) : StationaryEntity {
+        protected val eventHandler: IEventHandler) : IDevice {
 
 
     /**
@@ -51,9 +50,9 @@ abstract class AbstractDevice(
     var room: Room? = null
 
     /**
-     * Description of the device.
+     * Unique description of the device.
      * */
-    val deviceDescription: String
+    override val deviceDescription: String
         get() = deviceConfig.deviceDescription
 
     /**
@@ -73,9 +72,10 @@ abstract class AbstractDevice(
      * */
     protected val deviceStateMachine = DeviceStateMachine(deviceConfig.powerConsumption, deviceType, this)
 
-    val dataApi = DataApi(this)
-
-    lateinit var controlApi: Any
+    /**
+     * DataApi of this device to get consumption of energy
+     */
+    override val dataApi = DataApi(this)
 
     /**
      * Simulates work. After ending work it invokes callback.

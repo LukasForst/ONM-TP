@@ -16,7 +16,7 @@ class Washer(override val id: UUID,
 
     private val event = WasherDoneEvent(eventHandler)
 
-    val washerControlApi = WasherControlApi(this)
+    val washerControlApi = WasherControlApi(this, this.id)
 
     /**
      * Starts washing clothes. This produces event which is raised after given time period. Note that new thread is created.

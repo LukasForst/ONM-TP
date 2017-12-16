@@ -14,7 +14,7 @@ class Dryer(override val id: UUID,
 
     private val dryerIsDoneEvent = DryerIsDoneEvent(eventHandler)
 
-    val dryerControlApi = DryerControlApi(this)
+    val dryerControlApi = DryerControlApi(this, this.id)
 
     fun switchOn() {
 

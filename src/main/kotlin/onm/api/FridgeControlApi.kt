@@ -8,7 +8,7 @@ import java.util.*
  * Class representing api of fridge. Fridge stores food.
  */
 class FridgeControlApi(
-        private val fridge : Fridge){
+        private val fridge: Fridge, override val id: UUID) : IControlApi {
 
 
     /**

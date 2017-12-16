@@ -15,7 +15,7 @@ import java.util.*
  */
 object HouseBuilder {
 
-    val house = House()
+    private val house = House()
     /**
      * Builds house from given config class. This class should be parsed from JSON.
      * */
@@ -29,33 +29,27 @@ object HouseBuilder {
             for (deviceConfig in config.roomsAndDevices[roomConfig]!!) {
                 room.addDevice(createDevice(deviceConfig, eventHandler))
             }
+            house.rooms.add(room)
         }
 
         return house
     }
 
     private fun createDevice(deviceConfig: DeviceConfig, eventHandler: IEventHandler): AbstractDevice {
-        when (deviceConfig.deviceType) {
-            DeviceType.WASHER -> {
-                val washer = Washer(UUID.randomUUID(), eventHandler, deviceConfig)
-                house.washerList.add(washer)
-                return washer
-            }
-            DeviceType.FRIDGE -> {
-                val fridge = Fridge(UUID.randomUUID(), eventHandler, deviceConfig)
-                house.fridgeList.add(fridge)
-                return fridge
-            }
-            DeviceType.OVEN -> {
-                val oven = Oven(UUID.randomUUID(), eventHandler, deviceConfig)
-                house.ovenList.add(oven)
-                return oven
-            }
-            DeviceType.DRYER -> {
-                val dryer = Dryer(UUID.randomUUID(), eventHandler, deviceConfig)
-                house.dryerList.add(dryer)
-                return dryer
-            }
+        val createdDevice = when (deviceConfig.deviceType) {
+            DeviceType.WASHER -> Washer(UUID.randomUUID(), eventHandler, deviceConfig)
+            DeviceType.FRIDGE -> Fridge(UUID.randomUUID(), eventHandler, deviceConfig)
+            DeviceType.OVEN -> Oven(UUID.randomUUID(), eventHandler, deviceConfig)
+            DeviceType.DRYER -> Dryer(UUID.randomUUID(), eventHandler, deviceConfig)
         }
+
+        house.allIControlApi.add(when (deviceConfig.deviceType) {
+            DeviceType.WASHER -> (createdDevice as Washer).washerControlApi
+            DeviceType.FRIDGE -> (createdDevice as Fridge).fridgeControlApi
+            DeviceType.OVEN -> (createdDevice as Oven).ovenControlApi
+            DeviceType.DRYER -> (createdDevice as Dryer).dryerControlApi
+        })
+        house.allIDevices.add(createdDevice)
+        return createdDevice
     }
 }

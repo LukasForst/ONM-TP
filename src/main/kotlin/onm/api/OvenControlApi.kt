@@ -2,13 +2,14 @@ package onm.api
 
 import onm.house.devices.Oven
 import onm.things.Food
+import java.util.*
 
 
 /**
  * Class representing api of oven. Oven may bake input food for x minutes.
  */
 class OvenControlApi(
-        val oven: Oven) {
+        private val oven: Oven, override val id: UUID) : IControlApi {
 
     /**
      * Oven starts baking for input minutes

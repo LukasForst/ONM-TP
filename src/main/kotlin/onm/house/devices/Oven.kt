@@ -18,7 +18,7 @@ class Oven(override val id: UUID,
 
     private val ovenBakeFinishedEvent = BakeFinishedEvent(eventHandler)
 
-    val ovenControlApi = OvenControlApi(this)
+    val ovenControlApi = OvenControlApi(this, this.id)
 
     fun switchOn(food: Collection<Food>, minutes: Double) {
         doWork((minutes * 60000).toLong(), ovenBakeFinishedEvent::raiseEvent)

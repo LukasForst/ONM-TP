@@ -27,7 +27,7 @@ class FridgeTest {
     @Before
     fun setUp() {
         eventHandlerMock = mock(IEventHandler::class.java)
-        fridge = Fridge(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.FRIDGE, PowerConsumption(), "fridge")).fridgeControlApi
+        fridge = Fridge(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.FRIDGE, "fridge", PowerConsumption())).fridgeControlApi
     }
 
     @Test
