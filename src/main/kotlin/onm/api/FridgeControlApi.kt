@@ -24,7 +24,7 @@ class FridgeControlApi(
      * @param food food collection to be added to fridge
      * */
     fun addFood(food: Collection<Food>) {
-        fridge.food.addAll(food)
+        fridge.getListOfFood().addAll(food)
     }
 
     /**
@@ -32,7 +32,7 @@ class FridgeControlApi(
      * @param food food to be added to fridge
      * */
     fun addFood(food: Food) {
-        fridge.food.add(food)
+        fridge.getListOfFood().add(food)
     }
 
 

@@ -47,6 +47,9 @@ class Fridge(override val id: UUID,
             return _food
         }
 
+    fun getListOfFood(): LinkedList<Food> {
+        return _food
+    }
 
     override fun generateReport(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
