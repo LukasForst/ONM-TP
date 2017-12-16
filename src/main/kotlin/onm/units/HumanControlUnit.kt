@@ -102,12 +102,9 @@ class HumanControlUnit(private val availableHumans: Collection<Human>,
     }
 
     private fun goShop(device: Fridge) {
-        if (device != null) {
-            val h = getHumanByAbility(HumanAbility.ANY)
-            h.goShop(device)
-        } else {
-            //TODO: No device, log it
-        }
+        val h = getHumanByAbility(HumanAbility.ANY)
+        h.goShop(device)
+
     }
 
 
