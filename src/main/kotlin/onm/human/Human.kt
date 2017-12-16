@@ -1,5 +1,7 @@
 package onm.human
 
+import onm.house.devices.AbstractDevice
+import onm.house.devices.Dryer
 import onm.house.devices.Fridge
 import onm.things.Food
 import onm.things.FoodType
@@ -21,6 +23,26 @@ class Human(val ability: HumanAbility) {
             val ret = types.map { Food(it) }
 
             frigo.addFood(ret)
+            available = true;
+        }
+    }
+
+    fun dryingClothes(dryer: Dryer) {
+        available = false
+        thread(start = true) {
+            //Simulate work
+            Thread.sleep(1000)
+            dryer.switchOn()
+            available = true;
+        }
+    }
+
+    fun repairDevice(device: AbstractDevice) {
+        available = false
+        thread(start = true) {
+            //Simulate work
+            Thread.sleep(2000)
+            device.repair()
             available = true;
         }
     }

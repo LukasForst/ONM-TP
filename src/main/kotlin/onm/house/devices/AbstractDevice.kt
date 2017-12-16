@@ -65,6 +65,7 @@ abstract class AbstractDevice(
         thread(start = true) {
             val brokenEvent = verifyNotBroken(currentErrorProbability)
             if (brokenEvent != null) {
+                deviceStateMachine.brokenSate()
                 brokenEvent.raiseEvent()
             } else {
                 currentErrorProbability += currentErrorProbability / 10
@@ -74,6 +75,10 @@ abstract class AbstractDevice(
                 callback.invoke()
             }
         }
+    }
+
+    fun repair(){
+        deviceStateMachine.idleState();
     }
 
     private var currentErrorProbability: Double = deviceConfig.breakageProbability ?: deviceType.breakageProbability
