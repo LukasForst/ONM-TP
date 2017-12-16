@@ -17,12 +17,6 @@ class NoSuchHumans : Exception();
 
 class HumanControlUnit(private val availableHumans: Collection<Human>,
                        protected val eventHandler: EventHandler) {
-    init {
-        for (h in availableHumans) {
-            h.controlUnit = this
-        }
-    }
-
 
     private val availableEquipment = ConcurrentLinkedQueue<Equipment>()
     private val availableThings = mutableListOf<AbstractDevice>()

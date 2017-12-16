@@ -9,10 +9,8 @@ import onm.things.FoodType
 import onm.units.HumanControlUnit
 import kotlin.concurrent.thread
 
-class Human(val ability: HumanAbility, val name:String) {
+class Human(val ability: HumanAbility, val name: String, val controlUnit: HumanControlUnit) {
     var available: Boolean = true
-
-    var controlUnit: HumanControlUnit? = null
 
     fun goShop(frigo: Fridge) {
         available = false;
