@@ -1,6 +1,9 @@
 package onm.house.devices
 
 import onm.TestUtils
+import onm.configuration.DeviceType
+import onm.configuration.json.DeviceConfig
+import onm.configuration.json.PowerConsumption
 import onm.events.FridgeEmptyEvent
 import onm.events.IEventHandler
 import onm.things.Food
@@ -23,7 +26,7 @@ class FridgeTest {
     @Before
     fun setUp() {
         eventHandlerMock = mock(IEventHandler::class.java)
-        fridge = Fridge(UUID.randomUUID(), eventHandlerMock)
+        fridge = Fridge(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.FRIDGE, PowerConsumption()))
     }
 
     @Test

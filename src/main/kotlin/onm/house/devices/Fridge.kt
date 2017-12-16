@@ -26,10 +26,12 @@ class Fridge(override val id: UUID,
         //simulates fridge working
 
         thread(start = true) {
-            deviceStateMachine.idleState()
-            Thread.sleep((workingIntervalInMinutes * 60000).toLong())
-            deviceStateMachine.workingState()
-            Thread.sleep((workingIntervalInMinutes * 60000).toLong())
+            while (true) {
+                deviceStateMachine.idleState()
+                Thread.sleep((workingIntervalInMinutes * 60000).toLong())
+                deviceStateMachine.workingState()
+                Thread.sleep((workingIntervalInMinutes * 60000).toLong())
+            }
         }
     }
 
