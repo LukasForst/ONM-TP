@@ -7,12 +7,12 @@ import onm.configuration.json.PowerConsumption
 /**
  * This data class represents current device state. In state, device has power consumption and available state
  * */
-data class DeviceState(val currentPowerConsumption: Int, val isDeviceAvailable: Boolean, var stateType : StateType)
+data class DeviceState(val currentPowerConsumption: Int, val isDeviceAvailable: Boolean, var stateType : StateType, val isBroken: Boolean = false)
 
 
 //TODO this data clas and enum can be merged to just enum (if isDeviceAvailable is still unused)
 enum class StateType {
-    IDLE, WORKING, TURNED_OFF
+    IDLE, WORKING, TURNED_OFF, BROKEN
 }
 
 /**
@@ -40,6 +40,7 @@ class DeviceStateMachine(
             StateType.TURNED_OFF -> device.turnedOffConsumption += getConsumedEnergy()
             StateType.WORKING -> device.workingConsumption += getConsumedEnergy()
             StateType.IDLE -> device.idleConsumption += getConsumedEnergy()
+            //TODO
         }
         timeOfLastChange = System.currentTimeMillis()
     }
@@ -68,6 +69,12 @@ class DeviceStateMachine(
     fun turnedOffState(): DeviceState {
         addConsumption()
         currentState = DeviceState(powerConsumption.turnedOffState ?: deviceType.turnedOffPowerConsumption, false, StateType.TURNED_OFF)
+        return currentState
+    }
+
+    fun brokenSate(): DeviceState {
+        addConsumption()
+        currentState = DeviceState(powerConsumption.turnedOffState ?: deviceType.turnedOffPowerConsumption, false, StateType.BROKEN, true)
         return currentState
     }
 }

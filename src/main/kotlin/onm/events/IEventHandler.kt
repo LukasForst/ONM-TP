@@ -17,4 +17,12 @@ interface IEventHandler {
     fun handle(event: DeviceBrokenEvent)
 
     fun handle(event: AnimalIsHungryEvent)
+
+    fun handle(event: DryerIsDoneEvent)
+
+    fun handle(event: RepairEvent)
+
+    fun handle(event: HumanDoSport)
+
+    fun handle(event: HumanStopSport)
 }
