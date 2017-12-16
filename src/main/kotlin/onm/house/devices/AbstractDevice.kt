@@ -5,6 +5,7 @@ import onm.configuration.json.DeviceConfig
 import onm.events.DeviceBrokenEvent
 import onm.events.IEvent
 import onm.events.IEventHandler
+import onm.events.RepairEvent
 import onm.house.places.Room
 import onm.interfaces.StationaryEntity
 import java.util.*
@@ -65,6 +66,7 @@ abstract class AbstractDevice(
         thread(start = true) {
             val brokenEvent = verifyNotBroken(currentErrorProbability)
             if (brokenEvent != null) {
+                deviceStateMachine.brokenSate()
                 brokenEvent.raiseEvent()
             } else {
                 currentErrorProbability += currentErrorProbability / 10
@@ -74,6 +76,11 @@ abstract class AbstractDevice(
                 callback.invoke()
             }
         }
+    }
+
+    fun repair(){
+        deviceStateMachine.idleState()
+        RepairEvent(eventHandler, this).raiseEvent()
     }
 
     private var currentErrorProbability: Double = deviceConfig.breakageProbability ?: deviceType.breakageProbability
