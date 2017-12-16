@@ -1,6 +1,9 @@
 package onm.house.devices
 
 import onm.TestUtils
+import onm.configuration.DeviceType
+import onm.configuration.json.DeviceConfig
+import onm.configuration.json.PowerConsumption
 import onm.events.IEventHandler
 import onm.events.WasherDoneEvent
 import org.junit.Before
@@ -19,7 +22,7 @@ class WasherTest {
     @Before
     fun setUp() {
         eventHandlerMock = Mockito.mock(IEventHandler::class.java)
-        washer = Washer(UUID.randomUUID(), eventHandlerMock)
+        washer = Washer(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.WASHER, PowerConsumption()))
         event = WasherDoneEvent(eventHandlerMock)
     }
 

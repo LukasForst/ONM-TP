@@ -1,5 +1,7 @@
 package onm.events
 
+import onm.animals.events.AnimalIsHungryEvent
+
 
 /**
  * Handler which will react on all types of events. Works on dispatch pattern.
@@ -13,4 +15,6 @@ interface IEventHandler {
     fun handle(event: BakeFinishedEvent)
 
     fun handle(event: DeviceBrokenEvent)
+
+    fun handle(event: AnimalIsHungryEvent)
 }
