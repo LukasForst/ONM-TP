@@ -3,10 +3,13 @@ package onm.house.devices
 import onm.TestUtils
 import onm.api.FridgeControlApi
 import onm.configuration.DeviceType
+import onm.configuration.RoomType
 import onm.configuration.json.DeviceConfig
 import onm.configuration.json.PowerConsumption
 import onm.events.FridgeEmptyEvent
 import onm.events.IEventHandler
+import onm.events.isFinishedEvent
+import onm.house.places.Room
 import onm.things.Food
 import onm.things.FoodType
 import org.junit.Before
@@ -26,8 +29,10 @@ class FridgeTest {
 
     @Before
     fun setUp() {
+        val room = Room(UUID.randomUUID(), "kitchen", RoomType.LIVING_ROOM, 1)
         eventHandlerMock = mock(IEventHandler::class.java)
-        fridge = Fridge(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.FRIDGE, "fridge", PowerConsumption())).fridgeControlApi
+        fridge = Fridge(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.FRIDGE, "fridge",
+                PowerConsumption()), room).fridgeControlApi
     }
 
     @Test
@@ -45,6 +50,6 @@ class FridgeTest {
 
         val food = fridge.getFood()
         assertEquals(2, food.size)
-        verify(eventHandlerMock, never()).handle(TestUtils.any<FridgeEmptyEvent>())
+        verify(eventHandlerMock, never()).handle(TestUtils.any<isFinishedEvent>())
     }
 }

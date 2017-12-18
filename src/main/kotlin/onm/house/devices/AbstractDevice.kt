@@ -8,6 +8,7 @@ import onm.events.IEvent
 import onm.events.IEventHandler
 import onm.events.RepairEvent
 import onm.house.places.Room
+import onm.loggerFor
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -28,8 +29,17 @@ abstract class AbstractDevice(
         /**
          * Event handler used for handling raised events.
          * */
-        protected val eventHandler: IEventHandler) : IDevice {
+        protected val eventHandler: IEventHandler,
 
+        /**
+         * Room reference. This should be set after adding device to the room.
+         * */
+        var room: Room) : IDevice {
+
+    companion object {
+        @JvmStatic
+        protected val log = loggerFor(AbstractDevice::class.java)
+    }
 
     /**
      * Time of device in idle state
@@ -43,11 +53,6 @@ abstract class AbstractDevice(
      * Time of device in turnedOffTime
      */
     var turnedOffConsumption = 0.0
-
-    /**
-     * Room reference. This should be set after adding device to the room.
-     * */
-    var room: Room? = null
 
     /**
      * Unique description of the device.
@@ -94,6 +99,14 @@ abstract class AbstractDevice(
                 callback.invoke()
             }
         }
+    }
+
+    /**
+     * Returns false if device is broken or working. True otherwise.
+     */
+    protected fun isAvailable(): Boolean {
+        val type = deviceStateMachine.currentState.stateType
+        return !(type == StateType.BROKEN || type == StateType.WORKING)
     }
 
     fun repair(){
