@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.api.OvenControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.BakeFinishedEvent
@@ -16,6 +17,8 @@ class Oven(override val id: UUID,
     : AbstractDevice(DeviceType.OVEN, deviceConfig, eventHandler) {
 
     private val ovenBakeFinishedEvent = BakeFinishedEvent(eventHandler)
+
+    val ovenControlApi = OvenControlApi(this, this.id)
 
     fun switchOn(food: Collection<Food>, minutes: Double) {
         doWork((minutes * 60000).toLong(), ovenBakeFinishedEvent::raiseEvent)

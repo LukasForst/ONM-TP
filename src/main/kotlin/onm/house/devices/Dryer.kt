@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.api.DryerControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.DryerIsDoneEvent
@@ -12,6 +13,8 @@ class Dryer(override val id: UUID,
             private val workingIntervalInMinutes: Double = 1.0) : AbstractDevice(DeviceType.FRIDGE, deviceConfig, eventHandler) {
 
     private val dryerIsDoneEvent = DryerIsDoneEvent(eventHandler)
+
+    val dryerControlApi = DryerControlApi(this, this.id)
 
     fun switchOn() {
 

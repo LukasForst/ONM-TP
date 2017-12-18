@@ -1,20 +1,33 @@
 package onm.builder
 
+import onm.api.DataApi
+import onm.api.IControlApi
+import onm.house.devices.IDevice
 import onm.house.places.Room
 import java.util.*
+import kotlin.NoSuchElementException
 
 
 /**
  * Class that holds all rooms in a house. //TODO
  */
+//TODO add javadoc beacuse this works as API for now
 class House internal constructor(){
 
-    val rooms = LinkedList<Room>()
+    internal val rooms = LinkedList<Room>()
 
-    //TODO House might also generate events related to the house (e.g., broken floor, i don't know...)
-    //TODO if not, then convert this class to data class
+    internal val allIDevices = LinkedList<IDevice>()
+    val allIControlApi = LinkedList<IControlApi>()
 
+    fun getUidOfDevice(deviceDescription: String): UUID {
+        return allIDevices.firstOrNull { device -> device.deviceDescription.contentEquals(deviceDescription) }?.id ?: throw NoSuchElementException()
+    }
 
+    fun getDataApiByUUID(id: UUID): DataApi? {
+        return allIDevices.singleOrNull { iDevice -> iDevice.id == id }?.dataApi
+    }
 
-
+    inline fun <reified T> getControlApiByUUID(id: UUID): T? {
+        return allIControlApi.singleOrNull { iDevice -> iDevice.id == id }  as? T
+    }
 }
