@@ -1,0 +1,77 @@
+{
+  "rooms": [
+    {
+      "name": "kitchen",
+      "devices": [
+        {
+          "type": "Fridge",
+          "name": "This is my awesome fridge with Bear :) (This name should be unique)",
+          "powerConsumption": {
+            "idleState": 1000,
+            "workingState": 10000,
+            "turnedOffState": 0
+          },
+          "breakageProbability": 0.01
+        },
+        {
+          "type": "Oven",
+          "name": "Oven1",
+          "powerConsumption": {
+            "idleState": 100,
+            "workingState": 10000,
+            "turnedOffState": 0
+          },
+          "breakageProbability": 0.01
+        }
+      ]
+    },
+    {
+      "name": "Living room",
+      "devices": [
+        {
+          "type": "Dryer",
+          "name": "Dryer1",
+          "powerConsumption": {
+            "idleState": 10,
+            "workingState": 50000,
+            "turnedOffState": 0
+          },
+          "breakageProbability": 0.90
+        }
+      ]
+    }
+  ],
+  "vehicles": [
+    {
+      "name": "Electric car",
+      "powerConsumption": {
+        "idleState": 100,
+        "workingState": 40000,
+        "turnedOffState": 0
+      },
+      "breakageProbability": 0.1
+    }
+  ],
+  "human": [
+    {
+      "name": "Father",
+      "humanAbility": "ANY"
+    },
+    {
+      "name": "Mother",
+      "humanAbility": "CAN_COOK"
+    }
+  ],
+  "animals": [
+    {
+      "name": "Cat1",
+      "type": "CAT"
+    }
+  ],
+  "equipments": [
+    {
+      "type": "SKI",
+      "name": "My owesome unique ski"
+    }
+  ]
+}
