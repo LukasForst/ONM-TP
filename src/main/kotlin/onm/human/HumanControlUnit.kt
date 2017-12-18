@@ -1,32 +1,45 @@
-package onm.units
+package onm.human
 
 import onm.api.FridgeControlApi
 import onm.events.EventHandler
 import onm.events.HumanStopSport
+import onm.events.IEventHandler
 import onm.house.devices.AbstractDevice
 import onm.house.devices.Dryer
 import onm.house.devices.Fridge
-import onm.human.Human
-import onm.human.HumanAbility
-import onm.human.HumanTask
-import onm.human.TaskTypes
 import onm.things.Equipment
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.concurrent.thread
 
 class NoSuchHumans : Exception()
 
-class HumanControlUnit(private val availableHumans: Collection<Human>,
-                       protected val eventHandler: EventHandler) {
+class HumanControlUnit private constructor(availableHumans: Collection<Human>,
+                                           private val eventHandler: IEventHandler) {
+
+    private val _availableHumans = mutableListOf<Human>()
+    val humans: Collection<Human>
+        get() = _availableHumans
+
+    private val _availableThings = mutableListOf<AbstractDevice>()
+    val availableThings: Collection<AbstractDevice>
+        get() = _availableThings
 
     private val availableEquipment = ConcurrentLinkedQueue<Equipment>()
-    private val availableThings = mutableListOf<AbstractDevice>()
     private val queueTodo = ConcurrentLinkedQueue<HumanTask>()
     private val queueWaitForHuman = ConcurrentLinkedQueue<HumanTask>()
 
+    init {
+        this._availableHumans.addAll(availableHumans)
+        eventHandler.register(this)
+    }
+
+    companion object {
+        val instance by lazy { HumanControlUnit(mutableListOf(), EventHandler.instance) }
+    }
+
 
     private fun getHumanByAbility(ability: HumanAbility): Human {
-        val rest = availableHumans.filter { it.ability.compareTo(ability) > 0; it.available == true }.toList()
+        val rest = _availableHumans.filter { it.ability > ability; it.available }.toList()
         if (rest.isNotEmpty()) {
             return rest[0]
         } else {
@@ -34,6 +47,13 @@ class HumanControlUnit(private val availableHumans: Collection<Human>,
         }
     }
 
+    fun registerDevice(device: AbstractDevice) {
+        _availableThings.add(device)
+    }
+
+    fun registerHuman(human: Human) {
+        _availableHumans.add(human)
+    }
 
     private fun start() {
         thread(start = true) {

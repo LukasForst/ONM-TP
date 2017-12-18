@@ -1,6 +1,9 @@
 package onm.reports
 
-class CentralLogUnit: ICentralLogUnit {
+open class CentralLogUnit protected constructor() : ICentralLogUnit {
+    companion object {
+        val instance by lazy { CentralLogUnit() }
+    }
 
     private val allRecords = mutableListOf<IReport>()
 
@@ -9,7 +12,7 @@ class CentralLogUnit: ICentralLogUnit {
     }
 
     override fun eventReports(filter: (EventReport) -> Boolean): Collection<EventReport> {
-        return allRecords.filter { x -> x is EventReport && filter.invoke(x) }.map {x -> x as EventReport}.toList()
+        return allRecords.filter { x -> x is EventReport && filter.invoke(x) }.map { x -> x as EventReport }.toList()
     }
 
     override fun deviceReports(filter: (DeviceReport) -> Boolean): Collection<DeviceReport> {
