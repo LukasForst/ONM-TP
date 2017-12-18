@@ -3,6 +3,7 @@ package onm.builder
 import onm.configuration.DeviceType
 import onm.configuration.json.ConfigurationDataClass
 import onm.configuration.json.DeviceConfig
+import onm.configuration.json.RoomConfig
 import onm.events.EventHandler
 import onm.events.IEventHandler
 import onm.house.devices.*
@@ -22,27 +23,28 @@ object HouseBuilder {
     fun buildHouseFromConfig(config: ConfigurationDataClass): House {
         val eventHandler = EventHandler.instance
 
-        for (roomConfig in config.roomsAndDevices.keys) {
-            val room = Room(UUID.randomUUID(), roomConfig.description ?: "No description provided.",
-                    roomConfig.roomType, roomConfig.floor)
+        for (roomConfig in config.rooms) {
+            val room = createRoom(roomConfig)
+            for (dev in roomConfig.devices) {
+                val device = createDevice(dev, eventHandler, room)
 
-            for (deviceConfig in config.roomsAndDevices[roomConfig]!!) {
-                room.addDevice(createDevice(deviceConfig, eventHandler, room))
+//                for (deviceConfig in config.roomsAndDevices[roomConfig]!!) {
+//                    room.addDevice(createDevice(deviceConfig, eventHandler, room))
+//                }
             }
-            house.rooms.add(room)
         }
         return house
     }
 
     private fun createDevice(deviceConfig: DeviceConfig, eventHandler: IEventHandler, room: Room): AbstractDevice {
-        val createdDevice = when (deviceConfig.deviceType) {
+        val createdDevice = when (deviceConfig.type) {
             DeviceType.WASHER -> Washer(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.FRIDGE -> Fridge(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.OVEN -> Oven(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.DRYER -> Dryer(UUID.randomUUID(), eventHandler, deviceConfig, room)
         }
 
-        house.allIControlApi.add(when (deviceConfig.deviceType) {
+        house.allIControlApi.add(when (deviceConfig.type) {
             DeviceType.WASHER -> (createdDevice as Washer).washerControlApi
             DeviceType.FRIDGE -> (createdDevice as Fridge).fridgeControlApi
             DeviceType.OVEN -> (createdDevice as Oven).ovenControlApi
@@ -50,5 +52,11 @@ object HouseBuilder {
         })
         house.allIDevices.add(createdDevice)
         return createdDevice
+    }
+
+    private fun createRoom(room: RoomConfig): Room {
+        val createdRoom = Room(UUID.randomUUID(), room.name, room.type, room.floor)
+        house.rooms.add(createdRoom)
+        return createdRoom
     }
 }
