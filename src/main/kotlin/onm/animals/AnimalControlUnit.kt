@@ -26,7 +26,7 @@ class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalContro
 
     override fun handle(event: AnimalBrokeSomethingEvent) {
         log.warn(event.message)
-        DeviceBrokenEvent(eventHandler, null).raiseEvent()
+        DeviceBrokenEvent(eventHandler, null, event.entityId).raiseEvent()
     }
 
     override fun feedAnimal(animalId: UUID) {

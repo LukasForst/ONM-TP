@@ -2,12 +2,13 @@ package onm.events
 
 import onm.configuration.EventSeverity
 import onm.house.devices.AbstractDevice
+import java.util.*
 
 class RepairEvent (private val eventHandler: IEventHandler,
                    /**
                     * Reference to device which is broken.
                     * */
-                   val device: AbstractDevice?) : IEvent { //todo probably will be better to use api
+                   val device: AbstractDevice?, override val entityId: UUID) : IEvent { //todo probably will be better to use api
 
     override val message: String
         get() {

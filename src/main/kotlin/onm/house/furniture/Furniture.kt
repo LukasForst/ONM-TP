@@ -3,6 +3,7 @@ package onm.house.furniture
 import onm.configuration.FurnitureType
 import onm.house.places.Room
 import onm.interfaces.StationaryEntity
+import onm.reports.IReport
 import java.util.*
 
 /**
@@ -23,7 +24,7 @@ class Furniture internal constructor(
      * */
     var room: Room? = null
 
-    override fun generateReport(): String {
+    override fun generateReport(): IReport {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

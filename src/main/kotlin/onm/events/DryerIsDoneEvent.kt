@@ -1,8 +1,9 @@
 package onm.events
 
 import onm.configuration.EventSeverity
+import java.util.*
 
-class DryerIsDoneEvent(private val eventHandler: IEventHandler) : IEvent {
+class DryerIsDoneEvent(private val eventHandler: IEventHandler, override val entityId: UUID) : IEvent {
     override val severity: EventSeverity
         get() = EventSeverity.INFO
 

@@ -3,9 +3,10 @@ package onm.events
 import onm.configuration.EventSeverity
 import onm.house.devices.AbstractDevice
 import onm.human.Human
+import java.util.*
 
 class HumanStopSport(private val eventHandler: IEventHandler,
-                     val human: Human?) : IEvent { //todo probably will be better to use api
+                     val human: Human?, override val entityId: UUID) : IEvent { //todo probably will be better to use api
 
     override val message: String
         get() {

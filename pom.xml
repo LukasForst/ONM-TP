@@ -8,7 +8,7 @@
     <artifactId>term-paper</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
-        <kotlin.version>1.2.0</kotlin.version>
+        <kotlin.version>1.2.10</kotlin.version>
         <slf4j.version>1.7.25</slf4j.version>
         <mockit.version>2.12.0</mockit.version>
         <kotson.version>2.5.0</kotson.version>
