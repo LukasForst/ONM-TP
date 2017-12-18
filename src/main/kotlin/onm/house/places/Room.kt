@@ -1,10 +1,12 @@
 package onm.house.places
 
+import onm.configuration.FurnitureType
 import onm.configuration.PlaceType
 import onm.configuration.RoomType
 import onm.configuration.json.RoomConfig
 import onm.house.devices.AbstractDevice
 import onm.house.furniture.Furniture
+import onm.house.furniture.FurnitureFactory
 import onm.interfaces.Place
 import onm.reports.IReport
 import java.util.*
@@ -75,6 +77,16 @@ class RoomBuilder(private val roomConfig: RoomConfig) {
 
     private val devicesInRoom: MutableCollection<AbstractDevice> = ArrayList()
     private val furnitureInRoom: MutableCollection<Furniture> = ArrayList()
+
+    init {
+        for (furniture in roomConfig.furniture) {
+            when (furniture.type) {
+                FurnitureType.CHAIR -> {
+                    addFurniture(FurnitureFactory.createChair(furniture.name))
+                }
+            }
+        }
+    }
 
     fun addDevice(device: AbstractDevice): RoomBuilder {
         devicesInRoom.add(device)
