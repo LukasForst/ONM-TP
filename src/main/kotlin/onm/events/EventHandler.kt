@@ -1,5 +1,6 @@
 package onm.events
 
+import onm.animals.AnimalControlUnit
 import onm.animals.events.AnimalIsHungryEvent
 import onm.human.HumanControlUnit
 import onm.reports.*
@@ -19,8 +20,21 @@ open class EventHandler protected constructor() : IEventHandler {
         val instance by lazy { EventHandler() }
     }
 
-    private val logUnit = CentralLogUnit.instance
-    private val humanControlUnit = HumanControlUnit.instance
+    private lateinit var logUnit: ICentralLogUnit
+    private lateinit var humanControlUnit: HumanControlUnit
+    private lateinit var animalControlUnit: AnimalControlUnit
+
+    override fun register(humanControlUnit: HumanControlUnit) {
+        this.humanControlUnit = humanControlUnit
+    }
+
+    override fun register(logUnit: CentralLogUnit) {
+        this.logUnit = logUnit
+    }
+
+    override fun register(animalControlUnit: AnimalControlUnit) {
+        this.animalControlUnit = animalControlUnit
+    }
 
     override fun handle(event: isFinishedEvent) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -70,7 +84,8 @@ open class EventHandler protected constructor() : IEventHandler {
         val device = humanControlUnit.availableThings.first { x -> x.id == event.entityId }
         val deviceReport = DeviceReport(Instant.now(), event.entityId, event.message, event.severity, device.deviceType, device.deviceDescription)
         val room = device.room
-        if (room != null) logUnit.addReport(RoomReport(Instant.now(), room.id, deviceReport.toString(), event.severity, deviceReport))
+
+        logUnit.addReport(RoomReport(Instant.now(), room.id, deviceReport.toString(), event.severity, deviceReport))
         logUnit.addReport(deviceReport)
     }
 }

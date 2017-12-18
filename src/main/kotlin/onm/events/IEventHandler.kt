@@ -1,6 +1,9 @@
 package onm.events
 
+import onm.animals.AnimalControlUnit
 import onm.animals.events.AnimalIsHungryEvent
+import onm.human.HumanControlUnit
+import onm.reports.CentralLogUnit
 
 
 /**
@@ -8,6 +11,12 @@ import onm.animals.events.AnimalIsHungryEvent
  * */
 interface IEventHandler {
     //todo implement global handler for all events
+    fun register(humanControlUnit: HumanControlUnit)
+
+    fun register(logUnit: CentralLogUnit)
+
+    fun register(animalControlUnit: AnimalControlUnit)
+
     fun handle(event: isFinishedEvent)
 
     fun handle(event: FridgeEmptyEvent)

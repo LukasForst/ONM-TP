@@ -24,6 +24,10 @@ class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalContro
 
     private val logUnit = CentralLogUnit.instance
 
+    init {
+        eventHandler.register(this)
+    }
+
     override fun handle(event: AnimalIsHungryEvent) {
         log.info(event.message)
         hungryAnimals.add(event.animal)

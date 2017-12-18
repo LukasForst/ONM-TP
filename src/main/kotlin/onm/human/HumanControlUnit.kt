@@ -13,8 +13,8 @@ import kotlin.concurrent.thread
 
 class NoSuchHumans : Exception()
 
-open class HumanControlUnit protected constructor(availableHumans: Collection<Human>,
-                                                  private val eventHandler: IEventHandler) {
+class HumanControlUnit private constructor(availableHumans: Collection<Human>,
+                                           private val eventHandler: IEventHandler) {
 
     private val _availableHumans = mutableListOf<Human>()
     val humans: Collection<Human>
@@ -28,9 +28,9 @@ open class HumanControlUnit protected constructor(availableHumans: Collection<Hu
     private val queueTodo = ConcurrentLinkedQueue<HumanTask>()
     private val queueWaitForHuman = ConcurrentLinkedQueue<HumanTask>()
 
-
     init {
         this._availableHumans.addAll(availableHumans)
+        eventHandler.register(this)
     }
 
     companion object {
