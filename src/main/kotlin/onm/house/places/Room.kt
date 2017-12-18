@@ -6,6 +6,7 @@ import onm.configuration.json.RoomConfig
 import onm.house.devices.AbstractDevice
 import onm.house.furniture.Furniture
 import onm.interfaces.Place
+import onm.reports.IReport
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -59,7 +60,7 @@ class Room internal constructor(
         _furnitureInRoom.add(furniture)
     }
 
-    override fun generateReport(): String {
+    override fun generateReport(): IReport {
         TODO()
     }
 

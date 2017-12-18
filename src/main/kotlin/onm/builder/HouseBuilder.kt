@@ -21,25 +21,26 @@ object HouseBuilder {
      * Builds house from given config class. This class should be parsed from JSON.
      * */
     fun buildHouseFromConfig(config: ConfigurationDataClass): House {
-        val eventHandler = EventHandler() //todo make event handler as singleton
+        val eventHandler = EventHandler.instance
 
         for(roomConfig in config.rooms){
             createRoom(roomConfig)
             for(dev in roomConfig.devices){
                 val device = createDevice(dev,eventHandler)
 
+            for (deviceConfig in config.roomsAndDevices[roomConfig]!!) {
+                room.addDevice(createDevice(deviceConfig, eventHandler, room))
             }
         }
-
         return house
     }
 
-    private fun createDevice(deviceConfig: DeviceConfig, eventHandler: IEventHandler): AbstractDevice {
-        val createdDevice = when (deviceConfig.type) {
-            DeviceType.WASHER -> Washer(UUID.randomUUID(), eventHandler, deviceConfig)
-            DeviceType.FRIDGE -> Fridge(UUID.randomUUID(), eventHandler, deviceConfig)
-            DeviceType.OVEN -> Oven(UUID.randomUUID(), eventHandler, deviceConfig)
-            DeviceType.DRYER -> Dryer(UUID.randomUUID(), eventHandler, deviceConfig)
+    private fun createDevice(deviceConfig: DeviceConfig, eventHandler: IEventHandler, room: Room): AbstractDevice {
+        val createdDevice = when (deviceConfig.deviceType) {
+            DeviceType.WASHER -> Washer(UUID.randomUUID(), eventHandler, deviceConfig, room)
+            DeviceType.FRIDGE -> Fridge(UUID.randomUUID(), eventHandler, deviceConfig, room)
+            DeviceType.OVEN -> Oven(UUID.randomUUID(), eventHandler, deviceConfig, room)
+            DeviceType.DRYER -> Dryer(UUID.randomUUID(), eventHandler, deviceConfig, room)
         }
 
         house.allIControlApi.add(when (deviceConfig.type) {

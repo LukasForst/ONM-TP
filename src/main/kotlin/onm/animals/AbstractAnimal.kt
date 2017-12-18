@@ -29,8 +29,8 @@ abstract class AbstractAnimal(
     private fun doRandomStuff() {
         thread(start = true) {
             val rd = Random()
-            val brokeSmEvent = AnimalBrokeSomethingEvent(eventHandler, this)
-            val hungryEvent = AnimalIsHungryEvent(eventHandler, this)
+            val brokeSmEvent = AnimalBrokeSomethingEvent(eventHandler, this, id)
+            val hungryEvent = AnimalIsHungryEvent(eventHandler, this, id)
 
             while (true) {
                 Thread.sleep((1000 * animalType.probabilityOfBrokingSomething).toLong())
