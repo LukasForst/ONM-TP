@@ -35,11 +35,11 @@ class DeviceStateMachine(
         }
 
     /**
-     * Consumed energy is calculated this way: _elapsedMinutes_ * cur_power_consumption
+     * Consumed energy is calculated this way: _elapsedSeconds_ * cur_power_consumption
      */
     private fun getConsumedEnergy(): Float {
         val elapsedTimeMilis = System.currentTimeMillis() - timeOfLastChange
-        return elapsedTimeMilis / (60 * 1000F) * currentState.currentPowerConsumption
+        return elapsedTimeMilis / 1000F * currentState.currentPowerConsumption
     }
 
     /**

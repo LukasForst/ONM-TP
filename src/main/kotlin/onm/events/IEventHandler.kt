@@ -8,17 +8,13 @@ import onm.animals.events.AnimalIsHungryEvent
  * */
 interface IEventHandler {
     //todo implement global handler for all events
+    fun handle(event: isFinishedEvent)
+
     fun handle(event: FridgeEmptyEvent)
-
-    fun handle(event: WasherDoneEvent)
-
-    fun handle(event: BakeFinishedEvent)
 
     fun handle(event: DeviceBrokenEvent)
 
     fun handle(event: AnimalIsHungryEvent)
-
-    fun handle(event: DryerIsDoneEvent)
 
     fun handle(event: RepairEvent)
 

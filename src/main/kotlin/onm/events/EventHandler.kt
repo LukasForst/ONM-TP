@@ -22,6 +22,10 @@ open class EventHandler protected constructor() : IEventHandler {
     private val logUnit = CentralLogUnit.instance
     private val humanControlUnit = HumanControlUnit.instance
 
+    override fun handle(event: isFinishedEvent) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun handle(event: RepairEvent) {
 
         val device = event.device ?: humanControlUnit.availableThings.first()
@@ -43,11 +47,6 @@ open class EventHandler protected constructor() : IEventHandler {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun handle(event: DryerIsDoneEvent) {
-
-        handleDeviceDoneEvent(event)
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     override fun handle(event: AnimalIsHungryEvent) {
 
@@ -59,17 +58,6 @@ open class EventHandler protected constructor() : IEventHandler {
 
         val device = event.device ?: humanControlUnit.availableThings.first()
         logUnit.addReport(DeviceReport(Instant.now(), event.entityId, event.message, event.severity, device.deviceType, device.deviceDescription))
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun handle(event: BakeFinishedEvent) {
-
-        handleDeviceDoneEvent(event)
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun handle(event: WasherDoneEvent) {
-        handleDeviceDoneEvent(event)
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
