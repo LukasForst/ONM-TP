@@ -1,0 +1,91 @@
+{
+  "rooms": [
+    {
+      "name": "kitchen",
+      "type": "KITCHEN",
+      "devices": [
+        {
+          "type": "FRIDGE",
+          "name": "This is my awesome fridge with Bear :) (This name should be unique)",
+          "powerConsumption": {
+            "idleState": 1000,
+            "workingState": 10000,
+            "turnedOffState": 0
+          },
+          "breakageProbability": 0.01
+        },
+        {
+          "type": "OVEN",
+          "name": "Oven1",
+          "powerConsumption": {
+            "idleState": 100,
+            "workingState": 10000,
+            "turnedOffState": 0
+          },
+          "breakageProbability": 0.01
+        }
+      ],
+      "furniture": [
+        {
+          "type": "CHAIR",
+          "name": "chair1"
+        }
+      ]
+    },
+    {
+      "name": "Living room",
+      "type": "LIVING_ROOM",
+      "devices": [
+        {
+          "type": "DRYER",
+          "name": "Dryer1",
+          "powerConsumption": {
+            "idleState": 10,
+            "workingState": 50000,
+            "turnedOffState": 0
+          },
+          "breakageProbability": 0.90
+        }
+      ],
+      "furniture": [
+        {
+          "type": "CHAIR",
+          "name": "chair2"
+        }
+      ]
+    }
+  ],
+  "vehicles": [
+    {
+      "name": "Electric car",
+      "powerConsumption": {
+        "idleState": 100,
+        "workingState": 40000,
+        "turnedOffState": 0
+      },
+      "breakageProbability": 0.1
+    }
+  ],
+  "humans": [
+    {
+      "name": "Father",
+      "humanAbility": "ANY"
+    },
+    {
+      "name": "Mother",
+      "humanAbility": "CAN_COOK"
+    }
+  ],
+  "animals": [
+    {
+      "name": "Cat1",
+      "type": "CAT"
+    }
+  ],
+  "equipments": [
+    {
+      "type": "SKI",
+      "name": "My awesome unique ski"
+    }
+  ]
+}

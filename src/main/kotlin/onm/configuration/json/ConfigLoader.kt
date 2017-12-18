@@ -1,5 +1,6 @@
 package onm.configuration.json
 
+import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import java.io.File
@@ -21,11 +22,60 @@ object ConfigLoader {
     /**
      * Loads configuration data class from given string. Null is returned when parsing failed.
      * */
-    fun loadConfigFromString(data: String): ConfigurationDataClass? {
-        return try {
-            return Gson().fromJson(data, ConfigurationDataClass::class.java)
+    fun loadConfigFromString(data: String): ConfigurationDataClass {
+        try {
+            val config = Gson().fromJson<ConfigurationDataClass>(data)
+            checkNameForUnique(config)
+            return config;
         } catch (e: JsonSyntaxException) {
-            null
+            return ConfigurationDataClass(listOf(), listOf(), listOf(), listOf())
         }
+    }
+
+    private fun checkNameForUnique(config: ConfigurationDataClass): Boolean {
+        val desc = mutableSetOf<String>()
+
+        for (i in config.rooms) {
+            for (d in i.devices) {
+                if (desc.contains(d.name)) {
+                    throw Error("'${d.name}' is registered yet")
+                } else {
+                    desc.add(d.name)
+                }
+            }
+            for (f in i.furniture) {
+                if (desc.contains(f.name)) {
+                    throw Error("name: '${f.name}' is registered yet")
+                } else {
+                    desc.add(f.name)
+                }
+            }
+        }
+
+        for (f in config.animals) {
+            if (desc.contains(f.name)) {
+                throw Error("name: '${f.name}' is registered yet")
+            } else {
+                desc.add(f.name)
+            }
+        }
+
+        for (f in config.equipments) {
+            if (desc.contains(f.name)) {
+                throw Error("name: '${f.name}' is registered yet")
+            } else {
+                desc.add(f.name)
+            }
+        }
+
+        for (f in config.vehicles) {
+            if (desc.contains(f.name)) {
+                throw Error("name: '${f.name}' is registered yet")
+            } else {
+                desc.add(f.name)
+            }
+        }
+
+        return true
     }
 }
