@@ -5,6 +5,7 @@ import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.FridgeEmptyEvent
 import onm.events.IEventHandler
+import onm.human.HumanControlUnit
 import onm.reports.IReport
 import onm.things.Food
 import java.util.*
@@ -25,6 +26,7 @@ class Fridge(override val id: UUID,
 
     init { //todo what if electricity is turned off?
         //simulates fridge working
+        HumanControlUnit.instance.registerDevice(this)
 
         thread(start = true) {
             while (true) {

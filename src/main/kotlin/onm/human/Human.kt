@@ -3,22 +3,25 @@ package onm.human
 import onm.api.FridgeControlApi
 import onm.house.devices.AbstractDevice
 import onm.house.devices.Dryer
-import onm.house.devices.Fridge
 import onm.interfaces.MovableEntity
 import onm.reports.IReport
 import onm.things.Equipment
 import onm.things.Food
 import onm.things.FoodType
-import onm.units.HumanControlUnit
 import java.util.*
 import kotlin.concurrent.thread
 
-class Human(val ability: HumanAbility, val name: String, val controlUnit: HumanControlUnit, override val id: UUID): MovableEntity{
+class Human(val ability: HumanAbility, val name: String, private val controlUnit: HumanControlUnit, override val id: UUID) : MovableEntity {
+    var available: Boolean = true
+
+    init {
+        controlUnit.registerHuman(this)
+    }
+
     override fun generateReport(): IReport {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    var available: Boolean = true
 
     fun goShop(fridgeApi: FridgeControlApi) {
         available = false

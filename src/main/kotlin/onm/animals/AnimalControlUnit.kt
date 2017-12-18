@@ -2,9 +2,13 @@ package onm.animals
 
 import onm.animals.events.AnimalBrokeSomethingEvent
 import onm.animals.events.AnimalIsHungryEvent
+import onm.configuration.EventSeverity
 import onm.events.DeviceBrokenEvent
 import onm.events.IEventHandler
 import onm.loggerFor
+import onm.reports.AnimalReport
+import onm.reports.CentralLogUnit
+import java.time.Instant
 import java.util.*
 
 /**
@@ -18,6 +22,8 @@ class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalContro
     private val hungryAnimals = mutableListOf<IAnimal>()
     private val animals = LinkedList<IAnimal>()
 
+    private val logUnit = CentralLogUnit.instance
+
     override fun handle(event: AnimalIsHungryEvent) {
         log.info(event.message)
         hungryAnimals.add(event.animal)
@@ -30,9 +36,11 @@ class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalContro
     }
 
     override fun feedAnimal(animalId: UUID) {
-        val opResult = hungryAnimals.removeIf { x -> x.id == animalId }
-        if (opResult) {
+        val animal = hungryAnimals.firstOrNull { x -> x.id == animalId }
+        if (animal != null) {
             log.info("Animal with UUID $animalId was removed.")
+            hungryAnimals.removeIf { x -> x.id == animalId }
+            logUnit.addReport(AnimalReport(Instant.now(), animal.id, "Petting animal.", EventSeverity.INFO, animal.animalType))
         } else {
             log.error("Animal with UUID $animalId not found in collection of hungry animals!")
         }
@@ -47,6 +55,8 @@ class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalContro
 
         val animal = animals.pop()
         //todo add human happines
+
+        logUnit.addReport(AnimalReport(Instant.now(), animal.id, "Petting animal.", EventSeverity.INFO, animal.animalType))
         Thread.sleep(animal.animalType.pettingTimeInMillis) //petting takes some time
         animals.push(animal)
     }

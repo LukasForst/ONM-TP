@@ -30,7 +30,6 @@ abstract class AbstractDevice(
          * */
         protected val eventHandler: IEventHandler) : IDevice {
 
-
     /**
      * Time of device in idle state
      */
@@ -96,7 +95,7 @@ abstract class AbstractDevice(
         }
     }
 
-    fun repair(){
+    fun repair() {
         deviceStateMachine.idleState()
         RepairEvent(eventHandler, this, id).raiseEvent()
     }

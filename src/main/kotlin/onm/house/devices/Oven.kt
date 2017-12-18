@@ -5,6 +5,7 @@ import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.BakeFinishedEvent
 import onm.events.IEventHandler
+import onm.human.HumanControlUnit
 import onm.reports.IReport
 import onm.things.Food
 import java.util.*
@@ -16,6 +17,11 @@ class Oven(override val id: UUID,
            eventHandler: IEventHandler,
            deviceConfig: DeviceConfig)
     : AbstractDevice(DeviceType.OVEN, deviceConfig, eventHandler) {
+
+    init {
+        HumanControlUnit.instance.registerDevice(this)
+
+    }
 
     private val ovenBakeFinishedEvent = BakeFinishedEvent(eventHandler, id)
 
