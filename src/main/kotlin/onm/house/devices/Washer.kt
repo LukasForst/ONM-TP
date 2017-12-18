@@ -4,7 +4,8 @@ import onm.api.WasherControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.IEventHandler
-import onm.events.WasherDoneEvent
+import onm.events.isFinishedEvent
+import onm.house.places.Room
 import onm.reports.IReport
 import java.util.*
 
@@ -13,9 +14,10 @@ import java.util.*
  * */
 class Washer(override val id: UUID,
              eventHandler: IEventHandler,
-             deviceConfig: DeviceConfig) : AbstractDevice(DeviceType.WASHER, deviceConfig, eventHandler) {
+             deviceConfig: DeviceConfig,
+             room: Room) : AbstractDevice(DeviceType.WASHER, deviceConfig, eventHandler, room) {
 
-    private val event = WasherDoneEvent(eventHandler, id)
+    private val event = isFinishedEvent(eventHandler, id, "Washing clothes using $deviceDescription is done.")
 
     val washerControlApi = WasherControlApi(this, this.id)
 
@@ -24,7 +26,7 @@ class Washer(override val id: UUID,
      * */
     fun startWashing(periodInMinutes: Double) {
         if (!isAvailable())
-            log.error("Washer named '${deviceDescription}' is already working or broken, therefore cannot be switched on.")
+            log.error("Washer named '$deviceDescription' is already working or broken, therefore cannot be switched on.")
         else {
             doWork((periodInMinutes * 60000).toLong(), event::raiseEvent)
             deviceStateMachine.turnedOffState()

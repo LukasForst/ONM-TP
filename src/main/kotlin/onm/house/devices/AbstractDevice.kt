@@ -29,7 +29,12 @@ abstract class AbstractDevice(
         /**
          * Event handler used for handling raised events.
          * */
-        protected val eventHandler: IEventHandler) : IDevice {
+        protected val eventHandler: IEventHandler,
+
+        /**
+         * Room reference. This should be set after adding device to the room.
+         * */
+        var room: Room) : IDevice {
 
     companion object {
         @JvmStatic
@@ -48,11 +53,6 @@ abstract class AbstractDevice(
      * Time of device in turnedOffTime
      */
     var turnedOffConsumption = 0.0
-
-    /**
-     * Room reference. This should be set after adding device to the room.
-     * */
-    var room: Room? = null
 
     /**
      * Unique description of the device.

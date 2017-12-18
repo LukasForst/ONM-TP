@@ -17,6 +17,10 @@ open class EventHandler protected constructor(): IEventHandler {
         val instance by lazy { EventHandler() }
     }
 
+    override fun handle(event: isFinishedEvent) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun handle(event: RepairEvent) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -29,23 +33,12 @@ open class EventHandler protected constructor(): IEventHandler {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun handle(event: DryerIsDoneEvent) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     override fun handle(event: AnimalIsHungryEvent) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun handle(event: DeviceBrokenEvent) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun handle(event: BakeFinishedEvent) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun handle(event: WasherDoneEvent) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

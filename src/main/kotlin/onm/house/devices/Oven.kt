@@ -3,8 +3,9 @@ package onm.house.devices
 import onm.api.OvenControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
-import onm.events.BakeFinishedEvent
 import onm.events.IEventHandler
+import onm.events.isFinishedEvent
+import onm.house.places.Room
 import onm.reports.IReport
 import onm.things.Food
 import java.util.*
@@ -14,19 +15,21 @@ import java.util.*
  * */
 class Oven(override val id: UUID,
            eventHandler: IEventHandler,
-           deviceConfig: DeviceConfig)
-    : AbstractDevice(DeviceType.OVEN, deviceConfig, eventHandler) {
+           deviceConfig: DeviceConfig,
+           room: Room)
+    : AbstractDevice(DeviceType.OVEN, deviceConfig, eventHandler, room) {
 
-    private val ovenBakeFinishedEvent = BakeFinishedEvent(eventHandler, id)
+    private val ovenBakeFinishedEvent = isFinishedEvent(eventHandler, id, "Baking using $deviceDescription is done.")
 
     val ovenControlApi = OvenControlApi(this, this.id)
 
     fun switchOn(food: Collection<Food>, minutes: Double) {
         if (!isAvailable())
-            log.error("Oven named '${deviceDescription}' is already working or broken, therefore cannot be switched on.")
-        else
+            log.error("Oven named '$deviceDescription' is already working or broken, therefore cannot be switched on.")
+        else {
             doWork((minutes * 60000).toLong(), ovenBakeFinishedEvent::raiseEvent)
-        deviceStateMachine.turnedOffState()
+            deviceStateMachine.turnedOffState()
+        }
         //TODO Food size determines number of portions.
     }
 
