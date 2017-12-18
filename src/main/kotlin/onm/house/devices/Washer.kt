@@ -5,6 +5,7 @@ import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.IEventHandler
 import onm.events.WasherDoneEvent
+import onm.reports.IReport
 import java.util.*
 
 /**
@@ -14,7 +15,7 @@ class Washer(override val id: UUID,
              eventHandler: IEventHandler,
              deviceConfig: DeviceConfig) : AbstractDevice(DeviceType.WASHER, deviceConfig, eventHandler) {
 
-    private val event = WasherDoneEvent(eventHandler)
+    private val event = WasherDoneEvent(eventHandler, id)
 
     val washerControlApi = WasherControlApi(this, this.id)
 
@@ -30,7 +31,7 @@ class Washer(override val id: UUID,
         } //todo what if electricity is turned off?
     }
 
-    override fun generateReport(): String {
+    override fun generateReport(): IReport {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

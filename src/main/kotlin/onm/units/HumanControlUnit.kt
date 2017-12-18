@@ -88,7 +88,7 @@ class HumanControlUnit(private val availableHumans: Collection<Human>,
             val eq = availableEquipment.poll()
             val h = getHumanByAbility(HumanAbility.ANY)
             h.doSport(eq, {
-                HumanStopSport(eventHandler, h).raiseEvent()
+                HumanStopSport(eventHandler, h, h.id).raiseEvent()
                 availableEquipment.add(eq)
             })
         } catch (err: NoSuchHumans) {

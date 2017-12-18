@@ -5,6 +5,7 @@ import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.BakeFinishedEvent
 import onm.events.IEventHandler
+import onm.reports.IReport
 import onm.things.Food
 import java.util.*
 
@@ -16,7 +17,7 @@ class Oven(override val id: UUID,
            deviceConfig: DeviceConfig)
     : AbstractDevice(DeviceType.OVEN, deviceConfig, eventHandler) {
 
-    private val ovenBakeFinishedEvent = BakeFinishedEvent(eventHandler)
+    private val ovenBakeFinishedEvent = BakeFinishedEvent(eventHandler, id)
 
     val ovenControlApi = OvenControlApi(this, this.id)
 
@@ -29,7 +30,7 @@ class Oven(override val id: UUID,
         //TODO Food size determines number of portions.
     }
 
-    override fun generateReport(): String {
+    override fun generateReport(): IReport {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
