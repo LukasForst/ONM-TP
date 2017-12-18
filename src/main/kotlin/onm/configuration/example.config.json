@@ -2,6 +2,7 @@
   "rooms": [
     {
       "name": "kitchen",
+      "type": "KITCHEN",
       "devices": [
         {
           "type": "Fridge",
@@ -23,10 +24,17 @@
           },
           "breakageProbability": 0.01
         }
+      ],
+      "furniture": [
+        {
+          "type": "CHAIR",
+          "name": "chair1"
+        }
       ]
     },
     {
       "name": "Living room",
+      "type": "LIVING_ROOM",
       "devices": [
         {
           "type": "Dryer",
@@ -37,6 +45,12 @@
             "turnedOffState": 0
           },
           "breakageProbability": 0.90
+        }
+      ],
+      "furniture": [
+        {
+          "type": "CHAIR",
+          "name": "chair1"
         }
       ]
     }
@@ -52,7 +66,7 @@
       "breakageProbability": 0.1
     }
   ],
-  "human": [
+  "humans": [
     {
       "name": "Father",
       "humanAbility": "ANY"
@@ -71,7 +85,7 @@
   "equipments": [
     {
       "type": "SKI",
-      "name": "My owesome unique ski"
+      "name": "My awesome unique ski"
     }
   ]
 }
