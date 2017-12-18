@@ -1,6 +1,7 @@
 package onm.house.devices
 
 import onm.TestUtils
+import onm.api.OvenControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.configuration.json.PowerConsumption
@@ -16,13 +17,13 @@ import java.util.*
 
 class OvenTest {
 
-    lateinit var oven : Oven
+    lateinit var oven: OvenControlApi
     lateinit var eventHandlerMock: IEventHandler
 
     @Before
     fun setUp(){
         eventHandlerMock = mock(IEventHandler::class.java)
-        oven = Oven(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.OVEN, PowerConsumption()))
+        oven = Oven(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.OVEN, "oven", PowerConsumption())).ovenControlApi
     }
 
     @Test

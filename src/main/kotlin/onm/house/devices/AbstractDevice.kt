@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.api.DataApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.DeviceBrokenEvent
@@ -7,7 +8,6 @@ import onm.events.IEvent
 import onm.events.IEventHandler
 import onm.events.RepairEvent
 import onm.house.places.Room
-import onm.interfaces.StationaryEntity
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -28,8 +28,21 @@ abstract class AbstractDevice(
         /**
          * Event handler used for handling raised events.
          * */
-        protected val eventHandler: IEventHandler) : StationaryEntity {
+        protected val eventHandler: IEventHandler) : IDevice {
 
+
+    /**
+     * Time of device in idle state
+     */
+    var idleConsumption = 0.0
+    /**
+     * Time of device in working state
+     */
+    var workingConsumption = 0.0
+    /**
+     * Time of device in turnedOffTime
+     */
+    var turnedOffConsumption = 0.0
 
     /**
      * Room reference. This should be set after adding device to the room.
@@ -37,9 +50,9 @@ abstract class AbstractDevice(
     var room: Room? = null
 
     /**
-     * Description of the device.
+     * Unique description of the device.
      * */
-    val deviceDescription: String
+    override val deviceDescription: String
         get() = deviceConfig.deviceDescription
 
     /**
@@ -57,7 +70,12 @@ abstract class AbstractDevice(
     /**
      * State machine is used for manipulating with device power consumption.
      * */
-    protected val deviceStateMachine = DeviceStateMachine(deviceConfig.powerConsumption, deviceType)
+    protected val deviceStateMachine = DeviceStateMachine(deviceConfig.powerConsumption, deviceType, this)
+
+    /**
+     * DataApi of this device to get consumption of energy
+     */
+    override val dataApi = DataApi(this)
 
     /**
      * Simulates work. After ending work it invokes callback.

@@ -37,9 +37,9 @@ data class RoomConfig(
  * */
 data class DeviceConfig(
         val deviceType: DeviceType,
+        val deviceDescription: String, // TODO deviceDescription must be unique, therefore it has to be checked while parsing json
         val powerConsumption: PowerConsumption = PowerConsumption(),
-        val breakageProbability: Double? = null,
-        val deviceDescription: String = deviceType.name + " - description provided"
+        val breakageProbability: Double? = null
 )
 
 /**

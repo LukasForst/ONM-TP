@@ -1,5 +1,6 @@
 package onm.human
 
+import onm.api.FridgeControlApi
 import onm.house.devices.AbstractDevice
 import onm.house.devices.Dryer
 import onm.house.devices.Fridge
@@ -19,8 +20,8 @@ class Human(val ability: HumanAbility, val name: String, val controlUnit: HumanC
 
     var available: Boolean = true
 
-    fun goShop(frigo: Fridge) {
-        available = false;
+    fun goShop(fridgeApi: FridgeControlApi) {
+        available = false
         thread(start = true) {
             Thread.sleep(10000)
             // Generate food
@@ -28,8 +29,8 @@ class Human(val ability: HumanAbility, val name: String, val controlUnit: HumanC
 
             val ret = types.map { Food(it) }
 
-            frigo.addFood(ret)
-            available = true;
+            fridgeApi.addFood(ret)
+            available = true
         }
     }
 
@@ -39,7 +40,7 @@ class Human(val ability: HumanAbility, val name: String, val controlUnit: HumanC
             //Simulate work
             Thread.sleep(1000)
             dryer.switchOn()
-            available = true;
+            available = true
         }
     }
 
@@ -49,7 +50,7 @@ class Human(val ability: HumanAbility, val name: String, val controlUnit: HumanC
             //Simulate work
             Thread.sleep(2000)
             device.repair()
-            available = true;
+            available = true
         }
     }
 

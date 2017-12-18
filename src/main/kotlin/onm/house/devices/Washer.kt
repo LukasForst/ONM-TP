@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.api.WasherControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.IEventHandler
@@ -15,6 +16,8 @@ class Washer(override val id: UUID,
              deviceConfig: DeviceConfig) : AbstractDevice(DeviceType.WASHER, deviceConfig, eventHandler) {
 
     private val event = WasherDoneEvent(eventHandler, id)
+
+    val washerControlApi = WasherControlApi(this, this.id)
 
     /**
      * Starts washing clothes. This produces event which is raised after given time period. Note that new thread is created.
