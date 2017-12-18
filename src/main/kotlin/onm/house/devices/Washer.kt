@@ -22,7 +22,12 @@ class Washer(override val id: UUID,
      * Starts washing clothes. This produces event which is raised after given time period. Note that new thread is created.
      * */
     fun startWashing(periodInMinutes: Double) {
-        doWork((periodInMinutes * 60000).toLong(), event::raiseEvent) //todo what if electricity is turned off?
+        if (!isAvailable())
+            log.error("Washer named '${deviceDescription}' is already working or broken, therefore cannot be switched on.")
+        else {
+            doWork((periodInMinutes * 60000).toLong(), event::raiseEvent)
+            deviceStateMachine.turnedOffState()
+        } //todo what if electricity is turned off?
     }
 
     override fun generateReport(): String {

@@ -9,17 +9,21 @@ import java.util.*
 
 class Dryer(override val id: UUID,
             eventHandler: IEventHandler,
-            deviceConfig: DeviceConfig,
-            private val workingIntervalInMinutes: Double = 1.0) : AbstractDevice(DeviceType.FRIDGE, deviceConfig, eventHandler) {
+            deviceConfig: DeviceConfig) : AbstractDevice(DeviceType.FRIDGE, deviceConfig, eventHandler) {
 
     private val dryerIsDoneEvent = DryerIsDoneEvent(eventHandler)
 
     val dryerControlApi = DryerControlApi(this, this.id)
 
-    fun switchOn() {
 
-        doWork((6000 * 1).toLong(), dryerIsDoneEvent::raiseEvent)
+    fun switchOn() {
+        if (!isAvailable())
+            log.error("Dryer named '${deviceDescription}' is already working or broken, therefore cannot be switched on.")
+        else
+            doWork((60000 * 10).toLong(), dryerIsDoneEvent::raiseEvent) //Ten minutes
+        deviceStateMachine.turnedOffState()
     }
+
 
     override fun generateReport(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

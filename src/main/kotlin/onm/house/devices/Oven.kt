@@ -21,7 +21,11 @@ class Oven(override val id: UUID,
     val ovenControlApi = OvenControlApi(this, this.id)
 
     fun switchOn(food: Collection<Food>, minutes: Double) {
-        doWork((minutes * 60000).toLong(), ovenBakeFinishedEvent::raiseEvent)
+        if (!isAvailable())
+            log.error("Oven named '${deviceDescription}' is already working or broken, therefore cannot be switched on.")
+        else
+            doWork((minutes * 60000).toLong(), ovenBakeFinishedEvent::raiseEvent)
+        deviceStateMachine.turnedOffState()
         //TODO Food size determines number of portions.
     }
 

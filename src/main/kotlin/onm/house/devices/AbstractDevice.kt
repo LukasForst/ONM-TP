@@ -8,6 +8,7 @@ import onm.events.IEvent
 import onm.events.IEventHandler
 import onm.events.RepairEvent
 import onm.house.places.Room
+import onm.loggerFor
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -30,6 +31,10 @@ abstract class AbstractDevice(
          * */
         protected val eventHandler: IEventHandler) : IDevice {
 
+    companion object {
+        @JvmStatic
+        protected val log = loggerFor(AbstractDevice::class.java)
+    }
 
     /**
      * Time of device in idle state
@@ -94,6 +99,14 @@ abstract class AbstractDevice(
                 callback.invoke()
             }
         }
+    }
+
+    /**
+     * Returns false if device is broken or working. True otherwise.
+     */
+    protected fun isAvailable(): Boolean {
+        val type = deviceStateMachine.currentState.stateType
+        return !(type == StateType.BROKEN || type == StateType.WORKING)
     }
 
     fun repair(){
