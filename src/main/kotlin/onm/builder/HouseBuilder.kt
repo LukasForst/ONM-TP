@@ -23,20 +23,21 @@ object HouseBuilder {
     fun buildHouseFromConfig(config: ConfigurationDataClass): House {
         val eventHandler = EventHandler.instance
 
-        for(roomConfig in config.rooms){
-            createRoom(roomConfig)
-            for(dev in roomConfig.devices){
-                val device = createDevice(dev,eventHandler)
+        for (roomConfig in config.rooms) {
+            val room = createRoom(roomConfig)
+            for (dev in roomConfig.devices) {
+                val device = createDevice(dev, eventHandler, room)
 
-            for (deviceConfig in config.roomsAndDevices[roomConfig]!!) {
-                room.addDevice(createDevice(deviceConfig, eventHandler, room))
+//                for (deviceConfig in config.roomsAndDevices[roomConfig]!!) {
+//                    room.addDevice(createDevice(deviceConfig, eventHandler, room))
+//                }
             }
         }
         return house
     }
 
     private fun createDevice(deviceConfig: DeviceConfig, eventHandler: IEventHandler, room: Room): AbstractDevice {
-        val createdDevice = when (deviceConfig.deviceType) {
+        val createdDevice = when (deviceConfig.type) {
             DeviceType.WASHER -> Washer(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.FRIDGE -> Fridge(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.OVEN -> Oven(UUID.randomUUID(), eventHandler, deviceConfig, room)
@@ -53,8 +54,8 @@ object HouseBuilder {
         return createdDevice
     }
 
-    private fun createRoom(room: RoomConfig):Room{
-        val createdRoom = Room(UUID.randomUUID(), room.name,room.type,room.floor)
+    private fun createRoom(room: RoomConfig): Room {
+        val createdRoom = Room(UUID.randomUUID(), room.name, room.type, room.floor)
         house.rooms.add(createdRoom)
         return createdRoom
     }
