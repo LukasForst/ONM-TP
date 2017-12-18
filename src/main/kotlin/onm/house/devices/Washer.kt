@@ -6,6 +6,7 @@ import onm.configuration.json.DeviceConfig
 import onm.events.IEventHandler
 import onm.events.isFinishedEvent
 import onm.house.places.Room
+import onm.human.HumanControlUnit
 import onm.reports.IReport
 import java.util.*
 
@@ -16,6 +17,10 @@ class Washer(override val id: UUID,
              eventHandler: IEventHandler,
              deviceConfig: DeviceConfig,
              room: Room) : AbstractDevice(DeviceType.WASHER, deviceConfig, eventHandler, room) {
+
+    init {
+        HumanControlUnit.instance.registerDevice(this)
+    }
 
     private val event = isFinishedEvent(eventHandler, id, "Washing clothes using $deviceDescription is done.")
 

@@ -4,6 +4,7 @@ import onm.api.OvenControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.IEventHandler
+import onm.human.HumanControlUnit
 import onm.events.isFinishedEvent
 import onm.house.places.Room
 import onm.reports.IReport
@@ -18,6 +19,10 @@ class Oven(override val id: UUID,
            deviceConfig: DeviceConfig,
            room: Room)
     : AbstractDevice(DeviceType.OVEN, deviceConfig, eventHandler, room) {
+
+    init {
+        HumanControlUnit.instance.registerDevice(this)
+    }
 
     private val ovenBakeFinishedEvent = isFinishedEvent(eventHandler, id, "Baking using $deviceDescription is done.")
 

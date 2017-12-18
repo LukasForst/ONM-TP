@@ -6,6 +6,7 @@ import onm.configuration.json.DeviceConfig
 import onm.events.IEventHandler
 import onm.events.isFinishedEvent
 import onm.house.places.Room
+import onm.human.HumanControlUnit
 import onm.reports.IReport
 import java.util.*
 
@@ -15,6 +16,10 @@ class Dryer(override val id: UUID,
             room: Room) : AbstractDevice(DeviceType.FRIDGE, deviceConfig, eventHandler, room) {
 
     private val dryerIsDoneEvent = isFinishedEvent(eventHandler, id, "Drying clothes using $deviceDescription is done.")
+
+    init {
+        HumanControlUnit.instance.registerDevice(this)
+    }
 
     val dryerControlApi = DryerControlApi(this, this.id)
 
