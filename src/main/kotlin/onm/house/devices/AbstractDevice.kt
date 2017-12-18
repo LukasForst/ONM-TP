@@ -80,7 +80,7 @@ abstract class AbstractDevice(
 
     fun repair(){
         deviceStateMachine.idleState()
-        RepairEvent(eventHandler, this).raiseEvent()
+        RepairEvent(eventHandler, this, id).raiseEvent()
     }
 
     private var currentErrorProbability: Double = deviceConfig.breakageProbability ?: deviceType.breakageProbability
@@ -92,7 +92,7 @@ abstract class AbstractDevice(
         return if (randomNumber >= intervalNumber) {
             null
         } else {
-            DeviceBrokenEvent(eventHandler, this)
+            DeviceBrokenEvent(eventHandler, this, id)
         }
     }
 }

@@ -1,11 +1,12 @@
 package onm.events
 
 import onm.configuration.EventSeverity
+import java.util.*
 
 /**
  * Washing machine has done its job event.
  * */
-class WasherDoneEvent(private val eventHandler: IEventHandler) : IEvent {
+class WasherDoneEvent(private val eventHandler: IEventHandler, override val entityId: UUID) : IEvent {
 
     override val message: String
         get() = "Your clothes are washed!"

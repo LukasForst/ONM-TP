@@ -23,7 +23,7 @@ class WasherTest {
     fun setUp() {
         eventHandlerMock = Mockito.mock(IEventHandler::class.java)
         washer = Washer(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.WASHER, PowerConsumption()))
-        event = WasherDoneEvent(eventHandlerMock)
+        event = WasherDoneEvent(eventHandlerMock, UUID.randomUUID())
     }
 
     @Test

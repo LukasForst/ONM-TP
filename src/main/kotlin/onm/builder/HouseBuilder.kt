@@ -22,7 +22,7 @@ object HouseBuilder {
      * Builds house from given config class. This class should be parsed from JSON.
      * */
     fun buildHouseFromConfig(config: ConfigurationDataClass): House {
-        val eventHandler = EventHandler() //todo make event handler as singleton
+        val eventHandler = EventHandler.instance
         val house = House()
 
         for (roomConfig in config.roomsAndDevices.keys) {
@@ -33,7 +33,6 @@ object HouseBuilder {
                 room.addDevice(createDevice(deviceConfig, eventHandler))
             }
         }
-
         return house
     }
 

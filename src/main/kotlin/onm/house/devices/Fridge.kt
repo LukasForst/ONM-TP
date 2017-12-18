@@ -4,6 +4,7 @@ import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.FridgeEmptyEvent
 import onm.events.IEventHandler
+import onm.reports.IReport
 import onm.things.Food
 import java.util.*
 import kotlin.concurrent.thread
@@ -16,7 +17,7 @@ class Fridge(override val id: UUID,
              deviceConfig: DeviceConfig,
              private val workingIntervalInMinutes: Double = 1.0) : AbstractDevice(DeviceType.FRIDGE, deviceConfig, eventHandler) {
 
-    private val fridgeEmptyEvent = FridgeEmptyEvent(eventHandler)
+    private val fridgeEmptyEvent = FridgeEmptyEvent(eventHandler, id)
     private val _food = LinkedList<Food>()
 
     init { //todo what if electricity is turned off?
@@ -59,7 +60,7 @@ class Fridge(override val id: UUID,
     }
 
 
-    override fun generateReport(): String {
+    override fun generateReport(): IReport {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

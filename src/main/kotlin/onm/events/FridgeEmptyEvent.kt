@@ -1,11 +1,12 @@
 package onm.events
 
 import onm.configuration.EventSeverity
+import java.util.*
 
 /**
  * Event raised when fridge is empty.
  * */
-class FridgeEmptyEvent(private val eventHandler: IEventHandler) : IEvent {
+class FridgeEmptyEvent(private val eventHandler: IEventHandler, override val entityId: UUID) : IEvent {
 
     override val severity: EventSeverity
         get() = EventSeverity.INFO

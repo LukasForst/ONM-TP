@@ -1,5 +1,6 @@
 package onm.interfaces
 
+import onm.reports.IReport
 import java.util.*
 
 /**
@@ -16,5 +17,5 @@ interface HouseEntity {
     /**
      * Generates entity report of current state.
      * */
-    fun generateReport(): String
+    fun generateReport(): IReport
 }
