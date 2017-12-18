@@ -1,9 +1,8 @@
 package onm.reports
 
-import onm.events.IEvent
 
 interface ICentralLogUnit {
-    fun filteredRecords(filter: (IEvent) -> Boolean): Collection<IEvent>
+    fun filteredRecords(filter: (IReport) -> Boolean): Collection<IReport>
 
     fun eventReports(filter: (EventReport) -> Boolean): Collection<EventReport>
 

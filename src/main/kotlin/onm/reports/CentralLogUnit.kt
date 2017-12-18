@@ -1,13 +1,11 @@
 package onm.reports
 
-import onm.events.IEvent
-
 class CentralLogUnit: ICentralLogUnit {
 
     private val allRecords = mutableListOf<IReport>()
 
-    override fun filteredRecords(filter: (IEvent) -> Boolean): Collection<IEvent> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun filteredRecords(filter: (IReport) -> Boolean): Collection<IReport> {
+        return allRecords.filter { x -> filter.invoke(x) }.toList()
     }
 
     override fun eventReports(filter: (EventReport) -> Boolean): Collection<EventReport> {
