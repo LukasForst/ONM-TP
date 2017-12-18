@@ -53,7 +53,7 @@ abstract class AbstractDevice(
      * Unique description of the device.
      * */
     override val deviceDescription: String
-        get() = deviceConfig.deviceDescription
+        get() = deviceConfig.name
 
     /**
      * Determines whether is device available to be used or not.

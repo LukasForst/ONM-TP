@@ -86,7 +86,7 @@ class RoomBuilder(private val roomConfig: RoomConfig) {
     }
 
     fun buildRoom(): Room {
-        val room = Room(UUID.randomUUID(), roomConfig.description ?: "No description provided.", roomConfig.roomType, roomConfig.floor, devicesInRoom, furnitureInRoom)
+        val room = Room(UUID.randomUUID(), roomConfig.name ?: "No description provided.", roomConfig.type, roomConfig.floor, devicesInRoom, furnitureInRoom)
 
         furnitureInRoom.forEach { x -> x.room = room }
         devicesInRoom.forEach { x -> x.room = room }

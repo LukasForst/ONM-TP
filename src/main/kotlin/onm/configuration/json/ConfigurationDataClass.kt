@@ -1,7 +1,10 @@
 package onm.configuration.json
 
+import onm.animals.AnimalType
 import onm.configuration.DeviceType
+import onm.configuration.FurnitureType
 import onm.configuration.RoomType
+import onm.things.Equipment
 
 /**
  * Classes in this file will be serialized to the JSON.
@@ -11,35 +14,39 @@ import onm.configuration.RoomType
  * Data class used as configuration part for out framework.
  * */
 data class ConfigurationDataClass(
-        /**
-         * structure of this map is like that:
-         *
-         * ```RoomType: DeviceType - count```
-         *
-         * so example:
-         *
-         * ```Kitchen : Fridge : 1```
-         * */
-        val roomsAndDevices: Map<RoomConfig, Collection<DeviceConfig>> //todo add more config options + how to save generic collection to the json
+        val rooms: Collection<RoomConfig>,
+        val vehicles: Collection<VehicleConfig>,
+        val animals: Collection<AnimalConfig>,
+        val equipments: Collection<EquipmentConfig>
 )
 
 /**
  * Represents room config.
  * */
 data class RoomConfig(
-        val roomType: RoomType,
-        val description: String?,
-        val floor: Int
+        val type: RoomType,
+        val name: String,
+        val floor: Int = 0,
+        val devices: Collection<DeviceConfig>,
+        val furniture: Collection<FurnitureConfig>
 )
 
 /**
  * Represents device config.
  * */
 data class DeviceConfig(
-        val deviceType: DeviceType,
-        val deviceDescription: String, // TODO deviceDescription must be unique, therefore it has to be checked while parsing json
+        val type: DeviceType,
+        val name: String, // TODO deviceDescription must be unique, therefore it has to be checked while parsing json
         val powerConsumption: PowerConsumption = PowerConsumption(),
         val breakageProbability: Double? = null
+)
+
+/**
+ * Represent furniture config
+ */
+data class FurnitureConfig(
+        val type: FurnitureType,
+        val name: String
 )
 
 /**
@@ -49,4 +56,29 @@ data class PowerConsumption(
         val idleState: Int? = null,
         val workingState: Int? = null,
         val turnedOffState: Int? = null
+)
+
+/**
+ * Represent vehicle config
+ */
+data class VehicleConfig(
+        val name: String,
+        val powerConsumption: PowerConsumption,
+        val breakageProbability: Double? = null
+)
+
+/**
+ * Represent animal config
+ */
+data class AnimalConfig(
+        val name: String,
+        val type: AnimalType
+)
+
+/**
+ * Represent equipment config
+ */
+data class EquipmentConfig(
+        val name: String,
+        val type: Equipment
 )
