@@ -1,9 +1,8 @@
 package onm.builder
 
+import onm.animals.*
 import onm.configuration.DeviceType
-import onm.configuration.json.ConfigurationDataClass
-import onm.configuration.json.DeviceConfig
-import onm.configuration.json.RoomConfig
+import onm.configuration.json.*
 import onm.events.EventHandler
 import onm.events.IEventHandler
 import onm.house.devices.*
@@ -19,37 +18,66 @@ import java.util.*
  */
 object HouseBuilder {
 
-    private val house = House()
+    private var house = House()
+
+    private val eventHandler = EventHandler.instance
+    private val humanControl = HumanControlUnit.instance
+    private val animalControl = AnimalControlUnit.instance
+
     /**
      * Builds house from given config class. This class should be parsed from JSON.
      * */
     fun buildHouseFromConfig(config: ConfigurationDataClass): House {
-        val eventHandler = EventHandler.instance
-        val humanControl = HumanControlUnit.instance
-        for (roomConfig in config.rooms) {
+        createAndFillRooms(config.rooms)
+        createAndAddEquipment(config.equipments)
+        populateHouseWithAnimals(config.animals)
+        populateHouseWithHumans(config.humans)
+        return build()
+    }
+
+    /**
+     * Creates House from config you have provided.
+     *
+     * Note that after calling this method will this instance has again empty house.
+     * */
+    fun build(): House {
+        val result = house
+        house = House()
+        return result
+    }
+
+    fun createAndAddEquipment(equipmentConfig: Collection<EquipmentConfig>): HouseBuilder {
+        equipmentConfig.forEach { x -> humanControl.registerEquipment(x.type) }
+        return this
+    }
+
+    fun populateHouseWithAnimals(animalConfig: Collection<AnimalConfig>): HouseBuilder {
+        animalConfig.forEach { x -> createAnimal(x) }
+        return this
+    }
+
+    fun createAndFillRooms(rooms: Collection<RoomConfig>): HouseBuilder {
+        for (roomConfig in rooms) {
             val room = createRoom(roomConfig)
-            roomConfig.devices.forEach {
-                createDevice(it, eventHandler, room)
-
-            }
+            roomConfig.devices.forEach { x -> createDevice(x, eventHandler, room) }
             house.rooms.add(room)
-
         }
-        for (i in config.vehicles) {
-            //TODO: add vehicles like devices
+        return this
+    }
+
+    fun populateHouseWithHumans(humans: Collection<HumansConfig>): HouseBuilder {
+        humans.forEach { x -> Human(x.humanAbility, x.name, humanControl, UUID.randomUUID()) }
+        return this
+    }
+
+    private fun createAnimal(config: AnimalConfig): IAnimal {
+        return when (config.type) {
+            AnimalType.CAT -> Cat(UUID.randomUUID(), config.name, animalControl)
+            AnimalType.DOG -> Dog(UUID.randomUUID(), config.name, animalControl)
+            AnimalType.GOLF_FISH -> GoldFish(UUID.randomUUID(), config.name, animalControl)
+            AnimalType.SPIDER -> Spider(UUID.randomUUID(), config.name, animalControl)
+            AnimalType.SNAKE -> Snake(UUID.randomUUID(), config.name, animalControl)
         }
-
-        for (eq in config.equipments) {
-
-            humanControl.registerEquipment(eq.type)
-        }
-
-        for (human in config.humans) {
-            val h = Human(human.humanAbility.first(), human.name, humanControl, UUID.randomUUID())
-            humanControl.registerHuman(h)
-        }
-
-        return house
     }
 
     private fun createDevice(deviceConfig: DeviceConfig, eventHandler: IEventHandler, room: Room): AbstractDevice {
@@ -62,7 +90,7 @@ object HouseBuilder {
             DeviceType.CAR -> Car(UUID.randomUUID(), deviceConfig, eventHandler, room)
             DeviceType.RADIO -> Radio(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.TOILET -> Toilet(UUID.randomUUID(), eventHandler, deviceConfig, room)
-            DeviceType.BOILER -> Boiler(UUID.randomUUID(), deviceConfig, eventHandler, room, 25)
+            DeviceType.BOILER -> Boiler(UUID.randomUUID(), deviceConfig, eventHandler, room, 25) //todo maybe read thresh hold from somewhere
         }
 
         house.allIControlApi.add(when (deviceConfig.type) {
@@ -81,9 +109,7 @@ object HouseBuilder {
     }
 
     private fun createRoom(room: RoomConfig): Room {
-        val builder = RoomBuilder(room)
-
-        return builder.buildRoom()
+        return RoomBuilder(room).buildRoom()
     }
 }
 

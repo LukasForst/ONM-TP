@@ -11,7 +11,7 @@ import onm.things.FoodType
 import java.util.*
 import kotlin.concurrent.thread
 
-class Human(val ability: HumanAbility, val name: String, controlUnit: HumanControlUnit, override val id: UUID) : HouseEntity {
+class Human(val ability: Collection<HumanAbility>, val name: String, controlUnit: HumanControlUnit, override val id: UUID) : HouseEntity {
     var available: Boolean = true
 
     init {

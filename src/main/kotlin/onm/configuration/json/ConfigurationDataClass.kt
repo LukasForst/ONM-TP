@@ -16,7 +16,6 @@ import onm.things.Equipment
  * */
 data class ConfigurationDataClass(
         val rooms: Collection<RoomConfig>,
-        val vehicles: Collection<VehicleConfig>,
         val animals: Collection<AnimalConfig>,
         val equipments: Collection<EquipmentConfig>,
         val humans: Collection<HumansConfig>
@@ -61,15 +60,6 @@ data class PowerConsumption(
 )
 
 /**
- * Represent vehicle config
- */
-data class VehicleConfig(
-        val name: String,
-        val powerConsumption: PowerConsumption,
-        val breakageProbability: Double? = null
-)
-
-/**
  * Represent animal config
  */
 data class AnimalConfig(
@@ -81,7 +71,6 @@ data class AnimalConfig(
  * Represent equipment config
  */
 data class EquipmentConfig(
-        val name: String,
         val type: Equipment
 )
 
