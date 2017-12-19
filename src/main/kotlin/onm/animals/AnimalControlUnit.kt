@@ -50,7 +50,7 @@ class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalContro
         if (animal != null) {
             log.info("Animal with UUID $animalId was removed.")
             hungryAnimals.removeIf { x -> x.id == animalId }
-            logUnit.addReport(AnimalReport(Instant.now(), animal.id, "Petting animal.", EventSeverity.INFO, animal.animalType))
+            logUnit.addReport(AnimalReport(Instant.now(), animal.id, "Feeding animal", EventSeverity.INFO, animal.animalType))
         } else {
             log.error("Animal with UUID $animalId not found in collection of hungry animals!")
         }
@@ -62,9 +62,7 @@ class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalContro
             log.error("No animals are instanced!")
             return
         }
-
         val animal = animals.pop()
-        //todo add human happines
 
         logUnit.addReport(AnimalReport(Instant.now(), animal.id, "Petting animal.", EventSeverity.INFO, animal.animalType))
         Thread.sleep(animal.animalType.pettingTimeInMillis) //petting takes some time
