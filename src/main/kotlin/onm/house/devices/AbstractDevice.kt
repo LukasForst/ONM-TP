@@ -92,17 +92,17 @@ abstract class AbstractDevice(
      * */
     protected fun doWork(milliseconds: Long, callback: (() -> Unit)?): Boolean {
         val brokenEvent = verifyNotBroken(currentErrorProbability)
-        if (brokenEvent != null) {
+        return if (brokenEvent != null) {
             deviceStateMachine.brokenSate()
             brokenEvent.raiseEvent()
-            return false
+            false
         } else {
             currentErrorProbability += currentErrorProbability / 10
             deviceStateMachine.workingState()
             Thread.sleep(milliseconds) //TODO check if not broken after sleep whether animals and random events might destroy busy devices
             deviceStateMachine.idleState()
             callback?.invoke()
-            return true
+            true
         }
     }
 
