@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.api.DataApi
 import onm.api.DryerControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
@@ -29,6 +30,7 @@ class Dryer(override val id: UUID,
 
     val dryerControlApi = DryerControlApi(this, id)
 
+    override val dataApi = DataApi(this)
 
     fun switchOn() {
         if (deviceStateMachine.currentState.stateType != StateType.TURNED_OFF)

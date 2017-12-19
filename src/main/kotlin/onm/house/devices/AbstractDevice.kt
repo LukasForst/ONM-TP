@@ -1,6 +1,5 @@
 package onm.house.devices
 
-import onm.api.DataApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.DeviceBrokenEvent
@@ -82,27 +81,22 @@ abstract class AbstractDevice(
     protected val deviceStateMachine = DeviceStateMachine(deviceConfig.powerConsumption, deviceType, this)
 
     /**
-     * DataApi of this device to get consumption of energy
-     */
-    override val dataApi = DataApi(this)
-
-    /**
      * Simulates work. After ending work it invokes callback.
      * @return true if everything goes well, false otherwise
      * */
     protected fun doWork(milliseconds: Long, callback: (() -> Unit)?): Boolean {
         val brokenEvent = verifyNotBroken(currentErrorProbability)
-        if (brokenEvent != null) {
+        return if (brokenEvent != null) {
             deviceStateMachine.brokenSate()
             brokenEvent.raiseEvent()
-            return false
+            false
         } else {
             currentErrorProbability += currentErrorProbability / 10
             deviceStateMachine.workingState()
             Thread.sleep(milliseconds) //TODO check if not broken after sleep whether animals and random events might destroy busy devices
             deviceStateMachine.idleState()
             callback?.invoke()
-            return true
+            true
         }
     }
 
