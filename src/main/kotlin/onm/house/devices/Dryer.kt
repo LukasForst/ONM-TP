@@ -27,7 +27,7 @@ class Dryer(override val id: UUID,
         HumanControlUnit.instance.registerDevice(this)
     }
 
-    val dryerControlApi = DryerControlApi(this, this.id)
+    val dryerControlApi = DryerControlApi(this, id)
 
 
     fun switchOn() {

@@ -31,7 +31,7 @@ class Oven(override val id: UUID,
     private val ovenStartsEvent = DeviceStartsEvent(eventHandler, id, "Oven named $deviceDescription is turned on.")
     private val ovenTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Oven $deviceDescription is turned off.")
 
-    val ovenControlApi = OvenControlApi(this, this.id)
+    val ovenControlApi = OvenControlApi(this, id)
 
     fun switchOn(food: Collection<Food>, minutes: Double) {
         if (deviceStateMachine.currentState.stateType != StateType.TURNED_OFF)

@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.api.TelevisionControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.DeviceStartsEvent
@@ -23,6 +24,7 @@ class Television(override val id: UUID,
         HumanControlUnit.instance.registerDevice(this)
     }
 
+    val televisionControlApi = TelevisionControlApi(this, id)
     private val random = Random()
     private lateinit var currentStation: TvStations
 

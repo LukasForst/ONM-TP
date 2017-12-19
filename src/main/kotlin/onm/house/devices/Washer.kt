@@ -29,7 +29,7 @@ class Washer(override val id: UUID,
     private val washerStartsEvent = DeviceStartsEvent(eventHandler, id, "Washer named $deviceDescription is turned on.")
     private val washerTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Washer $deviceDescription is turned off.")
 
-    val washerControlApi = WasherControlApi(this, this.id)
+    val washerControlApi = WasherControlApi(this, id)
 
     /**
      * Starts washing clothes. This produces event which is raised after given time period. Note that new thread is created.
