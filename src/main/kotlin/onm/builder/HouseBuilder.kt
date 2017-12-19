@@ -69,7 +69,7 @@ class HouseBuilder {
     }
 
     fun populateHouseWithHumans(humans: Collection<HumansConfig>): HouseBuilder {
-        humans.forEach { x -> Human(x.humanAbility, x.name, humanControl, UUID.randomUUID()) }
+        humans.forEach { x -> Human(x.humanAbility.toHashSet(), x.name, humanControl, UUID.randomUUID()) }
         return this
     }
 
