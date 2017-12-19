@@ -17,10 +17,10 @@ class House internal constructor(){
 
     val inHouseTemperature = Temperature.instance
 
-    internal val rooms = LinkedList<Room>()
+    internal val rooms = mutableListOf<Room>()
 
-    internal val allIDevices = LinkedList<IDevice>()
-    val allIControlApi = LinkedList<IControlApi>()
+    internal val allIDevices = mutableListOf<IDevice>()
+    val allIControlApi = mutableListOf<IControlApi>()
 
     fun getUidOfDevice(deviceDescription: String): UUID {
         return allIDevices.firstOrNull { device -> device.deviceDescription.contentEquals(deviceDescription) }?.id ?: throw NoSuchElementException()

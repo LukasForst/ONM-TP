@@ -11,6 +11,8 @@ import onm.reports.AnimalReport
 import onm.reports.CentralLogUnit
 import java.time.Instant
 import java.util.*
+import java.util.concurrent.ConcurrentLinkedDeque
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * Animal control unit is in charge of controlling all animals in the system. It handles their events and communicates with primary event handler.
@@ -21,8 +23,8 @@ class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalContro
         private val log = loggerFor(AnimalControlUnit::class.java)
     }
 
-    private val hungryAnimals = mutableListOf<IAnimal>()
-    private val animals = LinkedList<IAnimal>()
+    private val hungryAnimals = ConcurrentLinkedQueue<IAnimal>()
+    private val animals = ConcurrentLinkedDeque<IAnimal>()
 
     private val logUnit = CentralLogUnit.instance
 

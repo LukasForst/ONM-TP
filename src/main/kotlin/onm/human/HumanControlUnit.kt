@@ -14,11 +14,11 @@ import kotlin.concurrent.thread
 class HumanControlUnit private constructor(availableHumans: Collection<Human>,
                                            private val eventHandler: IEventHandler) {
 
-    private val _humansList = mutableListOf<Human>()
+    private val _humansList = ConcurrentLinkedQueue<Human>()
     val humans: Collection<Human>
         get() = _humansList
 
-    private val _availableThings = mutableListOf<AbstractDevice>()
+    private val _availableThings = ConcurrentLinkedQueue<AbstractDevice>()
     val availableThings: Collection<AbstractDevice>
         get() = _availableThings
 
@@ -38,10 +38,8 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
     }
 
 
-
     private fun getAvailableHumanByAbility(ability: HumanAbility): Human? {
         return _humansList.firstOrNull { x -> x.abilitiesList.contains(ability) && x.available }
-
     }
 
 
@@ -111,7 +109,13 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
         val human = getAvailableHumanByAbility(HumanAbility.CAN_REPAIR_DEVICES)
         val device = task.device
 
-        if (human != null && device != null) human.repairDevice(device)
-        else log.error("ERROR HumanControlUnit! Device or human not found in repairDevice!")
+        when {
+            device == null -> log.error("ERROR HumanControlUnit! Device not found in repairDevice!")
+            human == null -> {
+                queueTodo.add(task)
+                log.warn("There was no human with needed ability: ${HumanAbility.CAN_REPAIR_DEVICES}")
+            }
+            else -> human.repairDevice(device)
+        }
     }
 }

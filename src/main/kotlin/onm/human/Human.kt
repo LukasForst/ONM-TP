@@ -16,7 +16,10 @@ import java.util.*
 import kotlin.concurrent.thread
 
 class Human(val abilitiesList: Collection<HumanAbility>, val name: String, private val controlUnit: HumanControlUnit, override val id: UUID) : HouseEntity {
-    internal var available: Boolean = true
+    var available: Boolean = true
+        internal set(value) {
+            field = value
+        }
 
     init {
         controlUnit.registerHuman(this)

@@ -69,7 +69,7 @@
     {
       "name": "Father",
       "humanAbility": [
-        "ANY"
+        "CAN_REPAIR_DEVICES"
       ]
     },
     {

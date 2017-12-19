@@ -35,7 +35,7 @@ abstract class AbstractAnimal(
             while (true) {
                 Thread.sleep((1000 * animalType.probabilityOfBrokingSomething).toLong())
                 if (rd.nextInt(1000) < animalType.probabilityOfBrokingSomething) {
-                    log.error("${animalType.name} with name \"$name\" just broke something! That bastard!")
+                    log.warn("${animalType.name} with name \"$name\" just broke something! That bastard!")
                     brokeSmEvent.raiseEvent()
 
                     Thread.sleep((10000 * animalType.probabilityOfBrokingSomething).toLong()) //feel guilty and to nothing
