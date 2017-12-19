@@ -1,38 +1,19 @@
 package onm.enterpoint
 
-import onm.things.Food
-import onm.things.FoodType
+import onm.builder.HouseBuilder
+import onm.configuration.json.ConfigLoader
+import java.nio.file.Paths
 
 
 fun main(args: Array<String>) {
-    //TODO
-//    var configstr = ""
-//    if (args.isNotEmpty()) {
-//        try {
-//            val f = File(args[0])
-//            configstr = f.readText()
-//        } catch (err: FileNotFoundException) {
-//            return
-//        }
-//
-//    } else {
-//        val path = System.getProperty("user.dir")
-//        configstr = Paths.get(path, "src", "main", "kotlin", "onm", "enterpoint", "config.json").toFile().readText()
-//    }
-//    try {
-//        println(configstr)
-//        val config = ConfigLoader.loadConfigFromString(configstr)
-//        val house = HouseBuilder.buildHouseFromConfig(config)
-//
-//    }catch (err:Error){
-//        println(err)
-//    }
+    val configstr = Paths.get(System.getProperty("user.dir"), "src", "main", "kotlin", "onm", "enterpoint", "config.json").toFile().readText()
+    val configs = ConfigLoader.loadConfigFromString(configstr)
+    if (configs == null) {
+        print("Error while parsing")
+        return
+    }
 
-    val types = FoodType.values()
+    val house = HouseBuilder.buildHouseFromConfig(configs)
 
-    val ret = types.map { Food(it) }
-    print(ret)
-
-
-
+    return
 }

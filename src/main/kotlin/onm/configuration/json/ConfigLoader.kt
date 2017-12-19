@@ -3,14 +3,14 @@ package onm.configuration.json
 import com.github.salomonbrys.kotson.fromJson
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import onm.loggerFor
 import java.io.File
 
 /**
  * Object responsible for parsing JSON to our data class.
  * */
 object ConfigLoader {
-    //todo this will not work for now, we need to find out how to save generics collection (like Map) to the json
-
+    private val log = loggerFor(ConfigLoader::class.java)
 
     /**
      * Loads configuration class from given file path. Null is returned when parsing failed.
@@ -22,44 +22,36 @@ object ConfigLoader {
     /**
      * Loads configuration data class from given string. Null is returned when parsing failed.
      * */
-    fun loadConfigFromString(data: String): ConfigurationDataClass {
-        try {
+    fun loadConfigFromString(data: String): ConfigurationDataClass? {
+        return try {
             val config = Gson().fromJson<ConfigurationDataClass>(data)
             checkNameForUnique(config)
-            return config
         } catch (e: JsonSyntaxException) {
-            return ConfigurationDataClass(listOf(), listOf(), listOf(), listOf())
+            log.error("JSON Parsing failed.", e)
+            null
         }
     }
 
-    private fun checkNameForUnique(config: ConfigurationDataClass): Boolean {
-        val desc = mutableSetOf<String>()
+    private fun checkNameForUnique(config: ConfigurationDataClass): ConfigurationDataClass? {
+        val set = mutableSetOf<String>()
 
-        for (i in config.rooms) {
-            for (d in i.devices) {
-                if (desc.contains(d.name)) {
-                    throw Error("'${d.name}' is registered yet")
-                } else {
-                    desc.add(d.name)
-                }
-            }
-            for (f in i.furniture) {
-                if (desc.contains(f.name)) {
-                    throw Error("name: '${f.name}' is registered yet")
-                } else {
-                    desc.add(f.name)
-                }
-            }
+        return if (!verifyNaming(config.animals.map { x -> x.name }, set, "Animals")
+                || !verifyNaming(config.humans.map { x -> x.name }, set, "Humans")
+                || !verifyNaming(config.rooms.map { x -> x.name }, set, "Rooms")) {
+            null
+        } else {
+            config
         }
+    }
 
-        for (f in config.animals) {
-            if (desc.contains(f.name)) {
-                throw Error("name: '${f.name}' is registered yet")
-            } else {
-                desc.add(f.name)
-            }
+    private fun verifyNaming(names: Collection<String>, set: MutableSet<String>, collectionName: String): Boolean {
+        val errMsg = "There is non unique name in "
+
+        return if (names.all { x -> set.add(x) }) {
+            true
+        } else {
+            log.error(errMsg + collectionName + "!")
+            false
         }
-
-        return true
     }
 }

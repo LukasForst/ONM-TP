@@ -16,7 +16,7 @@ import java.util.*
 /**
  * Class representing framework builder for devices and rooms in a smart house.
  */
-object HouseBuilder {
+class HouseBuilder {
 
     private var house = House()
 
@@ -24,15 +24,18 @@ object HouseBuilder {
     private val humanControl = HumanControlUnit.instance
     private val animalControl = AnimalControlUnit.instance
 
-    /**
-     * Builds house from given config class. This class should be parsed from JSON.
-     * */
-    fun buildHouseFromConfig(config: ConfigurationDataClass): House {
-        createAndFillRooms(config.rooms)
-        createAndAddEquipment(config.equipments)
-        populateHouseWithAnimals(config.animals)
-        populateHouseWithHumans(config.humans)
-        return build()
+    companion object {
+        /**
+         * Builds house from given config class. This class should be parsed from JSON.
+         * */
+        fun buildHouseFromConfig(config: ConfigurationDataClass): House {
+            val houseBuilder = HouseBuilder()
+            houseBuilder.createAndFillRooms(config.rooms)
+            houseBuilder.createAndAddEquipment(config.equipments)
+            houseBuilder.populateHouseWithAnimals(config.animals)
+            houseBuilder.populateHouseWithHumans(config.humans)
+            return houseBuilder.build()
+        }
     }
 
     /**
