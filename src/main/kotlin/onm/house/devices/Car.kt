@@ -28,10 +28,10 @@ class Car(override val id: UUID, deviceConfig: DeviceConfig, eventHandler: IEven
     fun go(humanName: String, distance: Int, avgSpeed: Int? = null) {
         val speed = avgSpeed ?: defaultAvgSpeed
 
-        val carStartedEvent = DeviceStartsEvent(eventHandler, id, "Car started! Distance: $distance with avg speed $speed. With human ${humanName}")
+        val carStartedEvent = DeviceStartsEvent(eventHandler, id, "Car started! Distance: $distance with avg speed $speed. With human ${humanName}", this)
         carStartedEvent.raiseEvent()
 
-        val carStopedEvent = DeviceFinishedEvent(eventHandler, id, "Car stopped! Distance: $distance with avg speed $speed. With human ${humanName}")
+        val carStopedEvent = DeviceFinishedEvent(eventHandler, id, "Car stopped! Distance: $distance with avg speed $speed. With human ${humanName}", this)
         doWork(((distance / speed) * 60 * 60000).toLong(), carStopedEvent::raiseEvent)
     }
 }

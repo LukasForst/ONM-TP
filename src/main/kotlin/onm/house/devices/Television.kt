@@ -32,9 +32,9 @@ class Television(override val id: UUID,
     private lateinit var currentStation: TvStations
 
     private val televisionStartsEvent = DeviceStartsEvent(eventHandler, id,
-            "Television named $deviceDescription is turned on.")
+            "Television named $deviceDescription is turned on.", this)
     private val televisionTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id,
-            "Television named $deviceDescription is turned off")
+            "Television named $deviceDescription is turned off", this)
 
 
     //TODO Check funcionality of this method

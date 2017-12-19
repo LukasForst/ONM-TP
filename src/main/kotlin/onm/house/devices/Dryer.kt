@@ -22,9 +22,9 @@ class Dryer(override val id: UUID,
             deviceConfig: DeviceConfig,
             room: Room) : AbstractDevice(DeviceType.FRIDGE, deviceConfig, eventHandler, room) {
 
-    private val dryerIsDoneEvent = DeviceFinishedEvent(eventHandler, id, "Drying clothes using $deviceDescription is done.")
-    private val dryerStartsEvent = DeviceStartsEvent(eventHandler, id, "Dryer named $deviceDescription is turned on.")
-    private val dryerTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Dryer $deviceDescription is turned off.")
+    private val dryerIsDoneEvent = DeviceFinishedEvent(eventHandler, id, "Drying clothes using $deviceDescription is done.", this)
+    private val dryerStartsEvent = DeviceStartsEvent(eventHandler, id, "Dryer named $deviceDescription is turned on.", this)
+    private val dryerTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Dryer $deviceDescription is turned off.", this)
     private val dryingTime = (60000 * 10).toLong() //Ten minutes
 
     init {
