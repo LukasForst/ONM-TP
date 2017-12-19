@@ -37,6 +37,10 @@ open class EventHandler protected constructor() : IEventHandler {
         this.animalControlUnit = animalControlUnit
     }
 
+    override fun handle(event: TemperatureEvent) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun handle(event: DeviceTurnedOffEvent) {
         TODO("not implemented")
     }

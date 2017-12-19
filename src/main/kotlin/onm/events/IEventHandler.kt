@@ -17,6 +17,8 @@ interface IEventHandler {
 
     fun register(animalControlUnit: AnimalControlUnit)
 
+    fun handle(event: TemperatureEvent)
+
     fun handle(event: DeviceTurnedOffEvent)
 
     fun handle(event: DeviceStartsEvent)

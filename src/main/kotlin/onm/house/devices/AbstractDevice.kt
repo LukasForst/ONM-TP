@@ -7,7 +7,6 @@ import onm.events.IEvent
 import onm.events.IEventHandler
 import onm.events.RepairEvent
 import onm.house.places.Room
-import onm.human.HumanControlUnit
 import onm.loggerFor
 import java.util.*
 
@@ -40,12 +39,8 @@ abstract class AbstractDevice(
         protected val log = loggerFor(AbstractDevice::class.java)
     }
 
-    init {
-        HumanControlUnit.instance.registerDevice(this)
-    }
-
     /**
-     * Time of device in idle state
+     * Time of de   vice in idle state
      */
     var idleConsumption = 0.0
     /**

@@ -30,7 +30,8 @@ enum class DeviceType(
     DRYER(1, 2, 0, 0.1),
     TELEVISION(1, 3, 0, 0.1),
     RADIO(1, 2, 0, 0.3),
+    Toilet(0, 100, 0, 0.5),
     CAR(2, 10, 1, 3.0),
-    Toilet(0, 100, 0, 0.5);
+    BOILER(20, 50, 1, 3.0)
     //todo add device type values and determine power consumption
 }
