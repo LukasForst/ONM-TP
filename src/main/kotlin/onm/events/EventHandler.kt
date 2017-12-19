@@ -8,6 +8,7 @@ import onm.human.TaskTypes
 import onm.loggerFor
 import onm.reports.*
 import java.time.Instant
+import kotlin.concurrent.thread
 
 
 /**
@@ -43,7 +44,9 @@ open class EventHandler protected constructor() : IEventHandler {
     }
 
     override fun handle(event: TemperatureEvent) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        log.info(event.message)
+        val device = humanControlUnit.availableThings.first { x -> x.id == event.entityId }
+        logUnit.addReport(DeviceReport(Instant.now(), device.id, event.message, event.severity, device.deviceType, device.deviceDescription))
     }
 
     override fun handle(event: DeviceTurnedOffEvent) {
@@ -82,9 +85,12 @@ open class EventHandler protected constructor() : IEventHandler {
 
 
     override fun handle(event: AnimalIsHungryEvent) {
-
+        log.info(event.message)
         logUnit.addReport(AnimalReport(Instant.now(), event.entityId, event.message, event.severity, event.animal.animalType))
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        thread(start = true) {
+            Thread.sleep(5000)
+            animalControlUnit.feedAnimal(event.entityId)
+        }
     }
 
     override fun handle(event: DeviceBrokenEvent) {
