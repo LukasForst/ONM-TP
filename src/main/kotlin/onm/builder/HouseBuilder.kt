@@ -33,6 +33,9 @@ object HouseBuilder {
             house.rooms.add(room)
 
         }
+        for( i in config.vehicles){
+
+        }
         return house
     }
 
