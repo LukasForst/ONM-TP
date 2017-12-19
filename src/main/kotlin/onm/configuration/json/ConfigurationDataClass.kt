@@ -4,6 +4,7 @@ import onm.animals.AnimalType
 import onm.configuration.DeviceType
 import onm.configuration.FurnitureType
 import onm.configuration.RoomType
+import onm.human.HumanAbility
 import onm.things.Equipment
 
 /**
@@ -17,7 +18,8 @@ data class ConfigurationDataClass(
         val rooms: Collection<RoomConfig>,
         val vehicles: Collection<VehicleConfig>,
         val animals: Collection<AnimalConfig>,
-        val equipments: Collection<EquipmentConfig>
+        val equipments: Collection<EquipmentConfig>,
+        val humans: Collection<HumansConfig>
 )
 
 /**
@@ -81,4 +83,9 @@ data class AnimalConfig(
 data class EquipmentConfig(
         val name: String,
         val type: Equipment
+)
+
+data class HumansConfig(
+        val name:String,
+        val humanAbility: HumanAbility
 )

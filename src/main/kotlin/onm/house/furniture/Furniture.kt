@@ -11,6 +11,7 @@ import java.util.*
  * */
 class Furniture internal constructor(
         override val id: UUID,
+        val name: String,
 
         /**
          * Type of furniture represented by this class.
@@ -37,7 +38,7 @@ object FurnitureFactory {
     /**
      * Creates chair furniture.
      * */
-    fun createChair(): Furniture {
-        return Furniture(UUID.randomUUID(), FurnitureType.CHAIR)
+    fun createChair(name: String): Furniture {
+        return Furniture(UUID.randomUUID(), name, FurnitureType.CHAIR)
     }
 }

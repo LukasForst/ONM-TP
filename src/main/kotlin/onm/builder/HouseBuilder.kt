@@ -8,6 +8,9 @@ import onm.events.EventHandler
 import onm.events.IEventHandler
 import onm.house.devices.*
 import onm.house.places.Room
+import onm.house.places.RoomBuilder
+import onm.human.Human
+import onm.human.HumanControlUnit
 import java.util.*
 
 
@@ -22,17 +25,30 @@ object HouseBuilder {
      * */
     fun buildHouseFromConfig(config: ConfigurationDataClass): House {
         val eventHandler = EventHandler.instance
-
+        val humanControl = HumanControlUnit.instance
         for (roomConfig in config.rooms) {
             val room = createRoom(roomConfig)
-            for (dev in roomConfig.devices) {
-                val device = createDevice(dev, eventHandler, room)
+            roomConfig.devices.forEach {
+                createDevice(it, eventHandler, room)
 
-//                for (deviceConfig in config.roomsAndDevices[roomConfig]!!) {
-//                    room.addDevice(createDevice(deviceConfig, eventHandler, room))
-//                }
             }
+            house.rooms.add(room)
+
         }
+        for (i in config.vehicles) {
+            //TODO: add vehicles like devices
+        }
+
+        for (eq in config.equipments) {
+
+            humanControl.registerEquipment(eq.type)
+        }
+
+        for (human in config.humans) {
+            val h = Human(human.humanAbility, human.name, humanControl, UUID.randomUUID())
+            humanControl.registerHuman(h)
+        }
+
         return house
     }
 
@@ -44,6 +60,8 @@ object HouseBuilder {
             DeviceType.DRYER -> Dryer(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.TELEVISION -> Television(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.CAR -> Car(UUID.randomUUID(), deviceConfig, eventHandler, room)
+            DeviceType.RADIO -> Radio(UUID.randomUUID(), eventHandler, deviceConfig, room)
+            DeviceType.Toilet -> Toilet(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.BOILER -> Boiler(UUID.randomUUID(), deviceConfig, eventHandler, room, 25)
         }
 
@@ -54,6 +72,8 @@ object HouseBuilder {
             DeviceType.OVEN -> (createdDevice as Oven).ovenControlApi
             DeviceType.DRYER -> (createdDevice as Dryer).dryerControlApi
             DeviceType.CAR -> (createdDevice as Car).carControlApi
+            DeviceType.RADIO -> (createdDevice as Radio).radioControlApi
+            DeviceType.Toilet -> (createdDevice as Toilet).toiletControlApi
             DeviceType.BOILER -> (createdDevice as Boiler).controlApi
         })
         house.allIDevices.add(createdDevice)
@@ -61,8 +81,9 @@ object HouseBuilder {
     }
 
     private fun createRoom(room: RoomConfig): Room {
-        val createdRoom = Room(UUID.randomUUID(), room.name, room.type, room.floor)
-        house.rooms.add(createdRoom)
-        return createdRoom
+        val builder = RoomBuilder(room)
+
+        return builder.buildRoom()
     }
 }
+
