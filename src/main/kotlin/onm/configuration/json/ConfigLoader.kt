@@ -28,7 +28,7 @@ object ConfigLoader {
             checkNameForUnique(config)
             return config;
         } catch (e: JsonSyntaxException) {
-            return ConfigurationDataClass(listOf(), listOf(), listOf(), listOf())
+            return ConfigurationDataClass(listOf(), listOf(), listOf(), listOf(), listOf())
         }
     }
 

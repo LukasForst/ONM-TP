@@ -3,6 +3,7 @@ package onm.house.devices
 import onm.api.DataApi
 import onm.api.FridgeControlApi
 import onm.configuration.DeviceType
+import onm.configuration.EventSeverity
 import onm.configuration.json.DeviceConfig
 import onm.events.DeviceStartsEvent
 import onm.events.DeviceTurnedOffEvent
@@ -10,8 +11,10 @@ import onm.events.FridgeEmptyEvent
 import onm.events.IEventHandler
 import onm.house.places.Room
 import onm.human.HumanControlUnit
+import onm.reports.DeviceReport
 import onm.reports.IReport
 import onm.things.Food
+import java.time.Instant
 import java.util.*
 import kotlin.concurrent.thread
 
@@ -94,6 +97,6 @@ class Fridge(override val id: UUID,
     }
 
     override fun generateReport(): IReport {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return DeviceReport(Instant.now(), id, "Fridge is ${deviceStateMachine.currentState.stateType}", EventSeverity.INFO, DeviceType.FRIDGE, deviceDescription)
     }
 }

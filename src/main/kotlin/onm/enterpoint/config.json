@@ -53,18 +53,26 @@
           "name": "chair2"
         }
       ]
+    },
+    {
+      "name": "Garage",
+      "type": "GARAGE",
+      "devices": [
+        {
+          "name": "Electric car",
+          "type": "CAR",
+          "powerConsumption": {
+            "idleState": 100,
+            "workingState": 40000,
+            "turnedOffState": 0
+          },
+          "breakageProbability": 0.1
+        }
+      ],
+      "furniture": []
     }
   ],
   "vehicles": [
-    {
-      "name": "Electric car",
-      "powerConsumption": {
-        "idleState": 100,
-        "workingState": 40000,
-        "turnedOffState": 0
-      },
-      "breakageProbability": 0.1
-    }
   ],
   "humans": [
     {
