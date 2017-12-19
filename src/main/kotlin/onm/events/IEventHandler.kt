@@ -17,7 +17,11 @@ interface IEventHandler {
 
     fun register(animalControlUnit: AnimalControlUnit)
 
-    fun handle(event: isFinishedEvent)
+    fun handle(event: DeviceTurnedOffEvent)
+
+    fun handle(event: DeviceStartsEvent)
+
+    fun handle(event: DeviceFinishedEvent)
 
     fun handle(event: FridgeEmptyEvent)
 

@@ -13,6 +13,7 @@ import java.time.Instant
  * For unit testing please inherit this class. For getting its instance in production code use EventHandler.instance.
  * */
 open class EventHandler protected constructor() : IEventHandler {
+
     companion object {
         /**
          * Gets instance as singleton.
@@ -36,7 +37,15 @@ open class EventHandler protected constructor() : IEventHandler {
         this.animalControlUnit = animalControlUnit
     }
 
-    override fun handle(event: isFinishedEvent) {
+    override fun handle(event: DeviceTurnedOffEvent) {
+        TODO("not implemented")
+    }
+
+    override fun handle(event: DeviceStartsEvent) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun handle(event: DeviceFinishedEvent) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
