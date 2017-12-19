@@ -28,8 +28,8 @@ class Fridge(override val id: UUID,
              private val workingIntervalInMinutes: Double = 1.0) : AbstractDevice(DeviceType.FRIDGE, deviceConfig, eventHandler, room) {
 
     private val fridgeEmptyEvent = FridgeEmptyEvent(eventHandler, id, this)
-    private val fridgeStartsEvent = DeviceStartsEvent(eventHandler, id, "Fridge named $deviceDescription is turned on.")
-    private val fridgeTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Fridge $deviceDescription is turned off.")
+    private val fridgeStartsEvent = DeviceStartsEvent(eventHandler, id, "Fridge named $deviceDescription is turned on.", this)
+    private val fridgeTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Fridge $deviceDescription is turned off.", this)
 
     private val _food = LinkedList<Food>()
 

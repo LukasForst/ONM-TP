@@ -1,8 +1,15 @@
 package onm.reports
 
-open class CentralLogUnit protected constructor() : ICentralLogUnit {
+import onm.events.EventHandler
+
+
+class CentralLogUnit private constructor() : ICentralLogUnit {
     companion object {
         val instance by lazy { CentralLogUnit() }
+    }
+
+    init {
+        EventHandler.instance.register(this)
     }
 
     private val allRecords = mutableListOf<IReport>()

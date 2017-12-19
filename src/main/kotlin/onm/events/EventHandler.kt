@@ -2,6 +2,7 @@ package onm.events
 
 import onm.animals.AnimalControlUnit
 import onm.animals.events.AnimalIsHungryEvent
+import onm.house.devices.AbstractDevice
 import onm.human.HumanControlUnit
 import onm.human.HumanTask
 import onm.human.TaskTypes
@@ -50,22 +51,28 @@ open class EventHandler protected constructor() : IEventHandler {
     }
 
     override fun handle(event: DeviceTurnedOffEvent) {
-        TODO("not implemented")
+        log.info(event.message)
+
+        logBasicThings(event, event.device)
     }
 
     override fun handle(event: DeviceStartsEvent) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        log.info(event.message)
+
+        logBasicThings(event, event.device)
     }
 
     override fun handle(event: DeviceFinishedEvent) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        log.info(event.message)
+
+        logBasicThings(event, event.device)
     }
 
     override fun handle(event: RepairEvent) {
+        val device = event.device
+        log.info(event.message)
 
-        val device = event.device ?: humanControlUnit.availableThings.first()
         logUnit.addReport(DeviceReport(Instant.now(), event.entityId, event.message, event.severity, device.deviceType, device.deviceDescription))
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun handle(event: HumanDoSport) {
@@ -100,10 +107,7 @@ open class EventHandler protected constructor() : IEventHandler {
 
         log.info(event.message)
 
-
-        val deviceReport = DeviceReport(Instant.now(), event.entityId, event.message, event.severity, device.deviceType, device.deviceDescription)
-        logUnit.addReport(RoomReport(Instant.now(), device.room.id, deviceReport.toString(), event.severity, deviceReport))
-        logUnit.addReport(deviceReport)
+        logBasicThings(event, device)
     }
 
     override fun handle(event: FridgeEmptyEvent) {
@@ -113,21 +117,13 @@ open class EventHandler protected constructor() : IEventHandler {
         log.info(event.message)
 
         val device = event.device
-
-        val deviceReport = DeviceReport(Instant.now(), event.entityId, event.message, event.severity,
-                device.deviceType, device.deviceDescription)
-        val room = device.room
-
-        logUnit.addReport(RoomReport(Instant.now(), room.id, deviceReport.toString(), event.severity, deviceReport))
-        logUnit.addReport(deviceReport)
+        logBasicThings(event, device)
     }
 
-    private fun handleDeviceDoneEvent(event: IEvent) {
-        val device = humanControlUnit.availableThings.first { x -> x.id == event.entityId }
-        val deviceReport = DeviceReport(Instant.now(), event.entityId, event.message, event.severity, device.deviceType, device.deviceDescription)
-        val room = device.room
-
-        logUnit.addReport(RoomReport(Instant.now(), room.id, deviceReport.toString(), event.severity, deviceReport))
+    private fun logBasicThings(event: IEvent, device: AbstractDevice) {
+        val deviceReport = DeviceReport(Instant.now(), event.entityId, event.message, event.severity,
+                device.deviceType, device.deviceDescription)
+        logUnit.addReport(RoomReport(Instant.now(), event.entityId, deviceReport.toString(), event.severity, deviceReport))
         logUnit.addReport(deviceReport)
     }
 }

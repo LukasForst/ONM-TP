@@ -29,9 +29,9 @@ class Washer(override val id: UUID,
         HumanControlUnit.instance.registerDevice(this)
     }
 
-    private val washerFinishedEvent = DeviceFinishedEvent(eventHandler, id, "Washing clothes using $deviceDescription is done.")
-    private val washerStartsEvent = DeviceStartsEvent(eventHandler, id, "Washer named $deviceDescription is turned on.")
-    private val washerTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Washer $deviceDescription is turned off.")
+    private val washerFinishedEvent = DeviceFinishedEvent(eventHandler, id, "Washing clothes using $deviceDescription is done.", this)
+    private val washerStartsEvent = DeviceStartsEvent(eventHandler, id, "Washer named $deviceDescription is turned on.", this)
+    private val washerTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Washer $deviceDescription is turned off.", this)
 
     val washerControlApi = WasherControlApi(this, id)
 

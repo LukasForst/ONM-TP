@@ -31,9 +31,9 @@ class Oven(override val id: UUID,
         HumanControlUnit.instance.registerDevice(this)
     }
 
-    private val ovenBakeFinishedEvent = DeviceFinishedEvent(eventHandler, id, "Baking using $deviceDescription is done.")
-    private val ovenStartsEvent = DeviceStartsEvent(eventHandler, id, "Oven named $deviceDescription is turned on.")
-    private val ovenTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Oven $deviceDescription is turned off.")
+    private val ovenBakeFinishedEvent = DeviceFinishedEvent(eventHandler, id, "Baking using $deviceDescription is done.", this)
+    private val ovenStartsEvent = DeviceStartsEvent(eventHandler, id, "Oven named $deviceDescription is turned on.", this)
+    private val ovenTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Oven $deviceDescription is turned off.", this)
     private val food = mutableListOf<Food>()
     val ovenControlApi = OvenControlApi(this, id)
 

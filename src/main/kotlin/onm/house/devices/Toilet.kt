@@ -27,9 +27,9 @@ class Toilet(override val id: UUID,
     val toiletControlApi = ToiletControlApi(this, id)
 
     private val flushingPeriodInSeconds = 7
-    private val toiletFlushStartsEvent = DeviceStartsEvent(eventHandler, id, "Toilet $deviceDescription is being flushed.")
-    private val toiletFlushFinishedEvent = DeviceFinishedEvent(eventHandler, id, "Toilet $deviceDescription flush is finished.")
-    private val toiletEndsAll = DeviceTurnedOffEvent(eventHandler, id, "Toilet $deviceDescription is ready to use again.")
+    private val toiletFlushStartsEvent = DeviceStartsEvent(eventHandler, id, "Toilet $deviceDescription is being flushed.", this)
+    private val toiletFlushFinishedEvent = DeviceFinishedEvent(eventHandler, id, "Toilet $deviceDescription flush is finished.", this)
+    private val toiletEndsAll = DeviceTurnedOffEvent(eventHandler, id, "Toilet $deviceDescription is ready to use again.", this)
 
     fun flush() {
         if (deviceStateMachine.currentState.stateType == StateType.TURNED_OFF) {

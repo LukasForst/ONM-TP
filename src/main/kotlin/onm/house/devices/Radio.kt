@@ -21,8 +21,8 @@ class Radio(override val id: UUID,
         HumanControlUnit.instance.registerDevice(this)
     }
 
-    private val radioStartsEvent = DeviceStartsEvent(eventHandler, id, "Radio $deviceDescription is turned on.")
-    private val radioTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Radio $deviceDescription is turned off.")
+    private val radioStartsEvent = DeviceStartsEvent(eventHandler, id, "Radio $deviceDescription is turned on.", this)
+    private val radioTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Radio $deviceDescription is turned off.", this)
 
     override val dataApi = DataApi(this)
     val radioControlApi = RadioControlApi(this, id)
