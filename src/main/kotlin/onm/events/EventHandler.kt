@@ -60,7 +60,7 @@ open class EventHandler protected constructor() : IEventHandler {
 
     override fun handle(event: RepairEvent) {
 
-        val device = event.device ?: humanControlUnit.availableThings.first()
+        val device = event.device
         logUnit.addReport(DeviceReport(Instant.now(), event.entityId, event.message, event.severity, device.deviceType, device.deviceDescription))
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
