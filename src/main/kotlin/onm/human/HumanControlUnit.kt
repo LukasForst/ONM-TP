@@ -4,12 +4,12 @@ import onm.events.EventHandler
 import onm.events.HumanStopSport
 import onm.events.IEventHandler
 import onm.house.devices.AbstractDevice
-import onm.house.devices.Dryer
+import onm.house.devices.Fridge
+import onm.loggerFor
 import onm.things.Equipment
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.concurrent.thread
 
-class NoSuchHumans : Exception()
 
 class HumanControlUnit private constructor(availableHumans: Collection<Human>,
                                            private val eventHandler: IEventHandler) {
@@ -22,9 +22,7 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
     val availableThings: Collection<AbstractDevice>
         get() = _availableThings
 
-    private val _availableEquipment = ConcurrentLinkedQueue<Equipment>()
-    val availableEquipment: Collection<Equipment>
-        get() = _availableEquipment
+    val _availableEquipment = ConcurrentLinkedQueue<Equipment>()
 
     private val queueTodo = ConcurrentLinkedQueue<HumanTask>()
 
@@ -35,7 +33,9 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
 
     companion object {
         val instance by lazy { HumanControlUnit(mutableListOf(), EventHandler.instance) }
+        val log = loggerFor(AbstractDevice::class.java)
     }
+
 
 
     private fun getAvailableHumanByAbility(ability: HumanAbility): Human? {
@@ -43,9 +43,6 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
 
     }
 
-    private fun getAvailableHuman(): Human? {
-        return _humansList.firstOrNull { x -> x.available }
-    }
 
     fun registerDevice(device: AbstractDevice) {
         _availableThings.add(device)
@@ -72,14 +69,8 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
                         TaskTypes.SHOP -> goShop(task)
                         TaskTypes.SPORT -> doSport(task)
                         TaskTypes.REPAIR_DEVICE -> repairDevice(task)
-                        TaskTypes.INTERACT_WITH_DEVICE -> interactWithDevice(task)
                     }
                 }
-
-
-
-
-
                 Thread.sleep(250)
             }
         }
@@ -89,48 +80,35 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
 
     }
 
-    //Makes task and put it to queueTODo
     private fun doSport(task: HumanTask) {
-        if (availableEquipment.isEmpty()) {
+        if (_availableEquipment.isEmpty()) {
             queueTodo.add(task)
             return
         }
         val human = getAvailableHumanByAbility(HumanAbility.SPORT_TYPE)
         val equip = _availableEquipment.poll()
-        human?.doSport(equip,
-                HumanStopSport(eventHandler, human, human.id)::raiseEvent
-        ) ?: queueTodo.add(task)
-
+        human?.doSport(equip, HumanStopSport(eventHandler, human, human.id)::raiseEvent)
+                ?: {
+            queueTodo.add(task)
+            _availableEquipment.add(equip)
+        }.invoke()
     }
 
     private fun goShop(task: HumanTask) {
-        val h = getHumanByAbility(HumanAbility.CAN_COOK)
-        h.goShop(device)
+        val human = getAvailableHumanByAbility(HumanAbility.CAN_COOK)
+        val fridge = ((task.device) as? Fridge)?.fridgeControlApi
+
+        if (fridge != null && human != null) human.goShop(fridge)
+        else log.error("ERROR HumanControlUnit! Fridge or human not found in goShop!!")
 
     }
 
 
     private fun repairDevice(task: HumanTask) {
-        val h = getHumanByAbility(HumanAbility.CAN_REPAIR_DEVICES)
-        h.repairDevice(device)
+        val human = getAvailableHumanByAbility(HumanAbility.CAN_REPAIR_DEVICES)
+        val device = task.device
+
+        if (human != null && device != null) human.repairDevice(device)
+        else log.error("ERROR HumanControlUnit! Device or human not found in repairDevice!")
     }
-
-    private fun interactWithDevice(task: HumanTask) {
-        when (device) {
-            is Dryer -> {
-                val h = getHumanByAbility(HumanAbility.ANY)
-                h.dryingClothes(device)
-            }
-        //TODO: implement other actions
-        }
-    }
-
-    fun handleTask(task: HumanTask) {
-        queueTodo.add(task)
-        if (queueTodo.size == 1) {
-            start()
-        }
-    }
-
-
 }
