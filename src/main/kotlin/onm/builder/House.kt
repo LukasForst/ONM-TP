@@ -2,6 +2,7 @@ package onm.builder
 
 import onm.api.DataApi
 import onm.api.IControlApi
+import onm.house.Temperature
 import onm.house.devices.IDevice
 import onm.house.places.Room
 import java.util.*
@@ -13,6 +14,8 @@ import kotlin.NoSuchElementException
  */
 //TODO add javadoc beacuse this works as API for now
 class House internal constructor(){
+
+    val inHouseTemperature = Temperature.instance
 
     internal val rooms = LinkedList<Room>()
 
