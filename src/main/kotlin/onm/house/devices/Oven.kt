@@ -3,13 +3,16 @@ package onm.house.devices
 import onm.api.OvenControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
+import onm.events.DeviceFinishedEvent
+import onm.events.DeviceStartsEvent
+import onm.events.DeviceTurnedOffEvent
 import onm.events.IEventHandler
-import onm.human.HumanControlUnit
-import onm.events.isFinishedEvent
 import onm.house.places.Room
+import onm.human.HumanControlUnit
 import onm.reports.IReport
 import onm.things.Food
 import java.util.*
+import kotlin.concurrent.thread
 
 /**
  * Oven representation.
@@ -24,16 +27,22 @@ class Oven(override val id: UUID,
         HumanControlUnit.instance.registerDevice(this)
     }
 
-    private val ovenBakeFinishedEvent = isFinishedEvent(eventHandler, id, "Baking using $deviceDescription is done.")
+    private val ovenBakeFinishedEvent = DeviceFinishedEvent(eventHandler, id, "Baking using $deviceDescription is done.")
+    private val ovenStartsEvent = DeviceStartsEvent(eventHandler, id, "Oven named $deviceDescription is turned on.")
+    private val ovenTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Oven $deviceDescription is turned off.")
 
     val ovenControlApi = OvenControlApi(this, this.id)
 
     fun switchOn(food: Collection<Food>, minutes: Double) {
-        if (!isAvailable())
-            log.error("Oven named '$deviceDescription' is already working or broken, therefore cannot be switched on.")
+        if (deviceStateMachine.currentState.stateType != StateType.TURNED_OFF)
+            log.error("Oven named '$deviceDescription' is not turned off, therefore cannot be switched on.")
         else {
-            doWork((minutes * 60000).toLong(), ovenBakeFinishedEvent::raiseEvent)
-            deviceStateMachine.turnedOffState()
+            thread(start = true) {
+                ovenStartsEvent.raiseEvent()
+                if (!doWork((minutes * 60000).toLong(), ovenBakeFinishedEvent::raiseEvent)) return@thread
+                deviceStateMachine.turnedOffState()
+                ovenTurnedOffEvent.raiseEvent()
+            }
         }
         //TODO Food size determines number of portions.
     }

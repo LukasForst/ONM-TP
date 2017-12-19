@@ -6,9 +6,9 @@ import onm.configuration.DeviceType
 import onm.configuration.RoomType
 import onm.configuration.json.DeviceConfig
 import onm.configuration.json.PowerConsumption
+import onm.events.DeviceFinishedEvent
 import onm.events.FridgeEmptyEvent
 import onm.events.IEventHandler
-import onm.events.isFinishedEvent
 import onm.house.places.Room
 import onm.things.Food
 import onm.things.FoodType
@@ -50,6 +50,6 @@ class FridgeTest {
 
         val food = fridge.getFood()
         assertEquals(2, food.size)
-        verify(eventHandlerMock, never()).handle(TestUtils.any<isFinishedEvent>())
+        verify(eventHandlerMock, never()).handle(TestUtils.any<DeviceFinishedEvent>())
     }
 }

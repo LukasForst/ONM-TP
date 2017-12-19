@@ -45,7 +45,7 @@ class DeviceStateMachine(
     /**
      * Add consumption to device according to current state
      */
-    private fun addConsumption() {
+    internal fun addConsumption() {
         when (currentState.stateType){
             StateType.TURNED_OFF -> device.turnedOffConsumption += getConsumedEnergy()
             StateType.WORKING -> device.workingConsumption += getConsumedEnergy()
