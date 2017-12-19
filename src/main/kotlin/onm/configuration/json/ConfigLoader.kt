@@ -26,9 +26,9 @@ object ConfigLoader {
         try {
             val config = Gson().fromJson<ConfigurationDataClass>(data)
             checkNameForUnique(config)
-            return config;
+            return config
         } catch (e: JsonSyntaxException) {
-            return ConfigurationDataClass(listOf(), listOf(), listOf(), listOf(), listOf())
+            return ConfigurationDataClass(listOf(), listOf(), listOf(), listOf())
         }
     }
 
@@ -53,22 +53,6 @@ object ConfigLoader {
         }
 
         for (f in config.animals) {
-            if (desc.contains(f.name)) {
-                throw Error("name: '${f.name}' is registered yet")
-            } else {
-                desc.add(f.name)
-            }
-        }
-
-        for (f in config.equipments) {
-            if (desc.contains(f.name)) {
-                throw Error("name: '${f.name}' is registered yet")
-            } else {
-                desc.add(f.name)
-            }
-        }
-
-        for (f in config.vehicles) {
             if (desc.contains(f.name)) {
                 throw Error("name: '${f.name}' is registered yet")
             } else {

@@ -4,6 +4,7 @@ import onm.animals.events.AnimalBrokeSomethingEvent
 import onm.animals.events.AnimalIsHungryEvent
 import onm.configuration.EventSeverity
 import onm.events.DeviceBrokenEvent
+import onm.events.EventHandler
 import onm.events.IEventHandler
 import onm.loggerFor
 import onm.reports.AnimalReport
@@ -16,6 +17,7 @@ import java.util.*
  * */
 class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalControlUnit {
     companion object {
+        val instance by lazy { AnimalControlUnit(EventHandler.instance) }
         private val log = loggerFor(AnimalControlUnit::class.java)
     }
 
@@ -26,6 +28,10 @@ class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalContro
 
     init {
         eventHandler.register(this)
+    }
+
+    override fun register(animal: IAnimal) {
+        animals.add(animal)
     }
 
     override fun handle(event: AnimalIsHungryEvent) {

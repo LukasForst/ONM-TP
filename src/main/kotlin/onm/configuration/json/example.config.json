@@ -15,6 +15,16 @@
           "breakageProbability": 0.01
         },
         {
+          "type": "CAR",
+          "name": "Electric car",
+          "powerConsumption": {
+            "idleState": 100,
+            "workingState": 40000,
+            "turnedOffState": 0
+          },
+          "breakageProbability": 0.1
+        },
+        {
           "type": "OVEN",
           "name": "Oven1",
           "powerConsumption": {
@@ -55,17 +65,6 @@
       ]
     }
   ],
-  "vehicles": [
-    {
-      "name": "Electric car",
-      "powerConsumption": {
-        "idleState": 100,
-        "workingState": 40000,
-        "turnedOffState": 0
-      },
-      "breakageProbability": 0.1
-    }
-  ],
   "humans": [
     {
       "name": "Father",
@@ -88,8 +87,7 @@
   ],
   "equipments": [
     {
-      "type": "SKI",
-      "name": "My awesome unique ski"
+      "type": "SKI"
     }
   ]
 }
