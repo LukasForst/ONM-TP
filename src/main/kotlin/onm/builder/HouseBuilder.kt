@@ -9,6 +9,8 @@ import onm.events.IEventHandler
 import onm.house.devices.*
 import onm.house.places.Room
 import onm.house.places.RoomBuilder
+import onm.human.Human
+import onm.human.HumanControlUnit
 import java.util.*
 
 
@@ -23,9 +25,9 @@ object HouseBuilder {
      * */
     fun buildHouseFromConfig(config: ConfigurationDataClass): House {
         val eventHandler = EventHandler.instance
-
+        val humanControl = HumanControlUnit.instance
         for (roomConfig in config.rooms) {
-            val room = createRoom(roomConfig, eventHandler)
+            val room = createRoom(roomConfig)
             roomConfig.devices.forEach {
                 createDevice(it, eventHandler, room)
 
@@ -33,9 +35,20 @@ object HouseBuilder {
             house.rooms.add(room)
 
         }
-        for( i in config.vehicles){
-
+        for (i in config.vehicles) {
+            //TODO: add vehicles like devices
         }
+
+        for (eq in config.equipments) {
+
+            humanControl.registerEquipment(eq.type)
+        }
+
+        for (human in config.humans) {
+            val h = Human(human.humanAbility, human.name, humanControl, UUID.randomUUID())
+            humanControl.registerHuman(h)
+        }
+
         return house
     }
 
@@ -59,8 +72,9 @@ object HouseBuilder {
         return createdDevice
     }
 
-    private fun createRoom(room: RoomConfig, eventHandler: IEventHandler): Room {
+    private fun createRoom(room: RoomConfig): Room {
         val builder = RoomBuilder(room)
+
         return builder.buildRoom()
     }
 }

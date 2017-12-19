@@ -30,13 +30,17 @@ class Oven(override val id: UUID,
     private val ovenBakeFinishedEvent = DeviceFinishedEvent(eventHandler, id, "Baking using $deviceDescription is done.")
     private val ovenStartsEvent = DeviceStartsEvent(eventHandler, id, "Oven named $deviceDescription is turned on.")
     private val ovenTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Oven $deviceDescription is turned off.")
-
+    private val food = mutableListOf<Food>()
     val ovenControlApi = OvenControlApi(this, id)
 
     fun switchOn(food: Collection<Food>, minutes: Double) {
+
         if (deviceStateMachine.currentState.stateType != StateType.TURNED_OFF)
             log.error("Oven named '$deviceDescription' is not turned off, therefore cannot be switched on.")
         else {
+            this.food.clear()
+            this.food.addAll(food)
+
             thread(start = true) {
                 ovenStartsEvent.raiseEvent()
                 if (!doWork((minutes * 60000).toLong(), ovenBakeFinishedEvent::raiseEvent)) return@thread
