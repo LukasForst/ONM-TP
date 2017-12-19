@@ -8,9 +8,9 @@ import onm.events.IEvent
 import onm.events.IEventHandler
 import onm.events.RepairEvent
 import onm.house.places.Room
+import onm.human.HumanControlUnit
 import onm.loggerFor
 import java.util.*
-import kotlin.concurrent.thread
 
 /**
  * Abstract device class represents device in the house. All future devices should implements this class.
@@ -39,6 +39,10 @@ abstract class AbstractDevice(
     companion object {
         @JvmStatic
         protected val log = loggerFor(AbstractDevice::class.java)
+    }
+
+    init {
+        HumanControlUnit.instance.registerDevice(this)
     }
 
     /**
@@ -84,26 +88,32 @@ abstract class AbstractDevice(
 
     /**
      * Simulates work. After ending work it invokes callback.
+     * @return true if everything goes well, false otherwise
      * */
-    protected fun doWork(milliseconds: Long, callback: () -> Unit) {
-        thread(start = true) {
-            val brokenEvent = verifyNotBroken(currentErrorProbability)
-            if (brokenEvent != null) {
-                deviceStateMachine.brokenSate()
-                brokenEvent.raiseEvent()
-            } else {
-                currentErrorProbability += currentErrorProbability / 10
-                deviceStateMachine.workingState()
-                Thread.sleep(milliseconds)
-                deviceStateMachine.idleState()
-                callback.invoke()
-            }
+    protected fun doWork(milliseconds: Long, callback: (() -> Unit)?): Boolean {
+        val brokenEvent = verifyNotBroken(currentErrorProbability)
+        if (brokenEvent != null) {
+            deviceStateMachine.brokenSate()
+            brokenEvent.raiseEvent()
+            return false
+        } else {
+            currentErrorProbability += currentErrorProbability / 10
+            deviceStateMachine.workingState()
+            Thread.sleep(milliseconds) //TODO check if not broken after sleep whether animals and random events might destroy busy devices
+            deviceStateMachine.idleState()
+            callback?.invoke()
+            return true
         }
+    }
+
+    fun updateConsumption() {
+        deviceStateMachine.addConsumption()
     }
 
     /**
      * Returns false if device is broken or working. True otherwise.
      */
+    //TODO May be deleted in close future if not used
     protected fun isAvailable(): Boolean {
         val type = deviceStateMachine.currentState.stateType
         return !(type == StateType.BROKEN || type == StateType.WORKING)

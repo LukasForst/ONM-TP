@@ -3,12 +3,15 @@ package onm.house.devices
 import onm.api.WasherControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
+import onm.events.DeviceFinishedEvent
+import onm.events.DeviceStartsEvent
+import onm.events.DeviceTurnedOffEvent
 import onm.events.IEventHandler
-import onm.events.isFinishedEvent
 import onm.house.places.Room
 import onm.human.HumanControlUnit
 import onm.reports.IReport
 import java.util.*
+import kotlin.concurrent.thread
 
 /**
  * Wash machine representation
@@ -22,19 +25,25 @@ class Washer(override val id: UUID,
         HumanControlUnit.instance.registerDevice(this)
     }
 
-    private val event = isFinishedEvent(eventHandler, id, "Washing clothes using $deviceDescription is done.")
+    private val washerFinishedEvent = DeviceFinishedEvent(eventHandler, id, "Washing clothes using $deviceDescription is done.")
+    private val washerStartsEvent = DeviceStartsEvent(eventHandler, id, "Washer named $deviceDescription is turned on.")
+    private val washerTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Washer $deviceDescription is turned off.")
 
-    val washerControlApi = WasherControlApi(this, this.id)
+    val washerControlApi = WasherControlApi(this, id)
 
     /**
      * Starts washing clothes. This produces event which is raised after given time period. Note that new thread is created.
      * */
     fun startWashing(periodInMinutes: Double) {
-        if (!isAvailable())
-            log.error("Washer named '$deviceDescription' is already working or broken, therefore cannot be switched on.")
+        if (deviceStateMachine.currentState.stateType != StateType.TURNED_OFF)
+            log.error("Washer named '$deviceDescription' is not turnedOff, therefore cannot be switched on.")
         else {
-            doWork((periodInMinutes * 60000).toLong(), event::raiseEvent)
-            deviceStateMachine.turnedOffState()
+            thread(start = true) {
+                washerStartsEvent.raiseEvent()
+                if (!doWork((periodInMinutes * 60000).toLong(), washerFinishedEvent::raiseEvent)) return@thread
+                deviceStateMachine.turnedOffState()
+                washerTurnedOffEvent.raiseEvent()
+            }
         } //todo what if electricity is turned off?
     }
 

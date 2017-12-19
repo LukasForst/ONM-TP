@@ -5,8 +5,8 @@ import onm.configuration.DeviceType
 import onm.configuration.RoomType
 import onm.configuration.json.DeviceConfig
 import onm.configuration.json.PowerConsumption
+import onm.events.DeviceFinishedEvent
 import onm.events.IEventHandler
-import onm.events.isFinishedEvent
 import onm.house.places.Room
 import org.junit.Before
 import org.junit.Test
@@ -18,7 +18,7 @@ import kotlin.test.assertTrue
 class WasherTest {
     lateinit var washer: Washer
     lateinit var eventHandlerMock: IEventHandler
-    lateinit var event: isFinishedEvent
+    lateinit var event: DeviceFinishedEvent
 
 
     @Before
@@ -27,14 +27,14 @@ class WasherTest {
         eventHandlerMock = Mockito.mock(IEventHandler::class.java)
         washer = Washer(UUID.randomUUID(), eventHandlerMock, DeviceConfig(DeviceType.WASHER, "washer",
                 PowerConsumption()), room)
-        event = isFinishedEvent(eventHandlerMock, UUID.randomUUID(), "something")
+        event = DeviceFinishedEvent(eventHandlerMock, UUID.randomUUID(), "something")
     }
 
     @Test
     fun startWashingTest() {
         var washerCalled = false
         var timesChecked = 0
-        `when`(eventHandlerMock.handle(TestUtils.any<isFinishedEvent>())).then({
+        `when`(eventHandlerMock.handle(TestUtils.any<DeviceFinishedEvent>())).then({
             washerCalled = true
             null
         })
@@ -47,7 +47,7 @@ class WasherTest {
         }
 
         assertTrue(washer.isDeviceAvailable)
-        verify(eventHandlerMock, times(1)).handle(TestUtils.any<isFinishedEvent>())
+        verify(eventHandlerMock, times(1)).handle(TestUtils.any<DeviceFinishedEvent>())
     }
 
 }

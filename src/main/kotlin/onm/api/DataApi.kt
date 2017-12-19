@@ -18,6 +18,7 @@ class DataApi(private val device: AbstractDevice) {
      * @return Gets consumption in Idle state
      */
     fun getIdleConsumption(): Double {
+        device.updateConsumption()
         return device.idleConsumption
     }
 
@@ -25,6 +26,7 @@ class DataApi(private val device: AbstractDevice) {
      * @return Gets consumption in working state
      */
     fun getWorkingConsumption(): Double {
+        device.updateConsumption()
         return device.workingConsumption
     }
 
@@ -32,6 +34,7 @@ class DataApi(private val device: AbstractDevice) {
      * @return Gets consumption in turned off state
      */
     fun getTurnedOffConsumption(): Double {
+        device.updateConsumption()
         return device.turnedOffConsumption
     }
 }
