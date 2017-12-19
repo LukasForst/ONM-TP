@@ -15,7 +15,7 @@
           "breakageProbability": 0.01
         },
         {
-          "type": "Oven",
+          "type": "OVEN",
           "name": "Oven1",
           "powerConsumption": {
             "idleState": 100,
@@ -69,11 +69,15 @@
   "humans": [
     {
       "name": "Father",
-      "humanAbility": "ANY"
+      "humanAbility": [
+        "ANY"
+      ]
     },
     {
       "name": "Mother",
-      "humanAbility": "CAN_COOK"
+      "humanAbility": [
+        "CAN_COOK"
+      ]
     }
   ],
   "animals": [

@@ -77,11 +77,15 @@
   "humans": [
     {
       "name": "Father",
-      "humanAbility": "ANY"
+      "humanAbility": [
+        "ANY"
+      ]
     },
     {
       "name": "Mother",
-      "humanAbility": "CAN_COOK"
+      "humanAbility": [
+        "CAN_COOK"
+      ]
     }
   ],
   "animals": [

@@ -87,5 +87,5 @@ data class EquipmentConfig(
 
 data class HumansConfig(
         val name:String,
-        val humanAbility: HumanAbility
+        val humanAbility: Collection<HumanAbility>
 )

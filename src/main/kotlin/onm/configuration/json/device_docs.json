@@ -1,0 +1,40 @@
+{
+  "devices": [
+    {
+      "type": "OVEN",
+      "documentation": "This is awesome documentation for OVEN device. In this docs you will find truth about live itself"
+    },
+    {
+      "type": "WASHER",
+      "documentation": "This is awesome documentation for WASHER device. In this docs you will find truth about live itself"
+    },
+    {
+      "type": "FRIDGE",
+      "documentation": "This is awesome documentation for FRIDGE device. In this docs you will find truth about live itself"
+    },
+    {
+      "type": "DRYER",
+      "documentation": "This is awesome documentation for DRYER device. In this docs you will find truth about live itself"
+    },
+    {
+      "type": "TELEVISION",
+      "documentation": "This is awesome documentation for TELEVISION device. In this docs you will find truth about live itself"
+    },
+    {
+      "type": "RADIO",
+      "documentation": "This is awesome documentation for RADIO device. In this docs you will find truth about live itself"
+    },
+    {
+      "type": "TOILET",
+      "documentation": "This is awesome documentation for TOILET device. In this docs you will find truth about live itself"
+    },
+    {
+      "type": "CAR",
+      "documentation": "This is awesome documentation for CAR device. In this docs you will find truth about live itself"
+    },
+    {
+      "type": "BOILER",
+      "documentation": "This is awesome documentation for BOILER device. In this docs you will find truth about live itself"
+    }
+  ]
+}
