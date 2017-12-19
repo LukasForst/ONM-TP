@@ -26,6 +26,8 @@ class Television(override val id: UUID,
     }
 
     val televisionControlApi = TelevisionControlApi(this, id)
+    override val dataApi = DataApi(this)
+
     private val random = Random()
     private lateinit var currentStation: TvStations
 
@@ -34,8 +36,6 @@ class Television(override val id: UUID,
     private val televisionTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id,
             "Television named $deviceDescription is turned off")
 
-
-    override val dataApi = DataApi(this)
 
     //TODO Check funcionality of this method
     fun getRandomChannel(): TvStations {

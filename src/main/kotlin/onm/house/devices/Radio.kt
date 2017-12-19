@@ -1,5 +1,7 @@
 package onm.house.devices
 
+import onm.api.DataApi
+import onm.api.RadioControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.DeviceStartsEvent
@@ -7,6 +9,7 @@ import onm.events.DeviceTurnedOffEvent
 import onm.events.IEventHandler
 import onm.house.places.Room
 import onm.human.HumanControlUnit
+import onm.reports.IReport
 import java.util.*
 
 class Radio(override val id: UUID,
@@ -21,6 +24,8 @@ class Radio(override val id: UUID,
     private val radioStartsEvent = DeviceStartsEvent(eventHandler, id, "Radio $deviceDescription is turned on.")
     private val radioTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Radio $deviceDescription is turned off.")
 
+    override val dataApi = DataApi(this)
+    val radioControlApi = RadioControlApi(this, id)
 
     private fun didItBreak(): Boolean {
         val brokenEvent = verifyNotBroken(currentErrorProbability)
@@ -55,6 +60,10 @@ class Radio(override val id: UUID,
         }
 
 
+    }
+
+    override fun generateReport(): IReport {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

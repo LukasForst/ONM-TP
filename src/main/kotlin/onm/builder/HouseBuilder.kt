@@ -44,6 +44,8 @@ object HouseBuilder {
             DeviceType.DRYER -> Dryer(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.TELEVISION -> Television(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.CAR -> Car(UUID.randomUUID(), deviceConfig, eventHandler, room)
+            DeviceType.RADIO -> Radio(UUID.randomUUID(), eventHandler, deviceConfig, room)
+            DeviceType.Toilet -> Toilet(UUID.randomUUID(), eventHandler, deviceConfig, room)
         }
 
         house.allIControlApi.add(when (deviceConfig.type) {
@@ -53,6 +55,8 @@ object HouseBuilder {
             DeviceType.OVEN -> (createdDevice as Oven).ovenControlApi
             DeviceType.DRYER -> (createdDevice as Dryer).dryerControlApi
             DeviceType.CAR -> (createdDevice as Car).carControlApi
+            DeviceType.RADIO -> (createdDevice as Radio).radioControlApi
+            DeviceType.Toilet -> (createdDevice as Toilet).toiletControlApi
         })
         house.allIDevices.add(createdDevice)
         return createdDevice
