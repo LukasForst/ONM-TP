@@ -28,7 +28,7 @@ class DeviceStateMachine(
     /**
      * Gets current state of the machine.
      * */
-    var currentState = DeviceState(powerConsumption.idleState ?: deviceType.idlePowerConsumption, true, StateType.IDLE)
+    var currentState = DeviceState(powerConsumption.turnedOffState ?: deviceType.turnedOffPowerConsumption, false, StateType.TURNED_OFF)
         private set(value) {
             addConsumption()
             field = value
@@ -45,7 +45,7 @@ class DeviceStateMachine(
     /**
      * Add consumption to device according to current state
      */
-    private fun addConsumption() {
+    internal fun addConsumption() {
         when (currentState.stateType){
             StateType.TURNED_OFF -> device.turnedOffConsumption += getConsumedEnergy()
             StateType.WORKING -> device.workingConsumption += getConsumedEnergy()
@@ -68,7 +68,7 @@ class DeviceStateMachine(
 
     fun turnedOffState() {
         addConsumption()
-        currentState = DeviceState(powerConsumption.turnedOffState ?: deviceType.turnedOffPowerConsumption, false, StateType.TURNED_OFF)
+        currentState = DeviceState(powerConsumption.turnedOffState ?: deviceType.turnedOffPowerConsumption, true, StateType.TURNED_OFF)
     }
 
     fun brokenSate() {

@@ -42,9 +42,11 @@ object HouseBuilder {
             DeviceType.FRIDGE -> Fridge(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.OVEN -> Oven(UUID.randomUUID(), eventHandler, deviceConfig, room)
             DeviceType.DRYER -> Dryer(UUID.randomUUID(), eventHandler, deviceConfig, room)
+            DeviceType.TELEVISION -> Television(UUID.randomUUID(), eventHandler, deviceConfig, room)
         }
 
         house.allIControlApi.add(when (deviceConfig.type) {
+            DeviceType.TELEVISION -> (createdDevice as Television).televisionControlApi
             DeviceType.WASHER -> (createdDevice as Washer).washerControlApi
             DeviceType.FRIDGE -> (createdDevice as Fridge).fridgeControlApi
             DeviceType.OVEN -> (createdDevice as Oven).ovenControlApi
