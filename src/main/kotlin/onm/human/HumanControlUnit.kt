@@ -22,7 +22,7 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
     val availableThings: Collection<AbstractDevice>
         get() = _availableThings
 
-    val _availableEquipment = ConcurrentLinkedQueue<Equipment>()
+    val availableEquipment = ConcurrentLinkedQueue<Equipment>()
 
     val queueTodo = ConcurrentLinkedQueue<HumanTask>()
 
@@ -54,7 +54,7 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
     }
 
     fun registerEquipment(equipment: Equipment) {
-        _availableEquipment.add(equipment)
+        availableEquipment.add(equipment)
     }
 
     private fun start() {
@@ -83,17 +83,17 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
     }
 
     private fun doSport(task: HumanTask) {
-        if (_availableEquipment.isEmpty()) {
+        if (availableEquipment.isEmpty()) {
             queueTodo.add(task)
             return
         }
 
         val human = getAvailableHumanByAbility(HumanAbility.SPORT_TYPE)
-        val equip = _availableEquipment.poll()
+        val equip = availableEquipment.poll()
         human?.doSport(eventHandler, equip, HumanStopSport(eventHandler, human, human.id)::raiseEvent)
                 ?: {
             queueTodo.add(task)
-            _availableEquipment.add(equip)
+            availableEquipment.add(equip)
         }.invoke()
     }
 

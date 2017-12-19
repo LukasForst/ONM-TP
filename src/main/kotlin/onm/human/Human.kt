@@ -72,7 +72,7 @@ class Human(val abilitiesList: Collection<HumanAbility>, val name: String, priva
             Thread.sleep(20000)
             callback.invoke()
 
-            controlUnit._availableEquipment.add(equipment)
+            controlUnit.availableEquipment.add(equipment)
             available = true
         }
     }
