@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.api.DataApi
 import onm.api.FridgeControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
@@ -36,6 +37,8 @@ class Fridge(override val id: UUID,
         HumanControlUnit.instance.registerDevice(this)
         switchOn()
     }
+
+    override val dataApi = DataApi(this)
 
     fun switchOn() {
         if (deviceStateMachine.currentState.stateType != StateType.TURNED_OFF) {

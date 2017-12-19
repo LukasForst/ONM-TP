@@ -1,6 +1,5 @@
 package onm.house.devices
 
-import onm.api.DataApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
 import onm.events.DeviceBrokenEvent
@@ -80,11 +79,6 @@ abstract class AbstractDevice(
      * State machine is used for manipulating with device power consumption.
      * */
     protected val deviceStateMachine = DeviceStateMachine(deviceConfig.powerConsumption, deviceType, this)
-
-    /**
-     * DataApi of this device to get consumption of energy
-     */
-    override val dataApi = DataApi(this)
 
     /**
      * Simulates work. After ending work it invokes callback.

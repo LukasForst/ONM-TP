@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.api.DataApi
 import onm.api.TelevisionControlApi
 import onm.configuration.DeviceType
 import onm.configuration.json.DeviceConfig
@@ -33,6 +34,8 @@ class Television(override val id: UUID,
     private val televisionTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id,
             "Television named $deviceDescription is turned off")
 
+
+    override val dataApi = DataApi(this)
 
     //TODO Check funcionality of this method
     fun getRandomChannel(): TvStations {
