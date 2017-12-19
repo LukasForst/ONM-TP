@@ -11,7 +11,7 @@ import onm.things.FoodType
 import java.util.*
 import kotlin.concurrent.thread
 
-class Human(val ability: HumanAbility, val name: String, controlUnit: HumanControlUnit, override val id: UUID) : HouseEntity {
+class Human(val abilitiesList: Collection<HumanAbility>, val name: String, controlUnit: HumanControlUnit, override val id: UUID) : HouseEntity {
     var available: Boolean = true
 
     init {
@@ -29,7 +29,6 @@ class Human(val ability: HumanAbility, val name: String, controlUnit: HumanContr
             Thread.sleep(10000)
             // Generate food
             val types = FoodType.values()
-
             val ret = types.map { Food(it) }
 
             fridgeApi.addFood(ret)

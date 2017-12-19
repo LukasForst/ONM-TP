@@ -107,7 +107,6 @@ abstract class AbstractDevice(
     /**
      * Returns false if device is broken or working. True otherwise.
      */
-    //TODO May be deleted in close future if not used
     protected fun isAvailable(): Boolean {
         val type = deviceStateMachine.currentState.stateType
         return !(type == StateType.BROKEN || type == StateType.WORKING)

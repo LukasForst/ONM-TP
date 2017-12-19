@@ -1,12 +1,10 @@
 package onm.human
 
-import onm.api.FridgeControlApi
 import onm.events.EventHandler
 import onm.events.HumanStopSport
 import onm.events.IEventHandler
 import onm.house.devices.AbstractDevice
 import onm.house.devices.Dryer
-import onm.house.devices.Fridge
 import onm.things.Equipment
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.concurrent.thread
@@ -16,16 +14,15 @@ class NoSuchHumans : Exception()
 class HumanControlUnit private constructor(availableHumans: Collection<Human>,
                                            private val eventHandler: IEventHandler) {
 
-    private val _availableHumans = mutableListOf<Human>()
+    private val _humansList = mutableListOf<Human>()
     val humans: Collection<Human>
-        get() = _availableHumans
+        get() = _humansList
 
     private val _availableThings = mutableListOf<AbstractDevice>()
     val availableThings: Collection<AbstractDevice>
         get() = _availableThings
 
     private val _availableEquipment = ConcurrentLinkedQueue<Equipment>()
-
     val availableEquipment: Collection<Equipment>
         get() = _availableEquipment
 
@@ -33,7 +30,7 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
     private val queueWaitForHuman = ConcurrentLinkedQueue<HumanTask>()
 
     init {
-        this._availableHumans.addAll(availableHumans)
+        this._humansList.addAll(availableHumans)
         eventHandler.register(this)
     }
 
@@ -42,13 +39,13 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
     }
 
 
-    private fun getHumanByAbility(ability: HumanAbility): Human {
-        val rest = _availableHumans.filter { it.ability > ability; it.available }.toList()
-        if (rest.isNotEmpty()) {
-            return rest[0]
-        } else {
-            throw NoSuchHumans()
-        }
+    private fun getAvailableHumanByAbility(ability: HumanAbility): Human? {
+        return _humansList.firstOrNull { x -> x.abilitiesList.contains(ability) && x.available }
+
+    }
+
+    private fun getAvailableHuman(): Human? {
+        return _humansList.firstOrNull { x -> x.available }
     }
 
     fun registerDevice(device: AbstractDevice) {
@@ -56,7 +53,7 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
     }
 
     fun registerHuman(human: Human) {
-        _availableHumans.add(human)
+        _humansList.add(human)
     }
 
     fun registerEquipment(equipment: Equipment) {
@@ -65,59 +62,43 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
 
     private fun start() {
         thread(start = true) {
-            while (!queueTodo.isEmpty()) {
-                val task = queueTodo.poll()
-                when (task.type) {
-                    TaskTypes.SHOP -> {
-                        try {
-                            goShop((task.device as Fridge).fridgeControlApi)
-                        } catch (err: NoSuchHumans) {
-                            queueWaitForHuman.add(task)
-                        }
-                    }
-
-                    TaskTypes.INTERACT_WITH_DEVICE -> {
-                        try {
-                            interactWithDevice(task.device!!)
-                        } catch (err: NoSuchHumans) {
-                            queueWaitForHuman.add(task)
-                        }
-                    }
-                    TaskTypes.REPAIR_DEVICE -> {
-                        try {
-                            repairDevice(task.device!!)
-                        } catch (err: NoSuchHumans) {
-                            queueWaitForHuman.add(task)
-                        }
-                    }
-                    TaskTypes.SPORT -> {
-                        choseRandomSport()
-                    }
-                }
-
-                // Add all stuff to queue when it possible
+            while (true) {
                 if (queueTodo.isEmpty()) {
                     //If there are no stuff to do, go sport
                     //TODO: call this function before "if" if human is lenoch
-                    choseRandomSport()
+                    chooseRandomSport()
 
                     if (queueWaitForHuman.isNotEmpty()) {
                         queueTodo.addAll(queueWaitForHuman)
                         queueWaitForHuman.clear()
                     }
 
-                }
-            }
 
+                } else {
+                    val task = queueTodo.poll()
+                    when (task.type) {
+                        TaskTypes.SHOP -> goShop(task)
+                        TaskTypes.SPORT -> chooseRandomSport(task)
+                        TaskTypes.REPAIR_DEVICE -> repairDevice(task)
+                        TaskTypes.INTERACT_WITH_DEVICE -> interactWithDevice(task)
+                    }
+                }
+
+
+
+
+
+                Thread.sleep(250)
+            }
         }
     }
 
-    private fun choseRandomSport() {
+    private fun chooseRandomSport(task: HumanTask) {
         if (availableEquipment.isEmpty()) return
 
         try {
             val eq = _availableEquipment.poll()
-            val h = getHumanByAbility(HumanAbility.ANY)
+            val h = getHumanByAbility(HumanAbility.SPORT_TYPE)
             h.doSport(eq, {
                 HumanStopSport(eventHandler, h, h.id).raiseEvent()
                 _availableEquipment.add(eq)
@@ -127,19 +108,19 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
         }
     }
 
-    private fun goShop(device: FridgeControlApi) {
-        val h = getHumanByAbility(HumanAbility.ANY)
+    private fun goShop(task: HumanTask) {
+        val h = getHumanByAbility(HumanAbility.CAN_COOK)
         h.goShop(device)
 
     }
 
 
-    private fun repairDevice(device: AbstractDevice) {
+    private fun repairDevice(task: HumanTask) {
         val h = getHumanByAbility(HumanAbility.CAN_REPAIR_DEVICES)
         h.repairDevice(device)
     }
 
-    private fun interactWithDevice(device: AbstractDevice) {
+    private fun interactWithDevice(task: HumanTask) {
         when (device) {
             is Dryer -> {
                 val h = getHumanByAbility(HumanAbility.ANY)
