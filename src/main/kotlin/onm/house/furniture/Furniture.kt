@@ -2,7 +2,7 @@ package onm.house.furniture
 
 import onm.configuration.FurnitureType
 import onm.house.places.Room
-import onm.interfaces.StationaryEntity
+import onm.interfaces.HouseEntity
 import onm.reports.IReport
 import java.util.*
 
@@ -16,7 +16,7 @@ class Furniture internal constructor(
         /**
          * Type of furniture represented by this class.
          * */
-        val furnitureType: FurnitureType) : StationaryEntity {
+        val furnitureType: FurnitureType) : HouseEntity {
 
     //todo implement and get specs
 

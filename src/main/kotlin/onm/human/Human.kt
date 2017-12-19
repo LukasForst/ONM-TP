@@ -3,7 +3,7 @@ package onm.human
 import onm.api.FridgeControlApi
 import onm.house.devices.AbstractDevice
 import onm.house.devices.Dryer
-import onm.interfaces.MovableEntity
+import onm.interfaces.HouseEntity
 import onm.reports.IReport
 import onm.things.Equipment
 import onm.things.Food
@@ -11,7 +11,7 @@ import onm.things.FoodType
 import java.util.*
 import kotlin.concurrent.thread
 
-class Human(val ability: HumanAbility, val name: String, private val controlUnit: HumanControlUnit, override val id: UUID) : MovableEntity {
+class Human(val ability: HumanAbility, val name: String, controlUnit: HumanControlUnit, override val id: UUID) : HouseEntity {
     var available: Boolean = true
 
     init {

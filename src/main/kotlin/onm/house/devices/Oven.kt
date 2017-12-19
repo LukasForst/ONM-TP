@@ -1,5 +1,6 @@
 package onm.house.devices
 
+import onm.api.DataApi
 import onm.api.OvenControlApi
 import onm.configuration.DeviceType
 import onm.configuration.EventSeverity
@@ -35,6 +36,9 @@ class Oven(override val id: UUID,
     private val ovenTurnedOffEvent = DeviceTurnedOffEvent(eventHandler, id, "Oven $deviceDescription is turned off.")
     private val food = mutableListOf<Food>()
     val ovenControlApi = OvenControlApi(this, id)
+
+    override val dataApi = DataApi(this)
+
 
     fun switchOn(food: Collection<Food>, minutes: Double) {
 

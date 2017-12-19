@@ -1,11 +1,11 @@
 package onm.animals
 
-import onm.interfaces.MovableEntity
+import onm.interfaces.HouseEntity
 
 /**
  * Interface represents methods and properties that every animal have
  * */
-interface IAnimal : MovableEntity {
+interface IAnimal : HouseEntity {
 
     /**
      * Name of the animal
