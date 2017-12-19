@@ -1,5 +1,6 @@
 package onm.api
 
+import onm.configuration.json.DocumentationLoader
 import onm.house.devices.AbstractDevice
 
 /**
@@ -8,33 +9,45 @@ import onm.house.devices.AbstractDevice
 class DataApi(private val device: AbstractDevice) {
 
     /**
-     * @return Gets sum of consumption in all states
-     */
-    fun getTotalConsumption(): Double {
-        return getIdleConsumption() + getTurnedOffConsumption() + getWorkingConsumption()
-    }
+     * Documentation for this particular device. It is lazy loaded from json config file.
+     * */
+    val documentation: String? by lazy { DocumentationLoader.loadConfigFor(device.deviceType) }
+
 
     /**
-     * @return Gets consumption in Idle state
+     * Gets sum of consumption in all states
      */
-    fun getIdleConsumption(): Double {
-        device.updateConsumption()
-        return device.idleConsumption
-    }
+    val totalConsumption: Double
+        get() {
+            return idleConsumption + turnedOffConsumption + workingConsumption
+        }
+
 
     /**
-     * @return Gets consumption in working state
+     *  Gets consumption in Idle state
      */
-    fun getWorkingConsumption(): Double {
-        device.updateConsumption()
-        return device.workingConsumption
-    }
+    val idleConsumption: Double
+        get() {
+            device.updateConsumption()
+            return device.idleConsumption
+        }
+
 
     /**
-     * @return Gets consumption in turned off state
+     * Gets consumption in working state
      */
-    fun getTurnedOffConsumption(): Double {
-        device.updateConsumption()
-        return device.turnedOffConsumption
-    }
+    val workingConsumption: Double
+        get() {
+            device.updateConsumption()
+            return device.workingConsumption
+        }
+
+    /**
+     * Gets consumption in turned off state
+     */
+    val turnedOffConsumption: Double
+        get() {
+            device.updateConsumption()
+            return device.turnedOffConsumption
+        }
 }
