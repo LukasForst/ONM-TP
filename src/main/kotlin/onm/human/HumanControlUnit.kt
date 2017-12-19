@@ -27,7 +27,6 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
         get() = _availableEquipment
 
     private val queueTodo = ConcurrentLinkedQueue<HumanTask>()
-    private val queueWaitForHuman = ConcurrentLinkedQueue<HumanTask>()
 
     init {
         this._humansList.addAll(availableHumans)
@@ -65,20 +64,13 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
             while (true) {
                 if (queueTodo.isEmpty()) {
                     //If there are no stuff to do, go sport
-                    //TODO: call this function before "if" if human is lenoch
-                    chooseRandomSport()
-
-                    if (queueWaitForHuman.isNotEmpty()) {
-                        queueTodo.addAll(queueWaitForHuman)
-                        queueWaitForHuman.clear()
-                    }
-
+                    createSportTask()
 
                 } else {
                     val task = queueTodo.poll()
                     when (task.type) {
                         TaskTypes.SHOP -> goShop(task)
-                        TaskTypes.SPORT -> chooseRandomSport(task)
+                        TaskTypes.SPORT -> doSport(task)
                         TaskTypes.REPAIR_DEVICE -> repairDevice(task)
                         TaskTypes.INTERACT_WITH_DEVICE -> interactWithDevice(task)
                     }
@@ -93,19 +85,22 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
         }
     }
 
-    private fun chooseRandomSport(task: HumanTask) {
-        if (availableEquipment.isEmpty()) return
+    private fun createSportTask() {
 
-        try {
-            val eq = _availableEquipment.poll()
-            val h = getHumanByAbility(HumanAbility.SPORT_TYPE)
-            h.doSport(eq, {
-                HumanStopSport(eventHandler, h, h.id).raiseEvent()
-                _availableEquipment.add(eq)
-            })
-        } catch (err: NoSuchHumans) {
-            //TODO: no humans for sporting... Do nothing
+    }
+
+    //Makes task and put it to queueTODo
+    private fun doSport(task: HumanTask) {
+        if (availableEquipment.isEmpty()) {
+            queueTodo.add(task)
+            return
         }
+        val human = getAvailableHumanByAbility(HumanAbility.SPORT_TYPE)
+        val equip = _availableEquipment.poll()
+        human?.doSport(equip,
+                HumanStopSport(eventHandler, human, human.id)::raiseEvent
+        ) ?: queueTodo.add(task)
+
     }
 
     private fun goShop(task: HumanTask) {
