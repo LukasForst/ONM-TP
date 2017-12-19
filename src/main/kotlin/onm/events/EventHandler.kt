@@ -85,6 +85,7 @@ open class EventHandler protected constructor() : IEventHandler {
 
 
     override fun handle(event: AnimalIsHungryEvent) {
+        log.info(event.message)
         logUnit.addReport(AnimalReport(Instant.now(), event.entityId, event.message, event.severity, event.animal.animalType))
         thread(start = true) {
             Thread.sleep(5000)
