@@ -118,9 +118,9 @@ abstract class AbstractDevice(
         RepairEvent(eventHandler, this, id).raiseEvent()
     }
 
-    private var currentErrorProbability: Double = deviceConfig.breakageProbability ?: deviceType.breakageProbability
+    protected var currentErrorProbability: Double = deviceConfig.breakageProbability ?: deviceType.breakageProbability
 
-    private fun verifyNotBroken(brokenChance: Double): IEvent? {
+    protected fun verifyNotBroken(brokenChance: Double): IEvent? {
         val intervalNumber = (brokenChance * 10).toInt()
         val randomNumber = Random().nextInt(1000)
 
