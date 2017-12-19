@@ -24,7 +24,11 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
     val availableThings: Collection<AbstractDevice>
         get() = _availableThings
 
-    private val availableEquipment = ConcurrentLinkedQueue<Equipment>()
+    private val _availableEquipment = ConcurrentLinkedQueue<Equipment>()
+
+    val availableEquipment: Collection<Equipment>
+        get() = _availableEquipment
+
     private val queueTodo = ConcurrentLinkedQueue<HumanTask>()
     private val queueWaitForHuman = ConcurrentLinkedQueue<HumanTask>()
 
@@ -55,6 +59,10 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
         _availableHumans.add(human)
     }
 
+    fun registerEquipment(equipment: Equipment) {
+        _availableEquipment.add(equipment)
+    }
+
     private fun start() {
         thread(start = true) {
             while (!queueTodo.isEmpty()) {
@@ -82,6 +90,9 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
                             queueWaitForHuman.add(task)
                         }
                     }
+                    TaskTypes.SPORT -> {
+                        choseRandomSport()
+                    }
                 }
 
                 // Add all stuff to queue when it possible
@@ -105,11 +116,11 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
         if (availableEquipment.isEmpty()) return
 
         try {
-            val eq = availableEquipment.poll()
+            val eq = _availableEquipment.poll()
             val h = getHumanByAbility(HumanAbility.ANY)
             h.doSport(eq, {
                 HumanStopSport(eventHandler, h, h.id).raiseEvent()
-                availableEquipment.add(eq)
+                _availableEquipment.add(eq)
             })
         } catch (err: NoSuchHumans) {
             //TODO: no humans for sporting... Do nothing
