@@ -24,16 +24,17 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
 
     val _availableEquipment = ConcurrentLinkedQueue<Equipment>()
 
-    private val queueTodo = ConcurrentLinkedQueue<HumanTask>()
+    val queueTodo = ConcurrentLinkedQueue<HumanTask>()
 
     init {
         this._humansList.addAll(availableHumans)
         eventHandler.register(this)
+        start()
     }
 
     companion object {
         val instance by lazy { HumanControlUnit(mutableListOf(), EventHandler.instance) }
-        val log = loggerFor(AbstractDevice::class.java)
+        val log = loggerFor(HumanControlUnit::class.java)
     }
 
 
@@ -77,7 +78,8 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
     }
 
     private fun createSportTask() {
-
+        val task = HumanTask(TaskTypes.SPORT)
+        queueTodo.add(task)
     }
 
     private fun doSport(task: HumanTask) {
@@ -85,9 +87,10 @@ class HumanControlUnit private constructor(availableHumans: Collection<Human>,
             queueTodo.add(task)
             return
         }
+
         val human = getAvailableHumanByAbility(HumanAbility.SPORT_TYPE)
         val equip = _availableEquipment.poll()
-        human?.doSport(equip, HumanStopSport(eventHandler, human, human.id)::raiseEvent)
+        human?.doSport(eventHandler, equip, HumanStopSport(eventHandler, human, human.id)::raiseEvent)
                 ?: {
             queueTodo.add(task)
             _availableEquipment.add(equip)
