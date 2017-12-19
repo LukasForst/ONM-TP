@@ -3,6 +3,9 @@ package onm.events
 import onm.animals.AnimalControlUnit
 import onm.animals.events.AnimalIsHungryEvent
 import onm.human.HumanControlUnit
+import onm.human.HumanTask
+import onm.human.TaskTypes
+import onm.loggerFor
 import onm.reports.*
 import java.time.Instant
 
@@ -19,7 +22,9 @@ open class EventHandler protected constructor() : IEventHandler {
          * Gets instance as singleton.
          * */
         val instance by lazy { EventHandler() }
+        val log = loggerFor(EventHandler::class.java)
     }
+
 
     private lateinit var logUnit: ICentralLogUnit
     private lateinit var humanControlUnit: HumanControlUnit
@@ -61,17 +66,18 @@ open class EventHandler protected constructor() : IEventHandler {
     }
 
     override fun handle(event: HumanDoSport) {
+        val human = event.human
 
-        val human = event.human ?: humanControlUnit.humans.first()
+        log.info((event.message))
         logUnit.addReport(HumanReport(Instant.now(), event.entityId, event.message, event.severity, human))
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun handle(event: HumanStopSport) {
+        val human = event.human
 
-        val human = event.human ?: humanControlUnit.humans.first()
+        log.info(event.message)
         logUnit.addReport(HumanReport(Instant.now(), event.entityId, event.message, event.severity, human))
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
 
@@ -82,15 +88,32 @@ open class EventHandler protected constructor() : IEventHandler {
     }
 
     override fun handle(event: DeviceBrokenEvent) {
-
         val device = event.device ?: humanControlUnit.availableThings.first()
-        logUnit.addReport(DeviceReport(Instant.now(), event.entityId, event.message, event.severity, device.deviceType, device.deviceDescription))
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val task = HumanTask(TaskTypes.REPAIR_DEVICE, device)
+        humanControlUnit.queueTodo.add(task)
+
+        log.info(event.message)
+
+
+        val deviceReport = DeviceReport(Instant.now(), event.entityId, event.message, event.severity, device.deviceType, device.deviceDescription)
+        logUnit.addReport(RoomReport(Instant.now(), device.room.id, deviceReport.toString(), event.severity, deviceReport))
+        logUnit.addReport(deviceReport)
     }
 
     override fun handle(event: FridgeEmptyEvent) {
-        handleDeviceDoneEvent(event)
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val task = HumanTask(TaskTypes.SHOP, event.device)
+        humanControlUnit.queueTodo.add(task)
+
+        log.info(event.message)
+
+        val device = event.device
+
+        val deviceReport = DeviceReport(Instant.now(), event.entityId, event.message, event.severity,
+                device.deviceType, device.deviceDescription)
+        val room = device.room
+
+        logUnit.addReport(RoomReport(Instant.now(), room.id, deviceReport.toString(), event.severity, deviceReport))
+        logUnit.addReport(deviceReport)
     }
 
     private fun handleDeviceDoneEvent(event: IEvent) {
