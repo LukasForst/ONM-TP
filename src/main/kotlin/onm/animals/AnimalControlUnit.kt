@@ -48,7 +48,7 @@ class AnimalControlUnit(private val eventHandler: IEventHandler) : IAnimalContro
     override fun feedAnimal(animalId: UUID) {
         val animal = hungryAnimals.firstOrNull { x -> x.id == animalId }
         if (animal != null) {
-            log.info("Animal with UUID $animalId was removed.")
+            log.info("Animal with UUID $animalId was feed up!.")
             hungryAnimals.removeIf { x -> x.id == animalId }
             logUnit.addReport(AnimalReport(Instant.now(), animal.id, "Feeding animal", EventSeverity.INFO, animal.animalType))
         } else {
