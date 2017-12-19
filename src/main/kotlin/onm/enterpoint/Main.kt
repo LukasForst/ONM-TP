@@ -1,7 +1,10 @@
 package onm.enterpoint
 
+import onm.api.OvenControlApi
 import onm.builder.HouseBuilder
 import onm.configuration.json.ConfigLoader
+import onm.things.Food
+import onm.things.FoodType
 import java.nio.file.Paths
 
 
@@ -14,6 +17,9 @@ fun main(args: Array<String>) {
     }
 
     val house = HouseBuilder.buildHouseFromConfig(configs)
+
+    val oven = house.getControlApiByUUID<OvenControlApi>(house.getUidOfDevice("Oven1"))
+            ?.switchOn(listOf(Food(FoodType.BREAD)), 1.0)
 
     return
 }
